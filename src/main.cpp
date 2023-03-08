@@ -21,62 +21,58 @@ main(void)
 {
 Tokenizador a(",", true, false);
 list<string> lt1;
-string s = "catedraTelefonicaUA@iuii.ua.es p1 p2";
+string s = "U.S.A p1 e.g. p2. La";
 a.DelimitadoresPalabra("@.&");
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s = "catedraTelefonicaUA@@iuii.ua.es p1 p2";
+s = "U..S.A p1 e..g. p2. La";
 a.Tokenizar(s, lt1);
 // La lista de tokens a devolver debería contener: "0.34 0,56"
 imprimirListaSTL(lt1);
 
-s = "pal1 @iuii.ua.es p1 p2";
+s = "U.S....A.BC.D ";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="pal1 cat@iuii.ua.es@cd p1 p2";
+s="...U.S.A p1 e..g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="pal1 cat@iuii@cd.ua.es p1 p2";
+s="...U.S.A... p1 e..g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-a.DelimitadoresPalabra("&.");
-
-s="catedraTelefonicaUA@iuii.ua.es p1 p2";
+s="...U.S.A@p1 e..g-p2. La";
 a.Tokenizar(s, lt1);
 // La lista de tokens a devolver debería contener: "0.34 0,56"
 imprimirListaSTL(lt1);
 
-s="pal1 @iuii.ua.es p1 p2";
+s="Hack.4.Good p1 ";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="pal1&@iuii.ua.es p1 p2";
+a.DelimitadoresPalabra("");
+
+s="U.S.A .U.S.A .p1 p1 e.g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="pal1&catedra@iuii.ua.es p1 p2";
+s="U..S.A p1 e..g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="pal1 cat@iuii.ua.es@cd p1 p2";
+s="...U.S.A p1 e..g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-a.DelimitadoresPalabra("@.-_");
-
-s="-catedraTelefonicaUA@iuii.ua.es @p1 p2 ";
+s="a&U.S.A p1 e.g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 
-s="@p2@@dot.com@p1-p2";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
+a.DelimitadoresPalabra("&");
 
-s="a@a- b@- c@c--c d@d-- e@-e f@--";
+s="a&U.S.A p1 e.g. p2. La";
 a.Tokenizar(s, lt1);
 imprimirListaSTL(lt1);
 }

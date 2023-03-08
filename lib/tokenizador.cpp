@@ -397,8 +397,6 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
     string emaildelimiters_string = ".-_@";
     unordered_set<char> emaildelimiters = unordered_set<char>(emaildelimiters_string.begin(), emaildelimiters_string.end());
     // 4. Acronimos: delimitadores especiales: “.“
-    string acronimodelimiters_string = ".";
-    unordered_set<char> acronimodelimiters = unordered_set<char>(acronimodelimiters_string.begin(), acronimodelimiters_string.end());
     // 5. Palabras con guiones: delimitadores especiales: “-“
     string guiondelimiters_string = "-";
     unordered_set<char> guiondelimiters = unordered_set<char>(guiondelimiters_string.begin(), guiondelimiters_string.end());
@@ -418,11 +416,10 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
                 confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
             if (!confirmado && decimaldelimiters.count(c) > 0)
                 confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
-            if (!confirmado && emaildelimiters.count(c) > 0)
+            if (!confirmado && c == '@')
                 confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
-            if (!confirmado && acronimodelimiters.count(c) > 0)
-                //confirmado = TokenizarAcronimo(acronimodelimiters, str, tokens, start, i);
-                printf("todo");
+            if (!confirmado && c == '.')
+                confirmado = TokenizarAcronimo(str, tokens, start, i);
             if (!confirmado && guiondelimiters.count(c) > 0)
                 //confirmado = TokenizarGuion(guiondelimiters, str, tokens, start, i);
                 printf("todo");
@@ -590,6 +587,37 @@ bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, con
             }
         }
         // Si aparece un delimitador es el final del email
+        if (delimitersSet.count(str[j]) > 0 || str[j] == '\0') {
+            i = j;
+            tokens.push_back(str.substr(start, i-start));
+            return true;
+        }
+    }
+    i = str.size();
+    tokens.push_back(str.substr(start, i-start));
+    return true;
+}
+
+bool Tokenizador::TokenizarAcronimo(const string &str, list<string> &tokens, size_t &start, size_t &i) const {
+    // Comprobar si lo que hay antes y después del "." no son delimitadores
+    if (delimitersSet.count(str[i-1]) > 0 || delimitersSet.count(str[i+1]) > 0) {
+        return false;
+    }
+    // Comprobar que lo que sigue sean carácteres alfanuméricos o delimitadores de acrónimo
+    for (size_t j = i+1; j <= str.size(); j++) {
+        // Si aparece un "." este debe ir rodeados de caracteres no delimitadores sin nigún blanco de por medio, si no acaba el acrónimo
+        if (str[j] == '.') {
+            if (delimitersSet.count(str[j-1]) > 0 || delimitersSet.count(str[j+1]) > 0) {
+                i = j;
+                tokens.push_back(str.substr(start, i-start));
+                return true;
+            }
+            else{
+                j++;
+                continue;
+            }
+        }
+        // Si aparece un delimitador es el final del acrónimo
         if (delimitersSet.count(str[j]) > 0 || str[j] == '\0') {
             i = j;
             tokens.push_back(str.substr(start, i-start));
