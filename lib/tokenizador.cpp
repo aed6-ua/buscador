@@ -73,7 +73,7 @@ void Tokenizador::Tokenizar(string &str, list<string> &tokens)
     // Limpiar la lista de tokens
     tokens.clear();
     if (casosEspeciales)
-        TokenizarEspecialesEstados(str, tokens);
+        TokenizarEspecialesEstados2(str, tokens);
     else
         {
         string::size_type lastPos = efficient_find_first_not_of(str, 0);
@@ -371,6 +371,196 @@ void Tokenizador::dividir_por_puntos_y_comas(const string &str, list<string> &to
     }
     if (delimitersSet.count(str[i]) != 0)
         tokens.push_back(str.substr(start, i-start));
+}
+
+void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &tokens) {
+    
+    // Añadir el espacio y el salto de línea al set de delimitadores
+    delimitersSet.insert(' ');
+    delimitersSet.insert('\n');
+
+    ESTADO estado = INICIO;
+    char c;
+    size_t start;
+    bool todo_digitos = true;
+    
+    // Si no es un delimitador especial, se añade el token a la lista de tokens
+
+    // Se detectarán casos especiales en el siguiente orden:
+    // 1. URL: delimitadores especiales: “:/.?&-=#@“
+    string URLdelimiters_string = ":/.?&-=#@";
+    unordered_set<char> URLdelimiters = unordered_set<char>(URLdelimiters_string.begin(), URLdelimiters_string.end());
+    // 2. Números decimales: delimitadores especiales: “.,“
+    string decimaldelimiters_string = ".,";
+    unordered_set<char> decimaldelimiters = unordered_set<char>(decimaldelimiters_string.begin(), decimaldelimiters_string.end());
+    // 3. E-mail: delimitadores especiales: “.-_@“
+    string emaildelimiters_string = ".-_@";
+    unordered_set<char> emaildelimiters = unordered_set<char>(emaildelimiters_string.begin(), emaildelimiters_string.end());
+    // 4. Acronimos: delimitadores especiales: “.“
+    string acronimodelimiters_string = ".";
+    unordered_set<char> acronimodelimiters = unordered_set<char>(acronimodelimiters_string.begin(), acronimodelimiters_string.end());
+    // 5. Palabras con guiones: delimitadores especiales: “-“
+    string guiondelimiters_string = "-";
+    unordered_set<char> guiondelimiters = unordered_set<char>(guiondelimiters_string.begin(), guiondelimiters_string.end());
+
+    // Booleano para saber si se ha confirmado un caso especial
+    bool confirmado = false;
+
+    // Booleano que controla si se encuentra "." o "," al principio de un token
+    bool delim_at_start = false;
+
+    // Recorrer la cadena a tokenizar de izquierda a derecha hasta encontrar un delimitador o un espacio
+    for (size_t i = 0; i <= str.size(); i++) {
+        c = str[i];
+        // Si estamos dentro de un token comprobamos si es un delimitador especial
+        if (estado == TOKEN && delimitersSet.count(c) > 0) {
+            if (URLdelimiters.count(c) > 0)
+                confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
+            if (!confirmado && decimaldelimiters.count(c) > 0)
+                confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
+            if (!confirmado && emaildelimiters.count(c) > 0)
+                //confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
+                printf("todo");
+            if (!confirmado && acronimodelimiters.count(c) > 0)
+                //confirmado = TokenizarAcronimo(acronimodelimiters, str, tokens, start, i);
+                printf("todo");
+            if (!confirmado && guiondelimiters.count(c) > 0)
+                //confirmado = TokenizarGuion(guiondelimiters, str, tokens, start, i);
+                printf("todo");
+            if (!confirmado){
+                tokens.push_back(str.substr(start, i-start));
+                estado = INICIO;
+                confirmado = false;
+            }
+            if (confirmado) {
+                estado = INICIO;
+                confirmado = false;
+            }
+        }
+        // Si estamos al inicio nos saltamos todos los delimitadores hasta encontrar un carácter
+        // Al encontrar el primer carácter es donde empieza el token
+        else if (estado == INICIO) {
+            if (delimitersSet.count(c) == 0) {
+                start = i;
+                estado = TOKEN;
+            }
+            // Para los casos en que el "." o "," aparece al principio del token
+            else if (decimaldelimiters.count(c) > 0) {
+                delim_at_start = true;
+                confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
+                if (confirmado) {
+                    estado = INICIO;
+                    confirmado = false;
+                }
+                delim_at_start = false;
+            }
+        }
+    }
+    // Si se acaba el string mientras se estaba leyendo un token, se añade el token a la lista de tokens
+    if (estado == TOKEN)
+        tokens.push_back(str.substr(start, str.size()-start));
+}
+
+bool Tokenizador::TokenizarURL(const unordered_set<char> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
+    // Comprobar si empieza por "http:" o "https:" o "ftp:" seguido de algun caracter que no sea delimitador
+    if (str.substr(start, 5) == "http:" || str.substr(start, 6) == "https:" || str.substr(start, 4) == "ftp:") {
+        // Comprobar que va seguido de un carácter que no sea delimitador
+        size_t aux = str.find(":", start)+1;
+        if (delimitersSet.count(str[aux]) == 0 || URLdelimiters.count(str[aux]) > 0)
+        {
+            bool salir = false;
+            // Buscar el siguiente delimitador que no sea de URL pero que sí sea de los delimitadores
+            i = aux;
+            while (!salir)
+            {
+                i = efficient_find_first_of(str, i);
+                if (i==-1) {
+                    salir = true;
+                    i = str.size();
+                }
+                else if (URLdelimiters.count(str[i]) == 0)
+                {
+                    salir = true;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            tokens.push_back(str.substr(start, i-start));
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const {
+    bool cero_inicial = false;
+    // Si el delimitador aparece al principio
+    if (delim_at_start) {
+        // Si el siguiente carácter es un dígito
+        if (isdigit(str[i+1])) {
+            // Se activa el booleano para 0 inicial
+            cero_inicial = true;
+            start = i;
+            i++;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        // Si el delimitador está en medio del token comprobar que lo de detras sean todo digitos numericos
+        for (size_t j = start; j < i; j++) {
+            if (!isdigit(str[j])) {
+                return false;
+            }
+        }
+        // Comprobar que lo que sigue sea un dígito numerico
+        if (!isdigit(str[i+1])) {
+            return false;
+        }
+    }
+    // Comprobar que lo que sigue sean todo digitos numericos o "." o ","
+    for (size_t j = i; j <= str.size(); j++) {
+        // Si aparece un "." o "," seguido de un blanco, o los símbolos "$" o "%" seguidos de un blanco, o un delimitador es el final del decimal
+        if ((decimaldelimiters.count(str[j]) > 0 && str[j+1] == ' ') || 
+                    (str[j] == '$' && (str[j+1] == ' ' || str[j+1] == '\0')) || 
+                    (str[j] == '%' && (str[j+1] == ' ' || str[j+1] == '\0')) || 
+                    (decimaldelimiters.count(str[j]) == 0 && delimitersSet.count(str[j]) > 0) ||
+                    (decimaldelimiters.count(str[j]) > 0 && str[j+1] == '\0') || 
+                    (str[j] == '\0')) {
+            i = j;
+            if (cero_inicial)
+                tokens.push_back("0"+str.substr(start, i-start));
+            else
+                tokens.push_back(str.substr(start, i-start));
+            // Si al final aparecían los símbolos "$" o "%" se añaden como tokens separados
+            if (str[j] == '$' || str[j] == '%') {
+                tokens.push_back(str.substr(j, 1));
+            }
+            return true;
+        }
+        // Si aparece un carácter que no es un dígito, ni "." o "," el token no es un decimal
+        if (!isdigit(str[j]) && delimitersSet.count(str[j]) == 0) {
+            return false;
+        }
+        // Si aparece un "." o "," seguido de otro "." o "," el token acaba en el primer "." o ","
+        if ((decimaldelimiters.count(str[j]) > 0 && decimaldelimiters.count(str[j+1]) > 0)) {
+            i = j;
+            if (cero_inicial)
+                tokens.push_back("0"+str.substr(start, i-start));
+            else
+                tokens.push_back(str.substr(start, i-start));
+            return true;
+        }
+    }
+    return true;
 }
 
 // Tokeniza el fichero i guardando la salida en el fichero f (una

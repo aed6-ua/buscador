@@ -112,6 +112,12 @@ private:
     void TokenizarEspeciales(string &str, list<string> &tokens) const;
     // Método auxiliar para tokenizar teniendo en cuenta los casos especiales
     void TokenizarEspecialesEstados(const string &str, list<string> &tokens);
+    void TokenizarEspecialesEstados2(const string &str, list<string> &tokens);
+    bool TokenizarURL(const unordered_set<char> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    bool TokenizarEmail(const unordered_set<char> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    bool TokenizarDecimal(const unordered_set<char> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const;
+    bool TokenizarAcronimo(const unordered_set<char> &acronimodelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    bool TokenizarGuion(const unordered_set<char> &guiondelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
     size_t efficient_find_first_of(const string &str, const size_t &pos) const;
     // Método auxiliar para buscar un caracter en un unordered_set
     size_t efficient_find_first_not_of(const string &str, const size_t &pos) const;
