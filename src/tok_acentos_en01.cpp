@@ -24,7 +24,6 @@ main(void)
 
 		Tokenizador a("[]# ", kCasosEspeciales, kpasarAminusculas);
 
-
 		a.Tokenizar("MS#DOS OS_2 [high low]", lt1);
 		imprimirListaSTL(lt1);
 

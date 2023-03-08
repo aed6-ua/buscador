@@ -5,9 +5,10 @@
 
 using namespace std;
 
+///////// Comprobación de que vacíe la lista resultado
+
 void imprimirListaSTL(const list<string>& cadena)
 {
-        cout << "---------------------------------------------------------------\n";      
         list<string>::const_iterator itCadena;
         for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
         {
@@ -19,60 +20,21 @@ void imprimirListaSTL(const list<string>& cadena)
 int
 main(void)
 {
-Tokenizador a(",", true, false);
-list<string> lt1;
-string s = "U.S.A p1 e.g. p2. La";
-a.DelimitadoresPalabra("@.&");
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
+	bool kCasosEspeciales = true, kpasarAminusculas = false;
 
-s = "U..S.A p1 e..g. p2. La";
-a.Tokenizar(s, lt1);
-// La lista de tokens a devolver deberÃ­a contener: "0.34 0,56"
-imprimirListaSTL(lt1);
+	list<string> lt1, lt2;
 
-s = "U.S....A.BC.D ";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
+Tokenizador a("", true, false); 
+list<string> tokens; 
 
-s="...U.S.A p1 e..g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
+a.Tokenizar("http:", tokens);
+	imprimirListaSTL(tokens);
 
-s="...U.S.A... p1 e..g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
+a.Tokenizar("http:////ab/", tokens);
+	imprimirListaSTL(tokens);
 
-s="...U.S.A@p1 e..g-p2. La";
-a.Tokenizar(s, lt1);
-// La lista de tokens a devolver deberÃ­a contener: "0.34 0,56"
-imprimirListaSTL(lt1);
+a.Tokenizar("http:////ab.", tokens);
+	imprimirListaSTL(tokens);
 
-s="Hack.4.Good p1 ";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
 
-a.DelimitadoresPalabra("");
-
-s="U.S.A .U.S.A .p1 p1 e.g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
-
-s="U..S.A p1 e..g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
-
-s="...U.S.A p1 e..g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
-
-s="a&U.S.A p1 e.g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
-
-a.DelimitadoresPalabra("&");
-
-s="a&U.S.A p1 e.g. p2. La";
-a.Tokenizar(s, lt1);
-imprimirListaSTL(lt1);
 }

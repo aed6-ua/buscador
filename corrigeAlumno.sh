@@ -89,7 +89,7 @@ function testOK()
 # Para no tener en cuenta lineas de mas: -B
 # Para ignorar mayusculas/minusculas: -i
 # Ejemplo: DIFF=$(diff -b -B -i $1.sal $NOMTMPSAL)
-    DIFF=$(diff -bB $1.sal $NOMTMPSAL)
+    DIFF=$(diff -b $1.sal $NOMTMPSAL)
     if test -z "$DIFF";
     then
       if test -z $MENERR;

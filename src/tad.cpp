@@ -1,7 +1,7 @@
 #include <iostream> 
 #include <string>
 #include <list> 
-#include "../include/Tokenizador.h"
+#include "../include/tokenizador.h"
 
 using namespace std;
 
