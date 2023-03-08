@@ -410,7 +410,7 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
     bool delim_at_start = false;
 
     // Recorrer la cadena a tokenizar de izquierda a derecha hasta encontrar un delimitador o un espacio
-    for (size_t i = 0; i <= str.size(); i++) {
+    for (size_t i = 0; i < str.size(); i++) {
         c = str[i];
         // Si estamos dentro de un token comprobamos si es un delimitador especial
         if (estado == TOKEN && delimitersSet.count(c) > 0) {
@@ -419,8 +419,7 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
             if (!confirmado && decimaldelimiters.count(c) > 0)
                 confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
             if (!confirmado && emaildelimiters.count(c) > 0)
-                //confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
-                printf("todo");
+                confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
             if (!confirmado && acronimodelimiters.count(c) > 0)
                 //confirmado = TokenizarAcronimo(acronimodelimiters, str, tokens, start, i);
                 printf("todo");
@@ -560,6 +559,45 @@ bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters,
             return true;
         }
     }
+    return true;
+}
+
+bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
+    // Comprobar que antes del "@" hay al menos un carácter no delimitador
+    if (delimitersSet.count(str[i-1]) > 0) {
+        return false;
+    }
+    // Comprobar que después del "@" hay al menos un carácter no delimitador
+    if (delimitersSet.count(str[i+1]) > 0) {
+        return false;
+    }
+    // Comprobar que lo que sigue sean carácteres alfanuméricos o delimitadores de email
+    for (size_t j = i+1; j <= str.size(); j++) {
+        // Si aparece una segunda "@" no es un email
+        if (str[j] == '@') {
+            return false;
+        }
+        // Si aparece un delimitador de email que no sea "@" este debe ir rodeados de caracteres no delimitadores sin nigún blanco de por medio, si no acaba el email
+        if (emaildelimiters.count(str[j]) > 0 && str[j] != '@') {
+            if (delimitersSet.count(str[j-1]) > 0 || delimitersSet.count(str[j+1]) > 0) {
+                i = j;
+                tokens.push_back(str.substr(start, i-start));
+                return true;
+            }
+            else{
+                j++;
+                continue;
+            }
+        }
+        // Si aparece un delimitador es el final del email
+        if (delimitersSet.count(str[j]) > 0 || str[j] == '\0') {
+            i = j;
+            tokens.push_back(str.substr(start, i-start));
+            return true;
+        }
+    }
+    i = str.size();
+    tokens.push_back(str.substr(start, i-start));
     return true;
 }
 
