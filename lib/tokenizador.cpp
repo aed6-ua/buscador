@@ -1,5 +1,6 @@
-#include "../include/tokenizador.h"
+#include "tokenizador.h"
 #include <sys/stat.h>
+#include <cmath>
 
 using namespace std;
 // Inicializa delimiters a delimitadoresPalabra filtrando que no se
@@ -10,7 +11,7 @@ using namespace std;
 Tokenizador::Tokenizador(const string &delimitadoresPalabra, const bool &kcasosEspeciales, const bool &minuscSinAcentos)
 {
     delimiters = delimitadoresPalabra;
-    delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
     casosEspeciales = kcasosEspeciales;
     pasarAminuscSinAcentos = minuscSinAcentos;
     string::size_type pos = 0;
@@ -26,13 +27,17 @@ Tokenizador::Tokenizador(const string &delimitadoresPalabra, const bool &kcasosE
             pos++;
         }
     }
+    delimitersBitset.reset();
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
 }
 
 // Constructor de copia
 Tokenizador::Tokenizador(const Tokenizador &t)
 {
     delimiters = t.delimiters;
-    delimitersSet = t.delimitersSet;
+    //delimitersSet = t.delimitersSet;
+    delimitersBitset = t.delimitersBitset;
     casosEspeciales = t.casosEspeciales;
     pasarAminuscSinAcentos = t.pasarAminuscSinAcentos;
 }
@@ -43,7 +48,9 @@ Tokenizador::Tokenizador(const Tokenizador &t)
 Tokenizador::Tokenizador()
 {
     delimiters = ",;:.-/+*\\ '\"{}[]()<>?!??&#=\t\n\r@";
-    delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
     casosEspeciales = true;
     pasarAminuscSinAcentos = false;
 }
@@ -52,6 +59,8 @@ Tokenizador::Tokenizador()
 Tokenizador::~Tokenizador()
 {
     delimiters = "";
+    //delimitersSet.clear();
+    delimitersBitset.reset();
 }
 
 // Copia
@@ -60,7 +69,8 @@ Tokenizador &Tokenizador::operator=(const Tokenizador &t)
     if (this == &t)
         return *this;
     delimiters = t.delimiters;
-    delimitersSet = t.delimitersSet;
+    //delimitersSet = t.delimitersSet;
+    delimitersBitset = t.delimitersBitset;
     casosEspeciales = t.casosEspeciales;
     pasarAminuscSinAcentos = t.pasarAminuscSinAcentos;
     return *this;
@@ -86,8 +96,9 @@ void Tokenizador::Tokenizar(const string &str, list<string> &tokens)
 
 void Tokenizador::TokenizarSimple(const string &str, list<string> &tokens)
 {
-    delimitersSet.clear();
-    delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    //delimitersSet.clear();
+    //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    /*
     string::size_type lastPos = efficient_find_first_not_of(str, 0);
     string::size_type pos = efficient_find_first_of(str, lastPos);
     while (string::npos != pos || string::npos != lastPos)
@@ -95,9 +106,27 @@ void Tokenizador::TokenizarSimple(const string &str, list<string> &tokens)
         tokens.push_back(str.substr(lastPos, pos - lastPos));
         lastPos = efficient_find_first_not_of(str, pos);
         pos = efficient_find_first_of(str, lastPos);
+    }*/
+    delimitersBitset.reset();
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
+    std::string token; // temporary string to store token
+    for (unsigned char c : str) { // loop through each character in str
+        if (delimitersBitset[c]) { // if c is a delimiter
+            if (!token.empty()) { // if token is not empty
+                tokens.push_back(token); // add token to vector
+                token.clear(); // clear token
+            }
+        } else { // if c is not a delimiter
+            token += c; // append c to token
+        }
+    }
+    if (!token.empty()) { // if token is not empty after loop
+        tokens.push_back(token); // add last token to vector
     }
 }
 
+/*
 // M?todo auxiliar para tokenizar teniendo en cuenta los casos especiales
 void Tokenizador::TokenizarEspeciales(const string &str, list<string> &tokens) const
 {
@@ -383,15 +412,18 @@ void Tokenizador::dividir_por_puntos_y_comas(const string &str, list<string> &to
     if (delimitersSet.count(str[i]) != 0)
         tokens.push_back(str.substr(start, i-start));
 }
+*/
 
 void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &tokens) {
     
     // A?adir el espacio y el salto de l?nea al set de delimitadores
-    delimitersSet.insert(' ');
-    delimitersSet.insert('\n');
+    //delimitersSet.insert(' ');
+    //delimitersSet.insert('\n');
+    delimitersBitset[' '] = 1;
+    delimitersBitset['\n'] = 1;
 
     ESTADO estado = INICIO;
-    char c;
+    unsigned char c;
     size_t start;
     bool todo_digitos = true;
     
@@ -400,13 +432,22 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
     // Se detectar?n casos especiales en el siguiente orden:
     // 1. URL: delimitadores especiales: ?:/.?&-=#@?
     string URLdelimiters_string = ":/.?&-=#@";
-    unordered_set<char> URLdelimiters = unordered_set<char>(URLdelimiters_string.begin(), URLdelimiters_string.end());
+    //unordered_set<char> URLdelimiters = unordered_set<char>(URLdelimiters_string.begin(), URLdelimiters_string.end());
+    bitset<256> URLdelimiters;
+    for (unsigned char c : URLdelimiters_string) // loop through each character in s
+        URLdelimiters[c] = 1; // set the bit for c to 1
     // 2. N?meros decimales: delimitadores especiales: ?.,?
     string decimaldelimiters_string = ".,";
-    unordered_set<char> decimaldelimiters = unordered_set<char>(decimaldelimiters_string.begin(), decimaldelimiters_string.end());
+    //unordered_set<char> decimaldelimiters = unordered_set<char>(decimaldelimiters_string.begin(), decimaldelimiters_string.end());
+    bitset<256> decimaldelimiters;
+    for (unsigned char c : decimaldelimiters_string) // loop through each character in s
+        decimaldelimiters[c] = 1; // set the bit for c to 1
     // 3. E-mail: delimitadores especiales: ?.-_@?
     string emaildelimiters_string = ".-_@";
-    unordered_set<char> emaildelimiters = unordered_set<char>(emaildelimiters_string.begin(), emaildelimiters_string.end());
+    //unordered_set<char> emaildelimiters = unordered_set<char>(emaildelimiters_string.begin(), emaildelimiters_string.end());
+    bitset<256> emaildelimiters;
+    for (unsigned char c : emaildelimiters_string) // loop through each character in s
+        emaildelimiters[c] = 1; // set the bit for c to 1
     // 4. Acronimos: delimitadores especiales: ?.?
     // 5. Palabras con guiones: delimitadores especiales: ?-?
 
@@ -420,10 +461,10 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
     for (size_t i = 0; i < str.size(); i++) {
         c = str[i];
         // Si estamos dentro de un token comprobamos si es un delimitador especial
-        if (estado == TOKEN && delimitersSet.count(c) > 0) {
-            if (URLdelimiters.count(c) > 0)
+        if (estado == TOKEN && delimitersBitset[c] > 0) {
+            if (URLdelimiters[c])
                 confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
-            if (!confirmado && decimaldelimiters.count(c) > 0)
+            if (!confirmado && decimaldelimiters[c] > 0)
                 confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
             if (!confirmado && c == '@')
                 confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
@@ -444,12 +485,12 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
         // Si estamos al inicio nos saltamos todos los delimitadores hasta encontrar un car?cter
         // Al encontrar el primer car?cter es donde empieza el token
         else if (estado == INICIO) {
-            if (delimitersSet.count(c) == 0) {
+            if (!delimitersBitset[c]) {
                 start = i;
                 estado = TOKEN;
             }
             // Para los casos en que el "." o "," aparece al principio del token
-            else if (decimaldelimiters.count(c) > 0) {
+            else if (decimaldelimiters[c]) {
                 delim_at_start = true;
                 confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
                 if (confirmado) {
@@ -465,16 +506,19 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
         tokens.push_back(str.substr(start, str.size()-start));
 }
 
-bool Tokenizador::TokenizarURL(const unordered_set<char> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
+bool Tokenizador::TokenizarURL(const bitset<256> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
     // Comprobar si empieza por "http:" o "https:" o "ftp:" seguido de algun caracter que no sea delimitador
     if (str.substr(start, 5) == "http:" || str.substr(start, 6) == "https:" || str.substr(start, 4) == "ftp:") {
         // Comprobar que va seguido de al menos un car?cter que no sea delimitador
         size_t aux = str.find(":", start)+1;
-        if (aux < str.size() && (delimitersSet.count(str[aux]) == 0 || URLdelimiters.count(str[aux]) > 0))
+        if (aux < str.size() && (!delimitersBitset[(unsigned char)(str[aux])] || URLdelimiters[(unsigned char)(str[aux])]))
         {
-            bool salir = false;
+            //bool salir = false;
             // Buscar el siguiente delimitador que no sea de URL pero que s? sea de los delimitadores
             i = aux;
+            while (i < str.size() && (URLdelimiters[(unsigned char)(str[i])] || !delimitersBitset[(unsigned char)(str[i])]))
+                i++;
+            /*
             while (!salir)
             {
                 i = efficient_find_first_of(str, i);
@@ -490,7 +534,7 @@ bool Tokenizador::TokenizarURL(const unordered_set<char> &URLdelimiters, const s
                 {
                     i++;
                 }
-            }
+            }*/
             tokens.push_back(str.substr(start, i-start));
             return true;
         }
@@ -503,7 +547,7 @@ bool Tokenizador::TokenizarURL(const unordered_set<char> &URLdelimiters, const s
     }
 }
 
-bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const {
+bool Tokenizador::TokenizarDecimal(const bitset<256> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const {
     bool cero_inicial = false;
     // Si el delimitador aparece al principio
     if (delim_at_start) {
@@ -532,11 +576,11 @@ bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters,
     // Comprobar que lo que sigue sean todo digitos numericos o "." o ","
     for (size_t j = i+1; j <= str.size(); j++) {
         // Si aparece un "." o "," seguido de un blanco, o los s?mbolos "$" o "%" seguidos de un blanco, o un delimitador es el final del decimal
-        if ((decimaldelimiters.count(str[j]) > 0 && str[j+1] == ' ') || 
+        if ((decimaldelimiters[(unsigned char)(str[j])] && str[j+1] == ' ') || 
                     (str[j] == '$' && (str[j+1] == ' ' || (j+1) == str.size())) || 
                     (str[j] == '%' && (str[j+1] == ' ' || (j+1) == str.size())) || 
-                    (decimaldelimiters.count(str[j]) == 0 && delimitersSet.count(str[j]) > 0) ||
-                    (decimaldelimiters.count(str[j]) > 0 && (j+1) == str.size()) || 
+                    (!decimaldelimiters[(unsigned char)(str[j])] && delimitersBitset[(unsigned char)(str[j])]) ||
+                    (decimaldelimiters[(unsigned char)str[j]] && (j+1) == str.size()) || 
                     (j == str.size())) {
             i = j;
             if (cero_inicial)
@@ -550,11 +594,11 @@ bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters,
             return true;
         }
         // Si aparece un car?cter que no es un d?gito, ni "." o "," el token no es un decimal
-        if (!isdigit(str[j]) && delimitersSet.count(str[j]) == 0) {
+        if (!isdigit(str[j]) && !delimitersBitset[(unsigned char)(str[j])]) {
             return false;
         }
         // Si aparece un "." o "," seguido de otro "." o "," el token acaba en el primer "." o ","
-        if ((decimaldelimiters.count(str[j]) > 0 && decimaldelimiters.count(str[j+1]) > 0)) {
+        if ((decimaldelimiters[(unsigned char)(str[j])] && decimaldelimiters[(unsigned char)(str[j+1])])) {
             i = j;
             if (cero_inicial)
                 tokens.push_back("0"+str.substr(start, i-start));
@@ -566,13 +610,13 @@ bool Tokenizador::TokenizarDecimal(const unordered_set<char> &decimaldelimiters,
     return true;
 }
 
-bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
+bool Tokenizador::TokenizarEmail(const bitset<256> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const {
     // Comprobar que antes del "@" hay al menos un car?cter no delimitador
-    if (delimitersSet.count(str[i-1]) > 0) {
+    if (delimitersBitset[(unsigned char)(str[i-1])]) {
         return false;
     }
     // Comprobar que despu?s del "@" hay al menos un car?cter no delimitador
-    if (delimitersSet.count(str[i+1]) > 0 && (i+1) < str.size()) {
+    if (delimitersBitset[(unsigned char)(str[i+1])] && (i+1) < str.size()) {
         return false;
     }
     // Comprobar que lo que sigue sean car?cteres alfanum?ricos o delimitadores de email
@@ -582,8 +626,8 @@ bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, con
             return false;
         }
         // Si aparece un delimitador de email que no sea "@" este debe ir rodeados de caracteres no delimitadores sin nig?n blanco de por medio, si no acaba el email
-        if (emaildelimiters.count(str[j]) > 0 && str[j] != '@') {
-            if (delimitersSet.count(str[j-1]) > 0 || delimitersSet.count(str[j+1]) > 0 || (j+1) >= str.size()) {
+        if (emaildelimiters[str[j]] && str[j] != '@') {
+            if (delimitersBitset[(unsigned char)(str[j-1])] || delimitersBitset[(unsigned char)(str[j+1])] || (j+1) >= str.size()) {
                 i = j;
                 tokens.push_back(str.substr(start, i-start));
                 return true;
@@ -594,7 +638,7 @@ bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, con
             }
         }
         // Si aparece un delimitador es el final del email
-        if (delimitersSet.count(str[j]) > 0 || j == str.size()) {
+        if (delimitersBitset[(unsigned char)(str[j])] || j == str.size()) {
             i = j;
             tokens.push_back(str.substr(start, i-start));
             return true;
@@ -607,14 +651,14 @@ bool Tokenizador::TokenizarEmail(const unordered_set<char> &emaildelimiters, con
 
 bool Tokenizador::TokenizarAcronimo(const string &str, list<string> &tokens, size_t &start, size_t &i) const {
     // Comprobar si lo que hay antes y despu?s del "." no son delimitadores
-    if (delimitersSet.count(str[i-1]) > 0 || delimitersSet.count(str[i+1]) > 0 || (i+1) >= str.size()) {
+    if (delimitersBitset[(unsigned char)(str[i-1])] || delimitersBitset[(unsigned char)(str[i+1])] || (i+1) >= str.size()) {
         return false;
     }
     // Comprobar que lo que sigue sean car?cteres alfanum?ricos o delimitadores de acr?nimo
     for (size_t j = i+1; j <= str.size(); j++) {
         // Si aparece un "." este debe ir rodeados de caracteres no delimitadores sin nig?n blanco de por medio, si no acaba el acr?nimo
         if (str[j] == '.') {
-            if (delimitersSet.count(str[j-1]) > 0 || delimitersSet.count(str[j+1]) > 0 || (j+1) >= str.size()) {
+            if (delimitersBitset[(unsigned char)(str[j-1])] || delimitersBitset[(unsigned char)(str[j+1])] || (j+1) >= str.size()) {
                 i = j;
                 tokens.push_back(str.substr(start, i-start));
                 return true;
@@ -625,7 +669,7 @@ bool Tokenizador::TokenizarAcronimo(const string &str, list<string> &tokens, siz
             }
         }
         // Si aparece un delimitador es el final del acr?nimo
-        if (delimitersSet.count(str[j]) > 0 || j == str.size()) {
+        if (delimitersBitset[(unsigned char)(str[j])] || j == str.size()) {
             i = j;
             tokens.push_back(str.substr(start, i-start));
             return true;
@@ -638,14 +682,14 @@ bool Tokenizador::TokenizarAcronimo(const string &str, list<string> &tokens, siz
 
 bool Tokenizador::TokenizarGuion(const string &str, list<string> &tokens, size_t &start, size_t &i) const {
     // Comprobar si lo que hay antes y despu?s del "-" no son delimitadores
-    if (delimitersSet.count(str[i-1]) > 0 || delimitersSet.count(str[i+1]) > 0 || (i+1) >= str.size()) {
+    if (delimitersBitset[(unsigned char)(str[i-1])] || delimitersBitset[(unsigned char)(str[i+1])] || (i+1) >= str.size()) {
         return false;
     }
     // Comprobar que lo que sigue sean car?cteres alfanum?ricos o guiones pero no dos guiones seguidos
-    for (size_t j = i+1; j <= str.size(); j++) {
+    for (size_t j = i+1; j < str.size(); j++) {
         // Si aparece un "-" este debe ir rodeado de caracteres no delimitadores sin nig?n blanco de por medio, si no acaba la palabra
         if (str[j] == '-') {
-            if (delimitersSet.count(str[j-1]) > 0 || delimitersSet.count(str[j+1]) > 0 || (j+1) >= str.size()) {
+            if (delimitersBitset[(unsigned char)(str[j-1])] || delimitersBitset[(unsigned char)(str[j+1])] || (j+1) >= str.size()) {
                 i = j;
                 tokens.push_back(str.substr(start, i-start));
                 return true;
@@ -656,7 +700,7 @@ bool Tokenizador::TokenizarGuion(const string &str, list<string> &tokens, size_t
             }
         }
         // Si aparece un delimitador es el final del gui?n
-        if (delimitersSet.count(str[j]) > 0 || j == str.size()) {
+        if (delimitersBitset[(unsigned char)(str[j])] || j == str.size()) {
             i = j;
             tokens.push_back(str.substr(start, i-start));
             return true;
@@ -837,8 +881,11 @@ void Tokenizador::DelimitadoresPalabra(const string &nuevoDelimiters) {
         }
     }
     // Borrar delimitersSet
-    delimitersSet.clear();
-    delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    //delimitersSet.clear();
+    //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
+    delimitersBitset.reset();
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
 }
 
 // A?ade al final de ?delimiters? los nuevos delimitadores que aparezcan
@@ -847,9 +894,12 @@ void Tokenizador::AnyadirDelimitadoresPalabra(const string &nuevoDelimiters) {
     for (int i = 0; i < nuevoDelimiters.length(); i++) {
         if (delimiters.find(nuevoDelimiters[i]) == string::npos) {
             delimiters += nuevoDelimiters[i];
-            delimitersSet.insert(nuevoDelimiters[i]);
+            //delimitersSet.insert(nuevoDelimiters[i]);
         }
     }
+    delimitersBitset.reset();
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
 }
 
 // Devuelve ?delimiters?
@@ -879,6 +929,7 @@ bool Tokenizador::PasarAminuscSinAcentos() {
     return pasarAminuscSinAcentos;
 }
 
+/*
 size_t Tokenizador::efficient_find_first_of(const string &str, const size_t &pos) const {
     for (size_t i = pos; i < str.size(); i++) {
         if (this->delimitersSet.count(str[i])>0) {
@@ -896,6 +947,7 @@ size_t Tokenizador::efficient_find_first_not_of(const string &str, const size_t 
     }
     return string::npos;
 }
+*/
 
 // Devuelve el string pasado a min?sculas y quitando los acentos utilizando la codificaci?n ISO - 8859-1.
 // Para la correcci?n de la pr?ctica se utilizar? el formato actual(ISO - 8859).
@@ -903,6 +955,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
     string result = "";
     for (unsigned char c : str) {
         int code = int(c);
+        /*
         if (code >= 192 && code <= 198) {
             result += 'a';
         } else if (code == 199) {
@@ -914,7 +967,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
         } else if (code == 208) {
             result += 'd';
         } else if (code == 209) {
-            result += 'ñ';
+            result += '?';
         } else if (code >= 210 && code <= 214) {
             result += 'o';
         } else if (code == 215) {
@@ -952,9 +1005,33 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
         } else if (code == 255) {
             result += 'y';
         }
+        else if (code > 256) {
+            result += '?';
+        }
         else {
             result += tolower(c);
+        }*/
+        if (code < 192)
+            result += tolower(c);
+        else if (code == 209)
+            result += 'ñ';
+        else if (code < 224) {
+            double y = floor((code-192)/6);
+            if (y<=2)
+                result += string(1, ((y + 1) * 4) + 93);
+            else
+                result += string(1, (y * 6) + 93);
         }
+        else if (code == 241)
+            result += 'ñ';
+        else {
+            double y = floor((code - 224) / 6);
+            if (y <= 2)
+                result += tolower(char(((y + 1) * 4) + 93));
+            else
+                result += tolower(char((y * 6) + 93));
+        }
+        
     }
     return result;
 }

@@ -2,7 +2,7 @@
 #include <string>
 #include <list>
 #include <sys/resource.h>
-#include ?tokenizador.h?
+#include "tokenizador.h"
 using namespace std;
 double getcputime(void) { 
 struct timeval tim; 

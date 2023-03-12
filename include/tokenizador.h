@@ -3,6 +3,7 @@
 #include <list>
 #include <fstream>
 #include <unordered_set>
+#include <bitset>
 
 using namespace std;
 
@@ -101,7 +102,8 @@ private:
     // modifique la forma de almacenamiento interna para mejorar la eficiencia, este
     // campo debe permanecer para indicar el orden en que se introdujeron los
     // delimitadores 
-    unordered_set<char> delimitersSet; // Delimitadores de t?rminos
+    //unordered_set<char> delimitersSet; // Delimitadores de t?rminos
+    bitset<256> delimitersBitset; // Delimitadores de t?rminos en forma de bitset
     bool casosEspeciales;
     // Si true detectar? palabras compuestas y casos especiales. Sino,
     // trabajar? al igual que el algoritmo propuesto en la secci?n ?Versi?n del
@@ -114,11 +116,13 @@ private:
     // M?todo auxiliar para tokenizar teniendo en cuenta los casos especiales
     void TokenizarEspecialesEstados(const string &str, list<string> &tokens);
     void TokenizarEspecialesEstados2(const string &str, list<string> &tokens);
-    bool TokenizarURL(const unordered_set<char> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
-    bool TokenizarEmail(const unordered_set<char> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
-    bool TokenizarDecimal(const unordered_set<char> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const;
+    bool TokenizarURL(const bitset<256> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    bool TokenizarEmail(const bitset<256> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    bool TokenizarDecimal(const bitset<256> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const;
     bool TokenizarAcronimo(const string &str, list<string> &tokens, size_t &start, size_t &i) const;
     bool TokenizarGuion(const string &str, list<string> &tokens, size_t &start, size_t &i) const;
+    size_t bitset_find_first_of(const string &str, const size_t &pos) const;
+    size_t bitset_find_first_not_of(const string &str, const size_t &pos) const;
     size_t efficient_find_first_of(const string &str, const size_t &pos) const;
     // M?todo auxiliar para buscar un caracter en un unordered_set
     size_t efficient_find_first_not_of(const string &str, const size_t &pos) const;

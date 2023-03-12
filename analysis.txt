@@ -1,0 +1,828 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 14.63      0.06     0.06 31782700     0.00     0.00  std::_Base_bitset<4ul>::_M_getword(unsigned long)
+ 12.20      0.11     0.05 31782700     0.00     0.00  std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long)
+  9.76      0.15     0.04 32589101     0.00     0.00  std::_Base_bitset<4ul>::_S_maskbit(unsigned long)
+  9.76      0.19     0.04   304441     0.00     0.00  Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
+  6.10      0.21     0.03 31782700     0.00     0.00  std::bitset<256ul>::operator[](unsigned long)
+  4.88      0.23     0.02 32589101     0.00     0.00  std::_Base_bitset<4ul>::_S_whichword(unsigned long)
+  4.88      0.26     0.02 26607176     0.00     0.00  std::bitset<256ul>::reference::operator bool() const
+  4.88      0.28     0.02 20428023     0.00     0.00  bool __gnu_cxx::operator!=<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+  4.88      0.29     0.02                             _init
+  3.66      0.31     0.01 31782700     0.00     0.00  std::bitset<256ul>::reference::~reference()
+  2.44      0.32     0.01 64371801     0.00     0.00  std::_Base_bitset<4ul>::_S_whichbit(unsigned long)
+  2.44      0.33     0.01 40856046     0.00     0.00  __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const
+  2.44      0.34     0.01 20123582     0.00     0.00  __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const
+  2.44      0.35     0.01 10959932     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const
+  2.44      0.36     0.01  5175524     0.00     0.00  std::bitset<256ul>::reference::operator=(bool)
+  2.44      0.37     0.01  2913660     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_inc_size(unsigned long)
+  2.44      0.38     0.01   305159     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear()
+  2.44      0.39     0.01   304441     0.00     0.00  Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const
+  2.44      0.40     0.01                             std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_node_allocator()
+  1.22      0.41     0.01  2913660     0.00     0.00  __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_max_size() const
+  1.22      0.41     0.01                             __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::_M_max_size() const
+  0.00      0.41     0.00 20123582     0.00     0.00  __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++()
+  0.00      0.41     0.00 11654640     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&)
+  0.00      0.41     0.00  5829545     0.00     0.00  __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_ptr()
+  0.00      0.41     0.00  5829545     0.00     0.00  __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_addr()
+  0.00      0.41     0.00  5829545     0.00     0.00  std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr()
+  0.00      0.41     0.00  5827320     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_Node_allocator()
+  0.00      0.41     0.00  5479966     0.00     0.00  bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+  0.00      0.41     0.00  4566642     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++()
+  0.00      0.41     0.00  4566642     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const
+  0.00      0.41     0.00  2917319     0.00     0.00  std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator(std::__detail::_List_node_base*)
+  0.00      0.41     0.00  2916602     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end()
+  0.00      0.41     0.00  2913789     0.00     0.00  std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+  0.00      0.41     0.00  2913660     0.00     0.00  __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::deallocate(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long)
+  0.00      0.41     0.00  2913660     0.00     0.00  void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*)
+  0.00      0.41     0.00  2913660     0.00     0.00  __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocate(unsigned long, void const*)
+  0.00      0.41     0.00  2913660     0.00     0.00  void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::__allocated_ptr(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~__allocated_ptr()
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::operator=(decltype(nullptr))
+  0.00      0.41     0.00  2913660     0.00     0.00  std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::deallocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long)
+  0.00      0.41     0.00  2913660     0.00     0.00  void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::allocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long)
+  0.00      0.41     0.00  2913660     0.00     0.00  void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_node()
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_put_node(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00  2913660     0.00     0.00  void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00  2913660     0.00     0.00  std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >* std::__addressof<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
+  0.00      0.41     0.00  2913660     0.00     0.00  operator new(unsigned long, void*)
+  0.00      0.41     0.00   806401     0.00     0.00  std::_Base_bitset<4ul>::_M_getword(unsigned long) const
+  0.00      0.41     0.00   806401     0.00     0.00  std::bitset<256ul>::_Unchecked_test(unsigned long) const
+  0.00      0.41     0.00   806401     0.00     0.00  std::bitset<256ul>::operator[](unsigned long) const
+  0.00      0.41     0.00   632109     0.00     0.00  bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00      0.41     0.00   328432     0.00     0.00  __gnu_cxx::__enable_if<std::__is_integer<int>::__value, double>::__type std::floor<int>(int)
+  0.00      0.41     0.00   305159     0.00     0.00  std::__detail::_List_node_header::_M_init()
+  0.00      0.41     0.00   304441     0.00     0.00  Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
+  0.00      0.41     0.00   304441     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_init()
+  0.00      0.41     0.00   304441     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear()
+  0.00      0.41     0.00   300927     0.00     0.00  Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const
+  0.00      0.41     0.00   210781     0.00     0.00  Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const
+  0.00      0.41     0.00   116939     0.00     0.00  Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const
+  0.00      0.41     0.00    15830     0.00     0.00  Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const
+  0.00      0.41     0.00     2942     0.00     0.00  std::operator!=(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+  0.00      0.41     0.00     2225     0.00     0.00  std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const
+  0.00      0.41     0.00     2225     0.00     0.00  std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++(int)
+  0.00      0.41     0.00      718     0.00     0.00  __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::new_allocator()
+  0.00      0.41     0.00      718     0.00     0.00  __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~new_allocator()
+  0.00      0.41     0.00      718     0.00     0.00  std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocator()
+  0.00      0.41     0.00      718     0.00     0.00  std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~allocator()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::~_List_impl()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_base()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list()
+  0.00      0.41     0.00      718     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list()
+  0.00      0.41     0.00      718     0.00     0.00  std::__detail::_List_node_header::_List_node_header()
+  0.00      0.41     0.00      717     0.00     0.52  Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00      0.41     0.00      717     0.00     0.00  std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator()
+  0.00      0.41     0.00      717     0.00     0.00  std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::begin()
+  0.00      0.41     0.00      717     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00      0.41     0.00      129     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  0.00      0.41     0.00        2     0.00     0.00  getcputime()
+  0.00      0.41     0.00        2     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_begin() const
+  0.00      0.41     0.00        2     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear()
+  0.00      0.41     0.00        2     0.00     0.00  std::_Base_bitset<4ul>::_M_do_reset()
+  0.00      0.41     0.00        2     0.00     0.00  std::bitset<256ul>::reset()
+  0.00      0.41     0.00        2     0.00     0.00  std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_deallocate_nodes(std::__detail::_Hash_node<char, false>*)
+  0.00      0.41     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.41     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.41     0.00        1     0.00   375.00  Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00      0.41     0.00        1     0.00     0.00  Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&)
+  0.00      0.41     0.00        1     0.00     0.00  Tokenizador::~Tokenizador()
+  0.00      0.41     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::new_allocator()
+  0.00      0.41     0.00        1     0.00     0.00  __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::~new_allocator()
+  0.00      0.41     0.00        1     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_uses_single_bucket(std::__detail::_Hash_node_base**) const
+  0.00      0.41     0.00        1     0.00     0.00  std::allocator<std::__detail::_Hash_node<char, false> >::allocator()
+  0.00      0.41     0.00        1     0.00     0.00  std::allocator<std::__detail::_Hash_node<char, false> >::~allocator()
+  0.00      0.41     0.00        1     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets(std::__detail::_Hash_node_base**, unsigned long)
+  0.00      0.41     0.00        1     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets()
+  0.00      0.41     0.00        1     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable()
+  0.00      0.41     0.00        1     0.00     0.00  std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable()
+  0.00      0.41     0.00        1     0.00     0.00  std::_Base_bitset<4ul>::_Base_bitset()
+  0.00      0.41     0.00        1     0.00     0.00  std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::clear()
+  0.00      0.41     0.00        1     0.00     0.00  std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::unordered_set()
+  0.00      0.41     0.00        1     0.00     0.00  std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::~unordered_set()
+  0.00      0.41     0.00        1     0.00     0.00  std::bitset<256ul>::bitset()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hash_code_base<char, char, std::__detail::_Identity, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, false>::_Hash_code_base()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hash_node_base::_Hash_node_base()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_Hashtable_alloc()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::~_Hashtable_alloc()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Prime_rehash_policy::_Prime_rehash_policy(float)
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::_Hashtable_ebo_helper()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::~_Hashtable_ebo_helper()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_ebo_helper<0, std::equal_to<char>, true>::_Hashtable_ebo_helper()
+  0.00      0.41     0.00        1     0.00     0.00  std::__detail::_Hashtable_ebo_helper<1, std::hash<char>, true>::_Hashtable_ebo_helper()
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 2.44% of 0.41 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     91.5    0.00    0.38                 main [1]
+                0.00    0.37       1/1           Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [2]
+                0.00    0.00       1/1           Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.00       2/2           getcputime() [93]
+                0.00    0.00       1/1           Tokenizador::~Tokenizador() [101]
+-----------------------------------------------
+                0.00    0.37       1/1           main [1]
+[2]     91.5    0.00    0.37       1         Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [2]
+                0.00    0.37     717/717         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+                0.00    0.00       1/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list() [41]
+                0.00    0.00       1/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list() [87]
+-----------------------------------------------
+                0.00    0.37     717/717         Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [2]
+[3]     91.5    0.00    0.37     717         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+                0.00    0.37  304441/304441      Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [4]
+                0.00    0.00     717/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list() [41]
+                0.00    0.00    2942/2916602     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end() [59]
+                0.00    0.00    2942/2942        std::operator!=(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [77]
+                0.00    0.00    2225/2225        std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [78]
+                0.00    0.00    2225/2225        std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++(int) [79]
+                0.00    0.00     717/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list() [87]
+                0.00    0.00     717/717         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [91]
+                0.00    0.00     717/717         std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator() [89]
+                0.00    0.00     717/717         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::begin() [90]
+-----------------------------------------------
+                0.00    0.37  304441/304441      Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[4]     91.5    0.00    0.37  304441         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [4]
+                0.04    0.27  304441/304441      Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+                0.01    0.04  304441/304441      Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+                0.00    0.01  304441/304441      std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear() [27]
+-----------------------------------------------
+                0.04    0.27  304441/304441      Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [4]
+[5]     76.8    0.04    0.27  304441         Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+                0.02    0.13 31782673/31782700     std::bitset<256ul>::operator[](unsigned long) [6]
+                0.02    0.04 26607176/26607176     std::bitset<256ul>::reference::operator bool() const [9]
+                0.01    0.01 5175497/5175524     std::bitset<256ul>::reference::operator=(bool) [15]
+                0.01    0.00 31782673/31782700     std::bitset<256ul>::reference::~reference() [16]
+                0.00    0.01 2851979/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+                0.00    0.01 5479938/5479966     bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [23]
+                0.00    0.00  300927/300927      Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [36]
+                0.00    0.00  116939/116939      Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [37]
+                0.00    0.00   15830/15830       Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [39]
+                0.00    0.00  210781/210781      Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [42]
+                0.00    0.00 4566615/4566642     __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [57]
+                0.00    0.00 4566615/4566642     __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [56]
+-----------------------------------------------
+                0.00    0.00      27/31782700     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.02    0.13 31782673/31782700     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[6]     38.9    0.03    0.13 31782700         std::bitset<256ul>::operator[](unsigned long) [6]
+                0.05    0.08 31782700/31782700     std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long) [7]
+-----------------------------------------------
+                0.05    0.08 31782700/31782700     std::bitset<256ul>::operator[](unsigned long) [6]
+[7]     32.8    0.05    0.08 31782700         std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long) [7]
+                0.06    0.02 31782700/31782700     std::_Base_bitset<4ul>::_M_getword(unsigned long) [8]
+                0.00    0.00 31782700/64371801     std::_Base_bitset<4ul>::_S_whichbit(unsigned long) [19]
+-----------------------------------------------
+                0.06    0.02 31782700/31782700     std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long) [7]
+[8]     19.4    0.06    0.02 31782700         std::_Base_bitset<4ul>::_M_getword(unsigned long) [8]
+                0.02    0.00 31782700/32589101     std::_Base_bitset<4ul>::_S_whichword(unsigned long) [13]
+-----------------------------------------------
+                0.02    0.04 26607176/26607176     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[9]     13.9    0.02    0.04 26607176         std::bitset<256ul>::reference::operator bool() const [9]
+                0.03    0.00 26607176/32589101     std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [11]
+-----------------------------------------------
+                0.01    0.04  304441/304441      Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [4]
+[10]    12.2    0.01    0.04  304441         Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+                0.02    0.01 20428023/20428023     bool __gnu_cxx::operator!=<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [12]
+                0.01    0.00 20123582/20123582     __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [21]
+                0.00    0.00 20123582/20123582     __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [50]
+                0.00    0.00  328432/328432      __gnu_cxx::__enable_if<std::__is_integer<int>::__value, double>::__type std::floor<int>(int) [74]
+-----------------------------------------------
+                0.00    0.00  806401/32589101     std::bitset<256ul>::_Unchecked_test(unsigned long) const [34]
+                0.01    0.00 5175524/32589101     std::bitset<256ul>::reference::operator=(bool) [15]
+                0.03    0.00 26607176/32589101     std::bitset<256ul>::reference::operator bool() const [9]
+[11]    11.0    0.04    0.01 32589101         std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [11]
+                0.01    0.00 32589101/64371801     std::_Base_bitset<4ul>::_S_whichbit(unsigned long) [19]
+-----------------------------------------------
+                0.02    0.01 20428023/20428023     Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+[12]     7.3    0.02    0.01 20428023         bool __gnu_cxx::operator!=<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [12]
+                0.01    0.00 40856046/40856046     __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [20]
+-----------------------------------------------
+                0.00    0.00  806401/32589101     std::_Base_bitset<4ul>::_M_getword(unsigned long) const [38]
+                0.02    0.00 31782700/32589101     std::_Base_bitset<4ul>::_M_getword(unsigned long) [8]
+[13]     4.9    0.02    0.00 32589101         std::_Base_bitset<4ul>::_S_whichword(unsigned long) [13]
+-----------------------------------------------
+                                                 <spontaneous>
+[14]     4.9    0.02    0.00                 _init [14]
+-----------------------------------------------
+                0.00    0.00      27/5175524     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.01    0.01 5175497/5175524     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[15]     4.2    0.01    0.01 5175524         std::bitset<256ul>::reference::operator=(bool) [15]
+                0.01    0.00 5175524/32589101     std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [11]
+-----------------------------------------------
+                0.00    0.00      27/31782700     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.01    0.00 31782673/31782700     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[16]     3.7    0.01    0.00 31782700         std::bitset<256ul>::reference::~reference() [16]
+-----------------------------------------------
+                0.00    0.01 2913660/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+[17]     3.7    0.00    0.01 2913660         void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [17]
+                0.01    0.00 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_inc_size(unsigned long) [24]
+                0.00    0.01 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+                0.00    0.00 2913660/11654640     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&) [51]
+-----------------------------------------------
+                0.00    0.00     117/2913660     Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [42]
+                0.00    0.00    2728/2913660     Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [37]
+                0.00    0.00   14579/2913660     Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [39]
+                0.00    0.00   44257/2913660     Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [36]
+                0.00    0.01 2851979/2913660     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[18]     3.7    0.00    0.01 2913660         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+                0.00    0.01 2913660/2913660     void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [17]
+                0.00    0.00 2913660/2913789     std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) [60]
+                0.00    0.00 2913660/2916602     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end() [59]
+-----------------------------------------------
+                0.00    0.00 31782700/64371801     std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long) [7]
+                0.01    0.00 32589101/64371801     std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [11]
+[19]     2.4    0.01    0.00 64371801         std::_Base_bitset<4ul>::_S_whichbit(unsigned long) [19]
+-----------------------------------------------
+                0.01    0.00 40856046/40856046     bool __gnu_cxx::operator!=<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [12]
+[20]     2.4    0.01    0.00 40856046         __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [20]
+-----------------------------------------------
+                0.01    0.00 20123582/20123582     Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+[21]     2.4    0.01    0.00 20123582         __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [21]
+-----------------------------------------------
+                0.01    0.00 10959932/10959932     bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [23]
+[22]     2.4    0.01    0.00 10959932         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [22]
+-----------------------------------------------
+                0.00    0.00      28/5479966     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.01 5479938/5479966     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[23]     2.4    0.00    0.01 5479966         bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [23]
+                0.01    0.00 10959932/10959932     __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [22]
+-----------------------------------------------
+                0.01    0.00 2913660/2913660     void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [17]
+[24]     2.4    0.01    0.00 2913660         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_inc_size(unsigned long) [24]
+-----------------------------------------------
+                0.00    0.00     718/305159      std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base() [40]
+                0.01    0.00  304441/305159      std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear() [27]
+[25]     2.4    0.01    0.00  305159         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+                0.00    0.00 2913660/5829545     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [54]
+                0.00    0.00 2913660/5827320     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_Node_allocator() [55]
+                0.00    0.00 2913660/2913660     void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [68]
+                0.00    0.00 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_put_node(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [70]
+-----------------------------------------------
+                                                 <spontaneous>
+[26]     2.4    0.01    0.00                 std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_node_allocator() [26]
+-----------------------------------------------
+                0.00    0.01  304441/304441      Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [4]
+[27]     2.4    0.00    0.01  304441         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear() [27]
+                0.01    0.00  304441/305159      std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+                0.00    0.00  304441/304441      std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_init() [76]
+-----------------------------------------------
+                0.00    0.01 2913660/2913660     std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::allocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) [30]
+[28]     1.2    0.00    0.01 2913660         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocate(unsigned long, void const*) [28]
+                0.01    0.00 2913660/2913660     __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_max_size() const [29]
+-----------------------------------------------
+                0.01    0.00 2913660/2913660     __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocate(unsigned long, void const*) [28]
+[29]     1.2    0.01    0.00 2913660         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_max_size() const [29]
+-----------------------------------------------
+                0.00    0.01 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_node() [31]
+[30]     1.2    0.00    0.01 2913660         std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::allocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) [30]
+                0.00    0.01 2913660/2913660     __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocate(unsigned long, void const*) [28]
+-----------------------------------------------
+                0.00    0.01 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[31]     1.2    0.00    0.01 2913660         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_node() [31]
+                0.00    0.01 2913660/2913660     std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::allocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) [30]
+-----------------------------------------------
+                0.00    0.01 2913660/2913660     void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [17]
+[32]     1.2    0.00    0.01 2913660         std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+                0.00    0.01 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_node() [31]
+                0.00    0.00 2913660/5827320     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_Node_allocator() [55]
+                0.00    0.00 2913660/2913660     std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::__allocated_ptr(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [64]
+                0.00    0.00 2913660/11654640     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&) [51]
+                0.00    0.00 2913660/5829545     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [54]
+                0.00    0.00 2913660/2913660     void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [69]
+                0.00    0.00 2913660/2913660     std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::operator=(decltype(nullptr)) [66]
+                0.00    0.00 2913660/2913660     std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~__allocated_ptr() [65]
+-----------------------------------------------
+                                                 <spontaneous>
+[33]     1.2    0.01    0.00                 __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::_M_max_size() const [33]
+-----------------------------------------------
+                0.00    0.00  806401/806401      std::bitset<256ul>::operator[](unsigned long) const [35]
+[34]     0.4    0.00    0.00  806401         std::bitset<256ul>::_Unchecked_test(unsigned long) const [34]
+                0.00    0.00  806401/32589101     std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [11]
+                0.00    0.00  806401/806401      std::_Base_bitset<4ul>::_M_getword(unsigned long) const [38]
+-----------------------------------------------
+                0.00    0.00    4550/806401      Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [42]
+                0.00    0.00  133185/806401      Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [39]
+                0.00    0.00  244212/806401      Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [37]
+                0.00    0.00  424454/806401      Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [36]
+[35]     0.4    0.00    0.00  806401         std::bitset<256ul>::operator[](unsigned long) const [35]
+                0.00    0.00  806401/806401      std::bitset<256ul>::_Unchecked_test(unsigned long) const [34]
+-----------------------------------------------
+                0.00    0.00  300927/300927      Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[36]     0.3    0.00    0.00  300927         Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [36]
+                0.00    0.00  424454/806401      std::bitset<256ul>::operator[](unsigned long) const [35]
+                0.00    0.00   44257/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+                0.00    0.00     129/129         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [92]
+-----------------------------------------------
+                0.00    0.00  116939/116939      Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[37]     0.1    0.00    0.00  116939         Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [37]
+                0.00    0.00  244212/806401      std::bitset<256ul>::operator[](unsigned long) const [35]
+                0.00    0.00    2728/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+-----------------------------------------------
+                0.00    0.00  806401/806401      std::bitset<256ul>::_Unchecked_test(unsigned long) const [34]
+[38]     0.1    0.00    0.00  806401         std::_Base_bitset<4ul>::_M_getword(unsigned long) const [38]
+                0.00    0.00  806401/32589101     std::_Base_bitset<4ul>::_S_whichword(unsigned long) [13]
+-----------------------------------------------
+                0.00    0.00   15830/15830       Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[39]     0.1    0.00    0.00   15830         Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [39]
+                0.00    0.00  133185/806401      std::bitset<256ul>::operator[](unsigned long) const [35]
+                0.00    0.00   14579/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list() [41]
+[40]     0.0    0.00    0.00     718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base() [40]
+                0.00    0.00     718/305159      std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::~_List_impl() [85]
+-----------------------------------------------
+                0.00    0.00       1/718         Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [2]
+                0.00    0.00     717/718         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[41]     0.0    0.00    0.00     718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list() [41]
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base() [40]
+-----------------------------------------------
+                0.00    0.00  210781/210781      Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[42]     0.0    0.00    0.00  210781         Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [42]
+                0.00    0.00    4550/806401      std::bitset<256ul>::operator[](unsigned long) const [35]
+                0.00    0.00     117/2913660     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+                0.00    0.00  632109/632109      bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [73]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[43]     0.0    0.00    0.00       1         Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.00      27/31782700     std::bitset<256ul>::operator[](unsigned long) [6]
+                0.00    0.00      27/5175524     std::bitset<256ul>::reference::operator=(bool) [15]
+                0.00    0.00      28/5479966     bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [23]
+                0.00    0.00      27/31782700     std::bitset<256ul>::reference::~reference() [16]
+                0.00    0.00      27/4566642     __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [57]
+                0.00    0.00      27/4566642     __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [56]
+                0.00    0.00       1/1           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::unordered_set() [113]
+                0.00    0.00       1/1           std::bitset<256ul>::bitset() [115]
+                0.00    0.00       1/2           std::bitset<256ul>::reset() [97]
+-----------------------------------------------
+                0.00    0.00 20123582/20123582     Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+[50]     0.0    0.00    0.00 20123582         __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [50]
+-----------------------------------------------
+                0.00    0.00 2913660/11654640     void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [17]
+                0.00    0.00 2913660/11654640     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+                0.00    0.00 2913660/11654640     void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [69]
+                0.00    0.00 2913660/11654640     void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [63]
+[51]     0.0    0.00    0.00 11654640         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&) [51]
+-----------------------------------------------
+                0.00    0.00 5829545/5829545     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [54]
+[52]     0.0    0.00    0.00 5829545         __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_ptr() [52]
+                0.00    0.00 5829545/5829545     __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_addr() [53]
+-----------------------------------------------
+                0.00    0.00 5829545/5829545     __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_ptr() [52]
+[53]     0.0    0.00    0.00 5829545         __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_addr() [53]
+-----------------------------------------------
+                0.00    0.00    2225/5829545     std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [78]
+                0.00    0.00 2913660/5829545     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+                0.00    0.00 2913660/5829545     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[54]     0.0    0.00    0.00 5829545         std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [54]
+                0.00    0.00 5829545/5829545     __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_ptr() [52]
+-----------------------------------------------
+                0.00    0.00 2913660/5827320     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+                0.00    0.00 2913660/5827320     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[55]     0.0    0.00    0.00 5827320         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_Node_allocator() [55]
+-----------------------------------------------
+                0.00    0.00      27/4566642     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.00 4566615/4566642     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[56]     0.0    0.00    0.00 4566642         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [56]
+-----------------------------------------------
+                0.00    0.00      27/4566642     Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.00 4566615/4566642     Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [5]
+[57]     0.0    0.00    0.00 4566642         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [57]
+-----------------------------------------------
+                0.00    0.00     717/2917319     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::begin() [90]
+                0.00    0.00 2916602/2917319     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end() [59]
+[58]     0.0    0.00    0.00 2917319         std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator(std::__detail::_List_node_base*) [58]
+-----------------------------------------------
+                0.00    0.00    2942/2916602     Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+                0.00    0.00 2913660/2916602     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+[59]     0.0    0.00    0.00 2916602         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end() [59]
+                0.00    0.00 2916602/2917319     std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator(std::__detail::_List_node_base*) [58]
+-----------------------------------------------
+                0.00    0.00     129/2913789     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [92]
+                0.00    0.00 2913660/2913789     std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [18]
+[60]     0.0    0.00    0.00 2913789         std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) [60]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::deallocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [67]
+[61]     0.0    0.00    0.00 2913660         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::deallocate(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [61]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [68]
+[62]     0.0    0.00    0.00 2913660         void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [62]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [69]
+[63]     0.0    0.00    0.00 2913660         void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [63]
+                0.00    0.00 2913660/11654640     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&) [51]
+                0.00    0.00 2913660/2913660     operator new(unsigned long, void*) [72]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[64]     0.0    0.00    0.00 2913660         std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::__allocated_ptr(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [64]
+                0.00    0.00 2913660/2913660     std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >* std::__addressof<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [71]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[65]     0.0    0.00    0.00 2913660         std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~__allocated_ptr() [65]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[66]     0.0    0.00    0.00 2913660         std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::operator=(decltype(nullptr)) [66]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_put_node(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [70]
+[67]     0.0    0.00    0.00 2913660         std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::deallocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [67]
+                0.00    0.00 2913660/2913660     __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::deallocate(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [61]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+[68]     0.0    0.00    0.00 2913660         void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [68]
+                0.00    0.00 2913660/2913660     void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [62]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [32]
+[69]     0.0    0.00    0.00 2913660         void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [69]
+                0.00    0.00 2913660/11654640     std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&) [51]
+                0.00    0.00 2913660/2913660     void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [63]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear() [25]
+[70]     0.0    0.00    0.00 2913660         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_put_node(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [70]
+                0.00    0.00 2913660/2913660     std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::deallocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [67]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::__allocated_ptr(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [64]
+[71]     0.0    0.00    0.00 2913660         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >* std::__addressof<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [71]
+-----------------------------------------------
+                0.00    0.00 2913660/2913660     void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [63]
+[72]     0.0    0.00    0.00 2913660         operator new(unsigned long, void*) [72]
+-----------------------------------------------
+                0.00    0.00  632109/632109      Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [42]
+[73]     0.0    0.00    0.00  632109         bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [73]
+-----------------------------------------------
+                0.00    0.00  328432/328432      Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [10]
+[74]     0.0    0.00    0.00  328432         __gnu_cxx::__enable_if<std::__is_integer<int>::__value, double>::__type std::floor<int>(int) [74]
+-----------------------------------------------
+                0.00    0.00     718/305159      std::__detail::_List_node_header::_List_node_header() [88]
+                0.00    0.00  304441/305159      std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_init() [76]
+[75]     0.0    0.00    0.00  305159         std::__detail::_List_node_header::_M_init() [75]
+-----------------------------------------------
+                0.00    0.00  304441/304441      std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear() [27]
+[76]     0.0    0.00    0.00  304441         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_init() [76]
+                0.00    0.00  304441/305159      std::__detail::_List_node_header::_M_init() [75]
+-----------------------------------------------
+                0.00    0.00    2942/2942        Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[77]     0.0    0.00    0.00    2942         std::operator!=(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [77]
+-----------------------------------------------
+                0.00    0.00    2225/2225        Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[78]     0.0    0.00    0.00    2225         std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [78]
+                0.00    0.00    2225/5829545     std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [54]
+-----------------------------------------------
+                0.00    0.00    2225/2225        Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[79]     0.0    0.00    0.00    2225         std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++(int) [79]
+-----------------------------------------------
+                0.00    0.00     718/718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocator() [82]
+[80]     0.0    0.00    0.00     718         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::new_allocator() [80]
+-----------------------------------------------
+                0.00    0.00     718/718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~allocator() [83]
+[81]     0.0    0.00    0.00     718         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~new_allocator() [81]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl() [84]
+[82]     0.0    0.00    0.00     718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocator() [82]
+                0.00    0.00     718/718         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::new_allocator() [80]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::~_List_impl() [85]
+[83]     0.0    0.00    0.00     718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~allocator() [83]
+                0.00    0.00     718/718         __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~new_allocator() [81]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_base() [86]
+[84]     0.0    0.00    0.00     718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl() [84]
+                0.00    0.00     718/718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocator() [82]
+                0.00    0.00     718/718         std::__detail::_List_node_header::_List_node_header() [88]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base() [40]
+[85]     0.0    0.00    0.00     718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::~_List_impl() [85]
+                0.00    0.00     718/718         std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~allocator() [83]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list() [87]
+[86]     0.0    0.00    0.00     718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_base() [86]
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl() [84]
+-----------------------------------------------
+                0.00    0.00       1/718         Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [2]
+                0.00    0.00     717/718         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[87]     0.0    0.00    0.00     718         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list() [87]
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_base() [86]
+-----------------------------------------------
+                0.00    0.00     718/718         std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl() [84]
+[88]     0.0    0.00    0.00     718         std::__detail::_List_node_header::_List_node_header() [88]
+                0.00    0.00     718/305159      std::__detail::_List_node_header::_M_init() [75]
+-----------------------------------------------
+                0.00    0.00     717/717         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[89]     0.0    0.00    0.00     717         std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator() [89]
+-----------------------------------------------
+                0.00    0.00     717/717         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[90]     0.0    0.00    0.00     717         std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::begin() [90]
+                0.00    0.00     717/2917319     std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator(std::__detail::_List_node_base*) [58]
+-----------------------------------------------
+                0.00    0.00     717/717         Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [3]
+[91]     0.0    0.00    0.00     717         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [91]
+-----------------------------------------------
+                0.00    0.00     129/129         Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [36]
+[92]     0.0    0.00    0.00     129         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [92]
+                0.00    0.00     129/2913789     std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) [60]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[93]     0.0    0.00    0.00       2         getcputime() [93]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [95]
+[94]     0.0    0.00    0.00       2         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_begin() const [94]
+-----------------------------------------------
+                0.00    0.00       1/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [110]
+                0.00    0.00       1/2           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::clear() [112]
+[95]     0.0    0.00    0.00       2         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [95]
+                0.00    0.00       2/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_begin() const [94]
+                0.00    0.00       2/2           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_deallocate_nodes(std::__detail::_Hash_node<char, false>*) [98]
+-----------------------------------------------
+                0.00    0.00       2/2           std::bitset<256ul>::reset() [97]
+[96]     0.0    0.00    0.00       2         std::_Base_bitset<4ul>::_M_do_reset() [96]
+-----------------------------------------------
+                0.00    0.00       1/2           Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+                0.00    0.00       1/2           Tokenizador::~Tokenizador() [101]
+[97]     0.0    0.00    0.00       2         std::bitset<256ul>::reset() [97]
+                0.00    0.00       2/2           std::_Base_bitset<4ul>::_M_do_reset() [96]
+-----------------------------------------------
+                0.00    0.00       2/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [95]
+[98]     0.0    0.00    0.00       2         std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_deallocate_nodes(std::__detail::_Hash_node<char, false>*) [98]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__Z10getcputimev [126]
+[99]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [99]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN11TokenizadorC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKbS9_ [127]
+[100]    0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [100]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[101]    0.0    0.00    0.00       1         Tokenizador::~Tokenizador() [101]
+                0.00    0.00       1/1           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::clear() [112]
+                0.00    0.00       1/2           std::bitset<256ul>::reset() [97]
+                0.00    0.00       1/1           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::~unordered_set() [114]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<std::__detail::_Hash_node<char, false> >::allocator() [105]
+[102]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::new_allocator() [102]
+-----------------------------------------------
+                0.00    0.00       1/1           std::allocator<std::__detail::_Hash_node<char, false> >::~allocator() [106]
+[103]    0.0    0.00    0.00       1         __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::~new_allocator() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets(std::__detail::_Hash_node_base**, unsigned long) [107]
+[104]    0.0    0.00    0.00       1         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_uses_single_bucket(std::__detail::_Hash_node_base**) const [104]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::_Hashtable_ebo_helper() [122]
+[105]    0.0    0.00    0.00       1         std::allocator<std::__detail::_Hash_node<char, false> >::allocator() [105]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::new_allocator() [102]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::~_Hashtable_ebo_helper() [123]
+[106]    0.0    0.00    0.00       1         std::allocator<std::__detail::_Hash_node<char, false> >::~allocator() [106]
+                0.00    0.00       1/1           __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::~new_allocator() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets() [108]
+[107]    0.0    0.00    0.00       1         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets(std::__detail::_Hash_node_base**, unsigned long) [107]
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_uses_single_bucket(std::__detail::_Hash_node_base**) const [104]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [110]
+[108]    0.0    0.00    0.00       1         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets() [108]
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets(std::__detail::_Hash_node_base**, unsigned long) [107]
+-----------------------------------------------
+                0.00    0.00       1/1           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::unordered_set() [113]
+[109]    0.0    0.00    0.00       1         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+                0.00    0.00       1/1           std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base() [118]
+                0.00    0.00       1/1           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_Hashtable_alloc() [119]
+                0.00    0.00       1/1           std::__detail::_Hash_node_base::_Hash_node_base() [117]
+                0.00    0.00       1/1           std::__detail::_Prime_rehash_policy::_Prime_rehash_policy(float) [121]
+-----------------------------------------------
+                0.00    0.00       1/1           std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::~unordered_set() [114]
+[110]    0.0    0.00    0.00       1         std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [110]
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets() [108]
+                0.00    0.00       1/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [95]
+                0.00    0.00       1/1           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::~_Hashtable_alloc() [120]
+-----------------------------------------------
+                0.00    0.00       1/1           std::bitset<256ul>::bitset() [115]
+[111]    0.0    0.00    0.00       1         std::_Base_bitset<4ul>::_Base_bitset() [111]
+-----------------------------------------------
+                0.00    0.00       1/1           Tokenizador::~Tokenizador() [101]
+[112]    0.0    0.00    0.00       1         std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::clear() [112]
+                0.00    0.00       1/2           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [95]
+-----------------------------------------------
+                0.00    0.00       1/1           Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+[113]    0.0    0.00    0.00       1         std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::unordered_set() [113]
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+-----------------------------------------------
+                0.00    0.00       1/1           Tokenizador::~Tokenizador() [101]
+[114]    0.0    0.00    0.00       1         std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::~unordered_set() [114]
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [110]
+-----------------------------------------------
+                0.00    0.00       1/1           Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [43]
+[115]    0.0    0.00    0.00       1         std::bitset<256ul>::bitset() [115]
+                0.00    0.00       1/1           std::_Base_bitset<4ul>::_Base_bitset() [111]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base() [118]
+[116]    0.0    0.00    0.00       1         std::__detail::_Hash_code_base<char, char, std::__detail::_Identity, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, false>::_Hash_code_base() [116]
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<1, std::hash<char>, true>::_Hashtable_ebo_helper() [125]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+[117]    0.0    0.00    0.00       1         std::__detail::_Hash_node_base::_Hash_node_base() [117]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+[118]    0.0    0.00    0.00       1         std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base() [118]
+                0.00    0.00       1/1           std::__detail::_Hash_code_base<char, char, std::__detail::_Identity, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, false>::_Hash_code_base() [116]
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<0, std::equal_to<char>, true>::_Hashtable_ebo_helper() [124]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+[119]    0.0    0.00    0.00       1         std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_Hashtable_alloc() [119]
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::_Hashtable_ebo_helper() [122]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [110]
+[120]    0.0    0.00    0.00       1         std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::~_Hashtable_alloc() [120]
+                0.00    0.00       1/1           std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::~_Hashtable_ebo_helper() [123]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [109]
+[121]    0.0    0.00    0.00       1         std::__detail::_Prime_rehash_policy::_Prime_rehash_policy(float) [121]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_Hashtable_alloc() [119]
+[122]    0.0    0.00    0.00       1         std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::_Hashtable_ebo_helper() [122]
+                0.00    0.00       1/1           std::allocator<std::__detail::_Hash_node<char, false> >::allocator() [105]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::~_Hashtable_alloc() [120]
+[123]    0.0    0.00    0.00       1         std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::~_Hashtable_ebo_helper() [123]
+                0.00    0.00       1/1           std::allocator<std::__detail::_Hash_node<char, false> >::~allocator() [106]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base() [118]
+[124]    0.0    0.00    0.00       1         std::__detail::_Hashtable_ebo_helper<0, std::equal_to<char>, true>::_Hashtable_ebo_helper() [124]
+-----------------------------------------------
+                0.00    0.00       1/1           std::__detail::_Hash_code_base<char, char, std::__detail::_Identity, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, false>::_Hash_code_base() [116]
+[125]    0.0    0.00    0.00       1         std::__detail::_Hashtable_ebo_helper<1, std::hash<char>, true>::_Hashtable_ebo_helper() [125]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [93] getcputime()           [35] std::bitset<256ul>::operator[](unsigned long) const [70] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_put_node(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*)
+  [99] __static_initialization_and_destruction_0(int, int) (main.cpp) [105] std::allocator<std::__detail::_Hash_node<char, false> >::allocator() [55] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_Node_allocator()
+ [100] __static_initialization_and_destruction_0(int, int) (tokenizador.cpp) [106] std::allocator<std::__detail::_Hash_node<char, false> >::~allocator() [76] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_init()
+   [2] Tokenizador::TokenizarListaFicheros(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [82] std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocator() [25] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_clear()
+   [5] Tokenizador::TokenizarEspecialesEstados2(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [83] std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~allocator() [86] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_base()
+   [3] Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [107] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets(std::__detail::_Hash_node_base**, unsigned long) [40] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~_List_base()
+   [4] Tokenizador::Tokenizar(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&) [108] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_deallocate_buckets() [32] std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >* std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_create_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  [43] Tokenizador::Tokenizador(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool const&, bool const&) [95] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::clear() [59] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::end()
+ [101] Tokenizador::~Tokenizador() [109] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable() [90] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::begin()
+ [102] __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::new_allocator() [110] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::~_Hashtable() [27] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::clear()
+ [103] __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::~new_allocator() [54] std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_valptr() [17] void std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_insert<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  [61] __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::deallocate(std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [8] std::_Base_bitset<4ul>::_M_getword(unsigned long) [18] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::push_back(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  [62] void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [11] std::_Base_bitset<4ul>::_S_maskbit(unsigned long) [87] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::list()
+  [28] __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::allocate(unsigned long, void const*) [96] std::_Base_bitset<4ul>::_M_do_reset() [41] std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~list()
+  [63] void __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [19] std::_Base_bitset<4ul>::_S_whichbit(unsigned long) [116] std::__detail::_Hash_code_base<char, char, std::__detail::_Identity, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, false>::_Hash_code_base()
+  [80] __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::new_allocator() [13] std::_Base_bitset<4ul>::_S_whichword(unsigned long) [117] std::__detail::_Hash_node_base::_Hash_node_base()
+  [81] __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~new_allocator() [111] std::_Base_bitset<4ul>::_Base_bitset() [118] std::__detail::_Hashtable_base<char, char, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Hashtable_traits<false, true, true> >::_Hashtable_base()
+  [52] __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_ptr() [112] std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::clear() [26] std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_node_allocator()
+  [53] __gnu_cxx::__aligned_membuf<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_addr() [113] std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::unordered_set() [98] std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_M_deallocate_nodes(std::__detail::_Hash_node<char, false>*)
+  [50] __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [114] std::unordered_set<char, std::hash<char>, std::equal_to<char>, std::allocator<char> >::~unordered_set() [119] std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::_Hashtable_alloc()
+  [56] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [58] std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator(std::__detail::_List_node_base*) [120] std::__detail::_Hashtable_alloc<std::allocator<std::__detail::_Hash_node<char, false> > >::~_Hashtable_alloc()
+  [12] bool __gnu_cxx::operator!=<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [89] std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_List_iterator() [75] std::__detail::_List_node_header::_M_init()
+  [23] bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [79] std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++(int) [88] std::__detail::_List_node_header::_List_node_header()
+  [42] Tokenizador::TokenizarURL(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [64] std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::__allocated_ptr(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*) [121] std::__detail::_Prime_rehash_policy::_Prime_rehash_policy(float)
+  [39] Tokenizador::TokenizarGuion(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [65] std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~__allocated_ptr() [122] std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::_Hashtable_ebo_helper()
+  [36] Tokenizador::TokenizarDecimal(std::bitset<256ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&, bool const&) const [66] std::__allocated_ptr<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::operator=(decltype(nullptr)) [123] std::__detail::_Hashtable_ebo_helper<0, std::allocator<std::__detail::_Hash_node<char, false> >, true>::~_Hashtable_ebo_helper()
+  [37] Tokenizador::TokenizarAcronimo(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::list<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, unsigned long&) const [67] std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::deallocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, unsigned long) [124] std::__detail::_Hashtable_ebo_helper<0, std::equal_to<char>, true>::_Hashtable_ebo_helper()
+  [10] Tokenizador::pasar_a_minusculas_sin_acentos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const [68] void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::destroy<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) [125] std::__detail::_Hashtable_ebo_helper<1, std::hash<char>, true>::_Hashtable_ebo_helper()
+  [33] __gnu_cxx::new_allocator<std::__detail::_Hash_node<char, false> >::_M_max_size() const [30] std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::allocate(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long) [71] std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >* std::__addressof<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
+  [29] __gnu_cxx::new_allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_max_size() const [69] void std::allocator_traits<std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::construct<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::allocator<std::_List_node<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&) [60] std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>::type&& std::move<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)
+  [20] __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [97] std::bitset<256ul>::reset() [74] __gnu_cxx::__enable_if<std::__is_integer<int>::__value, double>::__type std::floor<int>(int)
+  [21] __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [7] std::bitset<256ul>::reference::reference(std::bitset<256ul>&, unsigned long) [51] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&& std::forward<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(std::remove_reference<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::type&)
+  [22] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [16] std::bitset<256ul>::reference::~reference() [73] bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [57] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [15] std::bitset<256ul>::reference::operator=(bool) [77] std::operator!=(std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+ [104] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_uses_single_bucket(std::__detail::_Hash_node_base**) const [115] std::bitset<256ul>::bitset() [92] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&&)
+  [94] std::_Hashtable<char, char, std::allocator<char>, std::__detail::_Identity, std::equal_to<char>, std::hash<char>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, true, true> >::_M_begin() const [6] std::bitset<256ul>::operator[](unsigned long) [91] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > std::operator+<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [38] std::_Base_bitset<4ul>::_M_getword(unsigned long) const [84] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::_List_impl() [72] operator new(unsigned long, void*)
+  [78] std::_List_iterator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [85] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_List_impl::~_List_impl() [14] _init
+  [34] std::bitset<256ul>::_Unchecked_test(unsigned long) const [31] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_get_node()
+   [9] std::bitset<256ul>::reference::operator bool() const [24] std::__cxx11::_List_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_inc_size(unsigned long)
