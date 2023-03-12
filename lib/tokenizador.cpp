@@ -3,13 +3,17 @@
 #include <cmath>
 
 using namespace std;
-// Inicializa delimiters a delimitadoresPalabra filtrando que no se
-// introduzcan delimitadores repetidos(de izquierda a derecha, en cuyo
-// caso se eliminar?an los que hayan sido repetidos por la derecha);
-// casosEspeciales a kcasosEspeciales;
-// pasarAminuscSinAcentos a minuscSinAcentos
 Tokenizador::Tokenizador(const string &delimitadoresPalabra, const bool &kcasosEspeciales, const bool &minuscSinAcentos)
 {
+    string URLdelimiters_string = ":/.?&-=#@"; // delimiters for URLs
+    for (unsigned char c : URLdelimiters_string) // loop through each character in s
+        URLdelimiters[c] = 1; // set the bit for c to 1
+    string decimaldelimiters_string = ".,"; // delimiters for decimals
+    for (unsigned char c : decimaldelimiters_string) // loop through each character in s
+        decimaldelimiters[c] = 1; // set the bit for c to 1
+    string emaildelimiters_string = ".-_@"; // delimiters for emails
+    for (unsigned char c : emaildelimiters_string) // loop through each character in s
+        emaildelimiters[c] = 1; // set the bit for c to 1
     delimiters = delimitadoresPalabra;
     //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
     casosEspeciales = kcasosEspeciales;
@@ -42,12 +46,18 @@ Tokenizador::Tokenizador(const Tokenizador &t)
     pasarAminuscSinAcentos = t.pasarAminuscSinAcentos;
 }
 
-// Inicializa delimiters=",;:.-/+*\\ '\"{}[]()<>?!??&#=\t\n\r@";
-// casosEspeciales a true;
-// pasarAminuscSinAcentos a false
 Tokenizador::Tokenizador()
 {
-    delimiters = ",;:.-/+*\\ '\"{}[]()<>?!??&#=\t\n\r@";
+    string URLdelimiters_string = ":/.?&-=#@"; // delimiters for URLs
+    for (unsigned char c : URLdelimiters_string) // loop through each character in s
+        URLdelimiters[c] = 1; // set the bit for c to 1
+    string decimaldelimiters_string = ".,"; // delimiters for decimals
+    for (unsigned char c : decimaldelimiters_string) // loop through each character in s
+        decimaldelimiters[c] = 1; // set the bit for c to 1
+    string emaildelimiters_string = ".-_@"; // delimiters for emails
+    for (unsigned char c : emaildelimiters_string) // loop through each character in s
+        emaildelimiters[c] = 1; // set the bit for c to 1
+    delimiters = ",;:.-/+*\\ '\"{}[]()<>¡!¿?&#=\t\n\r@";
     //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
     for (unsigned char c : delimiters) // loop through each character in s
         delimitersBitset[c] = 1; // set the bit for c to 1
@@ -76,17 +86,15 @@ Tokenizador &Tokenizador::operator=(const Tokenizador &t)
     return *this;
 }
 
-// Tokeniza str devolviendo el resultado en tokens. La lista tokens se
-// vaciar? antes de almacenar el resultado de la tokenizaci?n.
 void Tokenizador::Tokenizar(const string &str, list<string> &tokens)
 {
     // Limpiar la lista de tokens
     tokens.clear();
     if (casosEspeciales)
         if (pasarAminuscSinAcentos)
-            TokenizarEspecialesEstados2(pasar_a_minusculas_sin_acentos(str), tokens);
+            TokenizarEspeciales(pasar_a_minusculas_sin_acentos(str), tokens);
         else
-            TokenizarEspecialesEstados2(str, tokens);
+            TokenizarEspeciales(str, tokens);
     else
         if (pasarAminuscSinAcentos)
             TokenizarSimple(pasar_a_minusculas_sin_acentos(str), tokens);
@@ -96,17 +104,7 @@ void Tokenizador::Tokenizar(const string &str, list<string> &tokens)
 
 void Tokenizador::TokenizarSimple(const string &str, list<string> &tokens)
 {
-    //delimitersSet.clear();
-    //delimitersSet = unordered_set<char>(delimiters.begin(), delimiters.end());
-    /*
-    string::size_type lastPos = efficient_find_first_not_of(str, 0);
-    string::size_type pos = efficient_find_first_of(str, lastPos);
-    while (string::npos != pos || string::npos != lastPos)
-    {
-        tokens.push_back(str.substr(lastPos, pos - lastPos));
-        lastPos = efficient_find_first_not_of(str, pos);
-        pos = efficient_find_first_of(str, lastPos);
-    }*/
+    // Reseteamos el bitset de delimiters porque en TokenizarEspeciales se puede haber modificado
     delimitersBitset.reset();
     for (unsigned char c : delimiters) // loop through each character in s
         delimitersBitset[c] = 1; // set the bit for c to 1
@@ -414,11 +412,9 @@ void Tokenizador::dividir_por_puntos_y_comas(const string &str, list<string> &to
 }
 */
 
-void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &tokens) {
+void Tokenizador::TokenizarEspeciales(const string &str, list<string> &tokens) {
     
     // A?adir el espacio y el salto de l?nea al set de delimitadores
-    //delimitersSet.insert(' ');
-    //delimitersSet.insert('\n');
     delimitersBitset[' '] = 1;
     delimitersBitset['\n'] = 1;
 
@@ -431,23 +427,8 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
 
     // Se detectar?n casos especiales en el siguiente orden:
     // 1. URL: delimitadores especiales: ?:/.?&-=#@?
-    string URLdelimiters_string = ":/.?&-=#@";
-    //unordered_set<char> URLdelimiters = unordered_set<char>(URLdelimiters_string.begin(), URLdelimiters_string.end());
-    bitset<256> URLdelimiters;
-    for (unsigned char c : URLdelimiters_string) // loop through each character in s
-        URLdelimiters[c] = 1; // set the bit for c to 1
     // 2. N?meros decimales: delimitadores especiales: ?.,?
-    string decimaldelimiters_string = ".,";
-    //unordered_set<char> decimaldelimiters = unordered_set<char>(decimaldelimiters_string.begin(), decimaldelimiters_string.end());
-    bitset<256> decimaldelimiters;
-    for (unsigned char c : decimaldelimiters_string) // loop through each character in s
-        decimaldelimiters[c] = 1; // set the bit for c to 1
     // 3. E-mail: delimitadores especiales: ?.-_@?
-    string emaildelimiters_string = ".-_@";
-    //unordered_set<char> emaildelimiters = unordered_set<char>(emaildelimiters_string.begin(), emaildelimiters_string.end());
-    bitset<256> emaildelimiters;
-    for (unsigned char c : emaildelimiters_string) // loop through each character in s
-        emaildelimiters[c] = 1; // set the bit for c to 1
     // 4. Acronimos: delimitadores especiales: ?.?
     // 5. Palabras con guiones: delimitadores especiales: ?-?
 
@@ -461,10 +442,10 @@ void Tokenizador::TokenizarEspecialesEstados2(const string &str, list<string> &t
     for (size_t i = 0; i < str.size(); i++) {
         c = str[i];
         // Si estamos dentro de un token comprobamos si es un delimitador especial
-        if (estado == TOKEN && delimitersBitset[c] > 0) {
+        if (estado == TOKEN && delimitersBitset[c]) {
             if (URLdelimiters[c])
                 confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
-            if (!confirmado && decimaldelimiters[c] > 0)
+            if (!confirmado && decimaldelimiters[c])
                 confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
             if (!confirmado && c == '@')
                 confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
@@ -626,7 +607,7 @@ bool Tokenizador::TokenizarEmail(const bitset<256> &emaildelimiters, const strin
             return false;
         }
         // Si aparece un delimitador de email que no sea "@" este debe ir rodeados de caracteres no delimitadores sin nig?n blanco de por medio, si no acaba el email
-        if (emaildelimiters[str[j]] && str[j] != '@') {
+        if (emaildelimiters[(unsigned char)(str[j])] && str[j] != '@') {
             if (delimitersBitset[(unsigned char)(str[j-1])] || delimitersBitset[(unsigned char)(str[j+1])] || (j+1) >= str.size()) {
                 i = j;
                 tokens.push_back(str.substr(start, i-start));
@@ -796,17 +777,6 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr)
     return true;
 }
 
-// Tokeniza el fichero i que contiene un nombre de fichero por l?nea
-// guardando la salida en ficheros(uno por cada l?nea de i) cuyo nombre
-// ser? el le?do en i a?adi?ndole extensi?n.tk,
-// y que contendr? una
-// palabra en cada l?nea del fichero le?do en i.Devolver? true si se
-// realiza la tokenizaci?n de forma correcta de todos los archivos que
-// contiene i;
-// devolver? false en caso contrario enviando a cerr el mensaje
-// correspondiente(p.ej.que no exista el archivo i, o que se trate de un directorio, 
-// enviando a ?cerr? los archivos de i que no existan o que sean directorios; luego no se ha de interrumpir la ejecuci?n si hay
-// alg?n archivo en i que no exista)
 
 bool Tokenizador::TokenizarListaFicheros(const string &NomFichEntr)
 {
@@ -836,16 +806,6 @@ bool Tokenizador::TokenizarListaFicheros(const string &NomFichEntr)
     return true;
 }
 
-// Tokeniza todos los archivos que contenga el directorio i, incluyendo
-// los de los subdirectorios, guardando la salida en ficheros cuyo nombre ser? el de entrada a?adi?ndole extensi?n.tk, 
-// y que contendr? una palabra en cada l?nea del fichero.Devolver? true si se realiza la tokenizaci?n de forma correcta 
-// de todos los archivos;
-// devolver? false en
-// caso contrario enviando a cerr el mensaje
-// correspondiente(p.ej.que no
-// exista el directorio i,
-// o los ficheros que no se hayan podido tokenizar)
-
 bool Tokenizador::TokenizarDirectorio(const string &dirAIndexar)
 {
     struct stat dir;
@@ -862,9 +822,6 @@ bool Tokenizador::TokenizarDirectorio(const string &dirAIndexar)
     }
 }
 
-// Inicializa delimiters a nuevoDelimiters, filtrando que no se
-// introduzcan delimitadores repetidos(de izquierda a derecha, en cuyo
-// caso se eliminar?an los que hayan sido repetidos por la derecha)
 void Tokenizador::DelimitadoresPalabra(const string &nuevoDelimiters) {
     delimiters = nuevoDelimiters;
     string::size_type pos = 0;
@@ -888,8 +845,6 @@ void Tokenizador::DelimitadoresPalabra(const string &nuevoDelimiters) {
         delimitersBitset[c] = 1; // set the bit for c to 1
 }
 
-// A?ade al final de ?delimiters? los nuevos delimitadores que aparezcan
-// en ?nuevoDelimiters?(no se almacenar?n caracteres repetidos)
 void Tokenizador::AnyadirDelimitadoresPalabra(const string &nuevoDelimiters) {
     for (int i = 0; i < nuevoDelimiters.length(); i++) {
         if (delimiters.find(nuevoDelimiters[i]) == string::npos) {
@@ -902,29 +857,22 @@ void Tokenizador::AnyadirDelimitadoresPalabra(const string &nuevoDelimiters) {
         delimitersBitset[c] = 1; // set the bit for c to 1
 }
 
-// Devuelve ?delimiters?
 string Tokenizador::DelimitadoresPalabra() const {
     return delimiters;
 }
 
-// Cambia la variable privada ?casosEspeciales?
 void Tokenizador::CasosEspeciales(const bool &nuevoCasosEspeciales) {
     casosEspeciales = nuevoCasosEspeciales;
 }
 
-// Devuelve el contenido de la variable privada ?casosEspeciales?
 bool Tokenizador::CasosEspeciales() {
     return casosEspeciales;
 }
 
-// Cambia la variable privada ?pasarAminuscSinAcentos?. Atenci?n al
-// formato de codificaci?n del corpus(comando ?file? de Linux).Para la correcci?n de la pr?ctica 
-// se utilizar? el formato actual(ISO - 8859).
 void Tokenizador::PasarAminuscSinAcentos(const bool &nuevoPasarAminuscSinAcentos) {
     pasarAminuscSinAcentos = nuevoPasarAminuscSinAcentos;
 }
 
-// Devuelve el contenido de la variable privada ?pasarAminuscSinAcentos?
 bool Tokenizador::PasarAminuscSinAcentos() {
     return pasarAminuscSinAcentos;
 }
@@ -949,8 +897,6 @@ size_t Tokenizador::efficient_find_first_not_of(const string &str, const size_t 
 }
 */
 
-// Devuelve el string pasado a min?sculas y quitando los acentos utilizando la codificaci?n ISO - 8859-1.
-// Para la correcci?n de la pr?ctica se utilizar? el formato actual(ISO - 8859).
 string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
     string result = "";
     for (unsigned char c : str) {

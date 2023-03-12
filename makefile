@@ -1,6 +1,6 @@
 .PHONY= clean
 
-CC=g++ -std=c++11 -pg
+CC=g++ -std=c++11
 OPTIONS= -g
 DEBUG= #-D DEBUG
 LIBDIR=lib
