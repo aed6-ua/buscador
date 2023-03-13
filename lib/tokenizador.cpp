@@ -442,33 +442,27 @@ void Tokenizador::TokenizarEspeciales(const string &str, list<string> &tokens) {
     for (size_t i = 0; i < str.size(); i++) {
         c = str[i];
         // Si estamos dentro de un token comprobamos si es un delimitador especial
-        if (estado == TOKEN && delimitersBitset[c]) {
-            if (URLdelimiters[c])
-                confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
-            if (!confirmado && decimaldelimiters[c])
-                confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
-            if (!confirmado && c == '@')
-                confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
-            if (!confirmado && c == '.')
-                confirmado = TokenizarAcronimo(str, tokens, start, i);
-            if (!confirmado && c == '-')
-                confirmado = TokenizarGuion(str, tokens, start, i);
-            if (!confirmado){
-                tokens.push_back(str.substr(start, i-start));
-                estado = INICIO;
-                confirmado = false;
-            }
-            if (confirmado) {
-                estado = INICIO;
-                confirmado = false;
-            }
-        }
-        // Si estamos al inicio nos saltamos todos los delimitadores hasta encontrar un car?cter
-        // Al encontrar el primer car?cter es donde empieza el token
-        else if (estado == INICIO) {
-            if (!delimitersBitset[c]) {
-                start = i;
-                estado = TOKEN;
+        if (delimitersBitset[c]) {
+            if (estado == TOKEN) {
+                if (URLdelimiters[c])
+                    confirmado = TokenizarURL(URLdelimiters, str, tokens, start, i);
+                if (!confirmado && decimaldelimiters[c])
+                    confirmado = TokenizarDecimal(decimaldelimiters, str, tokens, start, i, delim_at_start);
+                if (!confirmado && c == '@')
+                    confirmado = TokenizarEmail(emaildelimiters, str, tokens, start, i);
+                if (!confirmado && c == '.')
+                    confirmado = TokenizarAcronimo(str, tokens, start, i);
+                if (!confirmado && c == '-')
+                    confirmado = TokenizarGuion(str, tokens, start, i);
+                if (!confirmado){
+                    tokens.push_back(str.substr(start, i-start));
+                    estado = INICIO;
+                    confirmado = false;
+                }
+                if (confirmado) {
+                    estado = INICIO;
+                    confirmado = false;
+                }
             }
             // Para los casos en que el "." o "," aparece al principio del token
             else if (decimaldelimiters[c]) {
@@ -479,6 +473,14 @@ void Tokenizador::TokenizarEspeciales(const string &str, list<string> &tokens) {
                     confirmado = false;
                 }
                 delim_at_start = false;
+            }
+        }
+        else {
+            // Si estamos al inicio nos saltamos todos los delimitadores hasta encontrar un car?cter
+            // Al encontrar el primer car?cter es donde empieza el token
+            if (estado == INICIO) {
+                start = i;
+                estado = TOKEN;
             }
         }
     }
@@ -499,23 +501,6 @@ bool Tokenizador::TokenizarURL(const bitset<256> &URLdelimiters, const string &s
             i = aux;
             while (i < str.size() && (URLdelimiters[(unsigned char)(str[i])] || !delimitersBitset[(unsigned char)(str[i])]))
                 i++;
-            /*
-            while (!salir)
-            {
-                i = efficient_find_first_of(str, i);
-                if (i==-1) {
-                    salir = true;
-                    i = str.size();
-                }
-                else if (URLdelimiters.count(str[i]) == 0)
-                {
-                    salir = true;
-                }
-                else
-                {
-                    i++;
-                }
-            }*/
             tokens.push_back(str.substr(start, i-start));
             return true;
         }
