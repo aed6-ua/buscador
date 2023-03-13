@@ -10,12 +10,7 @@ using namespace std;
 enum ESTADO
 {
     INICIO,
-    TOKEN,
-    URL,
-    DECIMAL,
-    EMAIL,
-    ACRONIMO,
-    GUION
+    TOKEN
 };
 
 class Tokenizador
@@ -102,7 +97,6 @@ private:
     // modifique la forma de almacenamiento interna para mejorar la eficiencia, este
     // campo debe permanecer para indicar el orden en que se introdujeron los
     // delimitadores 
-    //unordered_set<char> delimitersSet; // Delimitadores de t?rminos
     bitset<256> delimitersBitset; // Delimitadores de t?rminos en forma de bitset
     bitset<256> URLdelimiters;
     bitset<256> decimaldelimiters;
