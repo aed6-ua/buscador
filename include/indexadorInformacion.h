@@ -86,6 +86,8 @@ public:
     // Inicializa todos los atributos de la clase InfDoc
     InfDoc();
 
+    InfDoc(int idDoc, int numPal, int numPalSinParada, int numPalDiferentes, int tamBytes, time_t fechaModificacion);
+
     // Pone todos los atributos de la clase InfDoc a 0
     ~InfDoc();
 
@@ -119,6 +121,12 @@ public:
     ~InfColeccionDocs();
     InfColeccionDocs &operator=(const InfColeccionDocs &);
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    int getNumDocs() const { return numDocs; }
+    void addDoc() { this->numDocs++; }
+    void addNumTotalPal(int numPal) { this->numTotalPal += numPal; }
+    void addNumTotalPalSinParada(int numPalSinParada) { this->numTotalPalSinParada += numPalSinParada; }
+    void addNumTotalPalDiferentes(int numPalDiferentes) { this->numTotalPalDiferentes += numPalDiferentes; }
+    void addTamBytes(int tamBytes) { this->tamBytes += tamBytes; }
 private:
     int numDocs; // Nº total de documentos en la colección
     int numTotalPal;

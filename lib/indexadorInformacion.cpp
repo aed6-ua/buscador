@@ -26,6 +26,17 @@ InfDoc::InfDoc(const InfDoc &infDoc)
     fechaModificacion = infDoc.fechaModificacion;
 }
 
+// Constructor con parámetros
+InfDoc::InfDoc(int idDoc, int numPal, int numPalSinParada, int numPalDiferentes, int tamBytes, time_t fechaModificacion)
+{
+    this->idDoc = idDoc;
+    this->numPal = numPal;
+    this->numPalSinParada = numPalSinParada;
+    this->numPalDiferentes = numPalDiferentes;
+    this->tamBytes = tamBytes;
+    this->fechaModificacion = fechaModificacion;
+}
+
 // Destructor
 InfDoc::~InfDoc()
 {

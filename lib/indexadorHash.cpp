@@ -247,6 +247,21 @@ IndexadorHash &IndexadorHash::operator=(const IndexadorHash &orig)
     return *this;
 }
 
+/* Devuelve true si nomDoc existe en la colección y muestra por pantalla
+el contenido del campo privado ?indiceDocs? para el documento con nombre
+?nomDoc?: cout << nomDoc << ?\t? << InfDoc << endl; . Si no existe no se
+muestra nada*/
+bool IndexadorHash::ListarDocs(const string &nomDoc) const
+{
+    auto it = indiceDocs.find(nomDoc);
+    if (it != indiceDocs.end())
+    {
+        cout << it->first << '\t' << it->second << "\n";
+        return true;
+    }
+    return false;
+}
+
 /* Devuelve true si consigue crear el índice para la colección de
     documentos detallada en ficheroDocumentos, el cual contendrá un nombre
     de documento por línea. Los añadirá a los ya existentes anteriormente en
@@ -272,7 +287,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
     ifstream f(ficheroDocumentos.c_str());
     if (!f)
     {
-        cout << "Error al abrir el fichero de documentos" << endl;
+        cerr << "Error al abrir el fichero de documentos " << ficheroDocumentos << endl;
         return false;
     }
     string linea;
@@ -302,15 +317,17 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             IndexarDoc(linea);
         }
     }
+    return true;
 }
 
 bool IndexadorHash::IndexarDoc(const string &nomDoc)
 {
     // Abrir el documento
-    ifstream f(nomDoc.c_str());
+    ifstream f;
+    f.open(nomDoc.c_str());
     if (!f)
     {
-        cout << "Error al abrir el fichero " << nomDoc << endl;
+        cerr << "Error al abrir el fichero para indexar " << nomDoc << endl;
         return false;
     }
     // Obtener el idDoc
@@ -324,53 +341,82 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
     {
         // Documento .tk que contiene un término por línea
         ifstream f(nomDoc + ".tk");
+        if (!f)
+        {
+            cerr << "Error al abrir el fichero de tokens " << nomDoc << ".tk" << endl;
+            return false;
+        }
         string linea;
         // Inicializar stemmer
         stemmerPorter stemmer = stemmerPorter();
+
+        // Número de palabras del documento
+        int numPalabras = 0;
+        // Número de palabras que no son stopWords
+        int numPalabrasSinStopWords = 0;
+        // Número de palabras distintas del documento
+        int numPalabrasDistintas = 0;
+        // Número de términos distintos total
+        int numTotalPalDiferentes = 0;
+
+        // Palabras distintas del documento
+        unordered_set<string> palabrasDistintas;
         while (getline(f, linea))
         {
-            // Quitar el salto de línea
-            string token = linea.substr(0, linea.size() - 1);
+            numPalabras++;
             // Comprobar si el término es una stopWord
             if (stopWords.find(linea) == stopWords.end())
             {
+                numPalabrasSinStopWords++;
                 // Aplicar el stemmer
-                stemmer.stemmer(token, tipoStemmer);
+                stemmer.stemmer(linea, tipoStemmer);
                 // Comprobar si el término está en el índice
-                if (indice.find(token) != indice.end())
+                if (indice.find(linea) != indice.end())
                 {
                     // Obtener la información del término del índice
-                    InformacionTermino infTerm = indice[token];
+                    InformacionTermino infTerm = indice[linea];
                     // Actualizar la información del término
                     infTerm.addFtc();
-                    Actualiza(token, infTerm);
+                    Actualiza(linea, infTerm);
                 }
                 else
                 {
+                    numTotalPalDiferentes++;
                     // Añadir el término al índice
-                    Inserta(token, InformacionTermino());
+                    Inserta(linea, InformacionTermino());
+                }
+                // Comprobar si la palabra es única en el documento
+                if (palabrasDistintas.find(linea) == palabrasDistintas.end())
+                {
+                    // Añadir la palabra al conjunto de palabras distintas del documento
+                    palabrasDistintas.insert(linea);
+                    numPalabrasDistintas++;
                 }
             }
         }
+        // Obtener fecha de modificación del documento y tamaño en bytes
+        struct stat atributos;
+        stat(nomDoc.c_str(), &atributos);
+        int tamBytes = atributos.st_size;
+        time_t fechaModificacion = atributos.st_mtime;
+        // Añadir el documento al índice de documentos
+        indiceDocs.insert(make_pair(nomDoc, InfDoc(informacionColeccionDocs.getNumDocs() + 1, numPalabras, numPalabrasSinStopWords, numPalabrasDistintas, tamBytes, fechaModificacion)));
+        // Actualizar la información de la colección de documentos
+        informacionColeccionDocs.addDoc();
+        informacionColeccionDocs.addNumTotalPal(numPalabras);
+        informacionColeccionDocs.addNumTotalPalSinParada(numPalabrasSinStopWords);
+        informacionColeccionDocs.addNumTotalPalDiferentes(numTotalPalDiferentes);
+        informacionColeccionDocs.addTamBytes(tamBytes);
     }
     else
     {
-        cout << "Error al tokenizar el documento " << nomDoc << endl;
+        cerr << "Error al tokenizar el documento " << nomDoc << endl;
         return false;
     }
+    return true;
 }
 
 bool IndexadorHash::BorraDoc(const string &nomDoc)
-{
-    return false;
-}
-
-bool IndexadorHash::Actualiza(const string &termino, const InformacionTermino &infTerm)
-{
-    return false;
-}
-
-bool IndexadorHash::Inserta(const string &termino, const InformacionTermino &infTerm)
 {
     return false;
 }

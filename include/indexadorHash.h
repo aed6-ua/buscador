@@ -52,10 +52,10 @@ public:
     void ImprimirPregunta();
     bool Devuelve(const string &word, InformacionTermino &inf) const;
 
-    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &InfDoc)
-        const;
+    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &InfDoc) const;
 
-    bool Existe(const string &word) const;
+    // Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
+    bool Existe(const string &word) const { return indice.find(word) != indice.end(); }
 
     bool Borra(const string &word);
 
@@ -65,11 +65,18 @@ public:
 
     void VaciarIndicePreg();
 
-    bool Actualiza(const string &word, const InformacionTermino &inf);
+    /* Será true si word (aplicándole el tratamiento de stemming y 
+    mayúsculas correspondiente) está indexado, sustituyendo la información 
+    almacenada por ?inf?*/
+    bool Actualiza(const string &word, const InformacionTermino &inf) { return Existe(word) ? indice[word] = inf, true : false; }
 
-    bool Inserta(const string &word, const InformacionTermino &inf);
+    /* Será true si se realiza la inserción (p.ej. si word, aplicándole el 
+    tratamiento de stemming y mayúsculas correspondiente, no estaba 
+    previamente indexado)*/
+    bool Inserta(const string &word, const InformacionTermino &inf) { return indice.insert(make_pair(word, inf)).second; }
 
-    int NumPalIndexadas() const;
+    // Devolverá el número de términos diferentes indexados (cardinalidad de campo privado ?índice?)
+    int NumPalIndexadas() const { return indice.size(); }
 
     // Devuelve el contenido del campo privado ?ficheroStopWords?
     string DevolverFichPalParada() const { return ficheroStopWords; }
@@ -100,13 +107,15 @@ public:
     // Devolverá el valor indicado en la variable privada ?almEnDisco?
     bool DevolverAlmEnDisco() const { return almacenarEnDisco; }
 
-    void ListarInfColeccDocs() const;
+    // Mostrar por pantalla: cout << informacionColeccionDocs << endl;
+    void ListarInfColeccDocs() const { cout << informacionColeccionDocs << endl; }
 
     void ListarTerminos() const;
 
     bool ListarTerminos(const string &nomDoc) const;
 
-    void ListarDocs() const;
+    // Mostrar por pantalla el contenido el contenido del campo privado ?indiceDocs?: cout << nomDoc << ?\t? << InfDoc << endl;
+    void ListarDocs() const { for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it) cout << it->first << '\t' << it->second << "\n"; }
 
     bool ListarDocs(const string &nomDoc) const;
 

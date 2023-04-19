@@ -1,40 +1,32 @@
 #include <iostream> 
 #include <string>
 #include <list> 
-#include "tokenizador.h"
+#include "indexadorHash.h"
 
 using namespace std;
 
-///////// Comprobación de que vacíe la lista resultado
-
-void imprimirListaSTL(const list<string>& cadena)
-{
-        list<string>::const_iterator itCadena;
-        for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
-        {
-                cout << (*itCadena) << ", ";
-        }
-        cout << endl;
-}
+/////////////////////////////////////////////////////////
+// ATENCIï¿½N: Actualizar convenientemente en el fichero indexador03.cpp.sal los tamanyos en bytes de los archivos y de la colecciï¿½n
+/////////////////////////////////////////////////////////
 
 int
 main(void)
 {
-	bool kCasosEspeciales = true, kpasarAminusculas = false;
+IndexadorHash a("./StopWordsEspanyol.txt", ". ,:", false, false, "./indicePrueba", 0, false, true);
 
-	list<string> lt1, lt2;
+if(a.Indexar("./listaFicheros_corto.txt"))
+	cout << "Indexacion terminada" << endl;
+else
+	cout << "Indexacion NO terminada" << endl;
+cout << a.NumPalIndexadas() << endl;
 
-Tokenizador a("", true, false); 
-list<string> tokens; 
+a.ListarDocs("corpus_corto/fichero1.txt");
+a.ListarDocs("corpus_corto/fichero2.txt");
+if(a.ListarDocs("corpus_corto/fichero3.txt"))
+	cout << "Existe el archivo corpus_corto/fichero3.txt" << endl;
+else
+	cout << "NO Existe el archivo corpus_corto/fichero3.txt" << endl;
 
-a.Tokenizar("http:", tokens);
-	imprimirListaSTL(tokens);
-
-a.Tokenizar("http:////ab/", tokens);
-	imprimirListaSTL(tokens);
-
-a.Tokenizar("http:////ab.", tokens);
-	imprimirListaSTL(tokens);
-
+a.ListarInfColeccDocs();
 
 }
