@@ -97,6 +97,9 @@ public:
 
     bool ListarDocs(const string &nomDoc) const;
 
+
+    bool IndexarDoc(const string &linea);
+
 private:
     IndexadorHash();
     unordered_map<string, InformacionTermino> indice;

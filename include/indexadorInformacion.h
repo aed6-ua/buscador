@@ -14,6 +14,7 @@ public:
     ~InformacionTermino(); // Pone ftc = 0 y vacía l_docs
     InformacionTermino &operator=(const InformacionTermino &);
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    void addFtc() { this->ftc++; }
 private:
     int ftc; // Frecuencia total del término en la colección
     unordered_map<int, InfTermDoc> l_docs;
@@ -64,6 +65,7 @@ public:
     ~InfDoc();
     InfDoc &operator=(const InfDoc &);
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    time_t getFechaModificacion() const { return fechaModificacion; }
 private:
     int idDoc;
     // Identificador del documento. El primer documento indexado en la colección será el identificador 1
