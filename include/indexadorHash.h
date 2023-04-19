@@ -1,12 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
-#include "InfTermDoc.h"
-#include "InfDoc.h"
-#include "InfColeccionDocs.h"
-#include "InformacionTermino.h"
-#include "InformacionTerminoPregunta.h"
-#include "InformacionPregunta.h"
+#include "indexadorInformacion.h"
 
 using namespace std;
 
