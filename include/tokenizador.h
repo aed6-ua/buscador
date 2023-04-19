@@ -10,12 +10,7 @@ using namespace std;
 enum ESTADO
 {
     INICIO,
-    TOKEN,
-    URL,
-    DECIMAL,
-    EMAIL,
-    ACRONIMO,
-    GUION
+    TOKEN
 };
 
 class Tokenizador
@@ -102,8 +97,10 @@ private:
     // modifique la forma de almacenamiento interna para mejorar la eficiencia, este
     // campo debe permanecer para indicar el orden en que se introdujeron los
     // delimitadores 
-    //unordered_set<char> delimitersSet; // Delimitadores de t?rminos
     bitset<256> delimitersBitset; // Delimitadores de t?rminos en forma de bitset
+    bitset<256> URLdelimiters;
+    bitset<256> decimaldelimiters;
+    bitset<256> emaildelimiters;
     bool casosEspeciales;
     // Si true detectar? palabras compuestas y casos especiales. Sino,
     // trabajar? al igual que el algoritmo propuesto en la secci?n ?Versi?n del
@@ -112,10 +109,10 @@ private:
     // Si true pasar? el token a min?sculas y quitar? acentos, antes de
     // realizar la tokenizaci?n
     void TokenizarSimple(const string &str, list<string> &tokens);
-    void TokenizarEspeciales(const string &str, list<string> &tokens) const;
+    //void TokenizarEspeciales(const string &str, list<string> &tokens) const;
     // M?todo auxiliar para tokenizar teniendo en cuenta los casos especiales
-    void TokenizarEspecialesEstados(const string &str, list<string> &tokens);
-    void TokenizarEspecialesEstados2(const string &str, list<string> &tokens);
+    //void TokenizarEspecialesEstados(const string &str, list<string> &tokens);
+    void TokenizarEspeciales(const string &str, list<string> &tokens);
     bool TokenizarURL(const bitset<256> &URLdelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
     bool TokenizarEmail(const bitset<256> &emaildelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i) const;
     bool TokenizarDecimal(const bitset<256> &decimaldelimiters, const string &str, list<string> &tokens, size_t &start, size_t &i, const bool &delim_at_start) const;
