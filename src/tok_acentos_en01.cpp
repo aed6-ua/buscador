@@ -36,15 +36,15 @@ main(void)
 		imprimirListaSTL(lt3);
 
 		a.DelimitadoresPalabra(" _");
-		a.Tokenizar("MS#DOS 10 España Éspáñé OS_2 [high low]", lt3);
+		a.Tokenizar("MS#DOS 10 Espa?a ?sp??? OS_2 [high low]", lt3);
 		imprimirListaSTL(lt3);
 
-		a.Tokenizar("áéíóú ÁÉÍÓÚ Ññ ", lt3);
+		a.Tokenizar("????? ????? ?? ", lt3);
 		imprimirListaSTL(lt3);
 
 		a.PasarAminuscSinAcentos(false);
 		a.DelimitadoresPalabra(" _");
-		a.Tokenizar("MS#DOS 10 España Éspáñé OS_2 [high low]", lt3);
+		a.Tokenizar("MS#DOS 10 Espa?a ?sp??? OS_2 [high low]", lt3);
 		imprimirListaSTL(lt3);
 		
 }

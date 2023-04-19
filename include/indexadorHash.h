@@ -1,7 +1,11 @@
+#ifndef _INDEXADORHASH_H_
+#define _INDEXADORHASH_H_
+
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include "indexadorInformacion.h"
+#include "tokenizador.h"
 
 using namespace std;
 
@@ -9,13 +13,13 @@ class IndexadorHash
 {
     friend ostream &operator<<(ostream &s, const IndexadorHash &p)
     {
-        s << "Fichero con el listado de palabras de parada : " << p.ficheroStopWords << endl;
-        s << "Tokenizador : " << p.tok << endl;
-        s << "Directorio donde se almacenara el indice generado : " << p.directorioIndice << endl;
-        s << "Stemmer utilizado : " << p.tipoStemmer << endl;
-        s << "Informacion de la coleccion indexada : " << p.informacionColeccionDocs << endl;
-        s << "Se almacenara parte del indice en disco duro : " << p.almacenarEnDisco << endl;
-        s << "Se almacenaran las posiciones de los terminos : " << p.almacenarPosTerm;
+        s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << endl;
+        s << "Tokenizador: " << p.tok << endl;
+        s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << endl;
+        s << "Stemmer utilizado: " << p.tipoStemmer << endl;
+        s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << endl;
+        s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << endl;
+        s << "Se almacenaran las posiciones de los terminos: " << p.almacenarPosTerm;
         return s;
     }
 
@@ -67,25 +71,34 @@ public:
 
     int NumPalIndexadas() const;
 
-    string DevolverFichPalParada() const;
+    // Devuelve el contenido del campo privado ?ficheroStopWords?
+    string DevolverFichPalParada() const { return ficheroStopWords; }
 
     void ListarPalParada() const;
 
-    int NumPalParada() const;
+    // Devolverá el número de palabras de parada almacenadas
+    int NumPalParada() const { return stopWords.size(); }
 
-    string DevolverDelimitadores() const;
+    // Devuelve los delimitadores utilizados por el tokenizador
+    string DevolverDelimitadores() const { return tok.DelimitadoresPalabra(); }
 
-    bool DevolverCasosEspeciales() const;
+    // Devuelve si el tokenizador analiza los casos especiales
+    bool DevolverCasosEspeciales() const { return tok.CasosEspeciales(); }
 
-    bool DevolverPasarAminuscSinAcentos() const;
+    // Devuelve si el tokenizador pasa a minúsculas y sin acentos
+    bool DevolverPasarAminuscSinAcentos() const { return tok.PasarAminuscSinAcentos(); }
 
-    bool DevolverAlmacenarPosTerm() const;
+    // Devuelve el valor de almacenarPosTerm
+    bool DevolverAlmacenarPosTerm() const { return almacenarPosTerm; }
 
-    string DevolverDirIndice() const;
+    // Devuelve ?directorioIndice? (el directorio del disco duro donde se almacenará el índice)
+    string DevolverDirIndice() const { return directorioIndice; }
 
-    int DevolverTipoStemming() const;
+    // Devolverá el tipo de stemming realizado en la indexación de acuerdo con el valor indicado en la variable privada ?tipoStemmer?
+    int DevolverTipoStemming() const { return tipoStemmer; }
 
-    bool DevolverAlmEnDisco() const;
+    // Devolverá el valor indicado en la variable privada ?almEnDisco?
+    bool DevolverAlmEnDisco() const { return almacenarEnDisco; }
 
     void ListarInfColeccDocs() const;
 
@@ -97,8 +110,7 @@ public:
 
     bool ListarDocs(const string &nomDoc) const;
 
-
-    bool IndexarDoc(const string &linea);
+    bool IndexarDoc(const string &nomDoc);
 
 private:
     IndexadorHash();
@@ -117,3 +129,5 @@ private:
     bool almacenarEnDisco;
     bool almacenarPosTerm;
 };
+
+#endif

@@ -55,7 +55,7 @@ Tokenizador::Tokenizador()
     string emaildelimiters_string = ".-_@"; // delimiters for emails
     for (unsigned char c : emaildelimiters_string) // loop through each character in s
         emaildelimiters[c] = 1; // set the bit for c to 1
-    delimiters = ",;:.-/+*\\ '\"{}[]()<>¡!¿?&#=\t\n\r@";
+    delimiters = ",;:.-/+*\\ '\"{}[]()<>?!??&#=\t\n\r@";
     for (unsigned char c : delimiters) // loop through each character in s
         delimitersBitset[c] = 1; // set the bit for c to 1
     casosEspeciales = true;
@@ -559,7 +559,7 @@ void Tokenizador::CasosEspeciales(const bool &nuevoCasosEspeciales) {
     casosEspeciales = nuevoCasosEspeciales;
 }
 
-bool Tokenizador::CasosEspeciales() {
+bool Tokenizador::CasosEspeciales() const {
     return casosEspeciales;
 }
 
@@ -567,7 +567,7 @@ void Tokenizador::PasarAminuscSinAcentos(const bool &nuevoPasarAminuscSinAcentos
     pasarAminuscSinAcentos = nuevoPasarAminuscSinAcentos;
 }
 
-bool Tokenizador::PasarAminuscSinAcentos() {
+bool Tokenizador::PasarAminuscSinAcentos() const {
     return pasarAminuscSinAcentos;
 }
 
@@ -578,7 +578,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
         if (code < 192)
             result += tolower(c);
         else if (code == 209)
-            result += 'ñ';
+            result += '?';
         else if (code < 224) {
             double y = floor((code-192)/6);
             if (y<=2)
@@ -587,7 +587,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
                 result += string(1, (y * 6) + 93);
         }
         else if (code == 241)
-            result += 'ñ';
+            result += '?';
         else {
             double y = floor((code - 224) / 6);
             if (y <= 2)

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-///////// Comprobación de que vacíe la lista resultado
+///////// Comprobaci?n de que vac?e la lista resultado
 
 void imprimirListaSTL(const list<string>& cadena)
 {

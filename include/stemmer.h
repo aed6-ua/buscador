@@ -8,7 +8,7 @@ using namespace std;
 
 class stemmerPorter {
 public:
-	stemmerPorter();	// Por defecto se inicializa para español
+	stemmerPorter();	// Por defecto se inicializa para espa?ol
 	stemmerPorter(const stemmerPorter&);
 	~stemmerPorter();
 	stemmerPorter& operator=(const stemmerPorter &n);

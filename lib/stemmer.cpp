@@ -169,11 +169,11 @@ void stemmerPorter::step_1 ( char *string )
 		delete [] stem;
 		GtamStem = strlen(string) + 1;
 		stem = new char [GtamStem];
-		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 	}
 
 //	if(strlen(string) >= TAMANYO_MAX_PAL) {
-//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 //		exit(EXIT_STEMMER);
 //	}
 
@@ -218,7 +218,7 @@ void stemmerPorter::step_1 ( char *string )
 	if ( (has_suffix(string,(char*) "y",stem) == TRUE) &&
 					(contains_vowel(stem) == TRUE) )
 		string[strlen(string)-1] = 'i';
-	if ( has_suffix(string,(char*) "th",stem) == TRUE)		//ING añadido para que quite 50th y deje 50
+	if ( has_suffix(string,(char*) "th",stem) == TRUE)		//ING a?adido para que quite 50th y deje 50
 		string[strlen(string)-2] = '\0';
 }
 
@@ -249,14 +249,14 @@ void stemmerPorter::step_2 ( char *string )
 					{  0,        0     } };
 //	char stem[TAMANYO_MAX_PAL];
 //	if(strlen(string) >= TAMANYO_MAX_PAL) {
-//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 //		exit(EXIT_STEMMER);
 //	}
 	if(strlen(string) >= GtamStem) {
 		delete [] stem;
 		GtamStem = strlen(string) + 1;
 		stem = new char [GtamStem];
-		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 	}
 	register int index;
 	for ( index = 0 ; suffixes[index][0] != 0 ; index++ ) {
@@ -283,14 +283,14 @@ void stemmerPorter::step_3 ( char *string )
 				       { 0,       0 } };
 //	char stem[TAMANYO_MAX_PAL];
 //	if(strlen(string) >= TAMANYO_MAX_PAL) {
-//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 //		exit(EXIT_STEMMER);
 //	}
 	if(strlen(string) >= GtamStem) {
 		delete [] stem;
 		GtamStem = strlen(string) + 1;
 		stem = new char [GtamStem];
-		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+		cerr << "ERROR SOLUCIONADO: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 	}
 	register int index;
 	for ( index = 0 ; suffixes[index][0] != 0 ; index++ ) {
@@ -310,7 +310,7 @@ void stemmerPorter::step_4 ( char *string )
 		(char*) "ou", (char*) "ism", (char*) "ate", (char*) "iti", (char*) "ous", (char*) "ive", (char*) "ize", (char*) "ise", 0 };
 //	char stem[TAMANYO_MAX_PAL];
 //	if(strlen(string) >= TAMANYO_MAX_PAL) {
-//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+//		cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 //		exit(EXIT_STEMMER);
 //	}
 	if(strlen(string) >= GtamStem) {
@@ -339,7 +339,7 @@ void stemmerPorter::step_5 ( char *string )
 			if ( measure(string) == 1 ) {
 				char stem[TAMANYO_MAX_PAL];
 				if(strlen(string) > TAMANYO_MAX_PAL) {
-					cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+					cerr << "ERROR: palabra: " << string << " a stemmerizar de longitud: " << strlen(string) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 					exit(EXIT_STEMMER);
 				}
 				strcpy(stem,"");
@@ -358,7 +358,7 @@ int stemmerPorter::has_suffix ( char *word, char *suffix, char *stem )
 {
 //	char tmp[TAMANYO_MAX_PAL];
 //	if(strlen(word) >= TAMANYO_MAX_PAL) {
-//		cerr << "ERROR: palabra: " << word << " a stemmerizar de longitud: " << strlen(word) << " mayor que el máximo previsto: " << TAMANYO_MAX_PAL << endl;
+//		cerr << "ERROR: palabra: " << word << " a stemmerizar de longitud: " << strlen(word) << " mayor que el m?ximo previsto: " << TAMANYO_MAX_PAL << endl;
 //		exit(EXIT_STEMMER);
 //	}
   
@@ -468,7 +468,7 @@ int len = strlen (word)-1;
 if (len > 3) {  
    removeSpanishAccent(word);
    if ((word[len]=='s') && (word[len-1]=='e') && (word[len-2]=='s') && (word[len-3]=='e')) {
-         /*  corteses -> cortés  */
+         /*  corteses -> cort?s  */
          word[len-1]='\0';
          return(word);
       }
@@ -506,19 +506,19 @@ int len = strlen (word)-1;
 int i;
 
    for(i=len; i>=0; i--) {
-      if ((word[i]=='à') || (word[i]=='á') || (word[i]=='â') || (word[i]=='ä')) {
+      if ((word[i]=='?') || (word[i]=='?') || (word[i]=='?') || (word[i]=='?')) {
          word[i] = 'a';
          }
-      if ((word[i]=='ò') || (word[i]=='ó') || (word[i]=='ô') || (word[i]=='ö')) {
+      if ((word[i]=='?') || (word[i]=='?') || (word[i]=='?') || (word[i]=='?')) {
          word[i] = 'o';
          }
-      if ((word[i]=='è') || (word[i]=='é') || (word[i]=='ê') || (word[i]=='ë')) {
+      if ((word[i]=='?') || (word[i]=='?') || (word[i]=='?') || (word[i]=='?')) {
          word[i] = 'e';
          }
-      if ((word[i]=='ù') || (word[i]=='ú') || (word[i]=='û') || (word[i]=='ü')) {
+      if ((word[i]=='?') || (word[i]=='?') || (word[i]=='?') || (word[i]=='?')) {
          word[i] = 'u';
          }
-      if ((word[i]=='ì') || (word[i]=='í') || (word[i]=='î') || (word[i]=='ï')) {
+      if ((word[i]=='?') || (word[i]=='?') || (word[i]=='?') || (word[i]=='?')) {
          word[i] = 'i';
          }
       }
