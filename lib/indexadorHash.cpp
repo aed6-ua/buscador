@@ -185,17 +185,6 @@ IndexadorHash::IndexadorHash(const string &fichStopWords, const string &delimita
     // Si es true se almacenará la posición en la que aparecen los términos dentro del documento en la clase InfTermDoc
 }
 
-/* Constructor para inicializar IndexadorHash a partir de una indexación
-previamente realizada que habrá sido almacenada en
-?directorioIndexacion? mediante el método ?bool GuardarIndexacion()?.
-Con ello toda la parte privada se inicializará convenientemente, igual
-que si se acabase de indexar la colección de documentos. En caso que no
-exista el directorio o que no contenga los datos de la indexación se
-tratará la excepción correspondiente*/
-IndexadorHash::IndexadorHash(const string &directorioIndexacion)
-{
-}
-
 IndexadorHash::IndexadorHash(const IndexadorHash &orig)
 {
     indice = orig.indice;
@@ -248,37 +237,126 @@ IndexadorHash &IndexadorHash::operator=(const IndexadorHash &orig)
     return *this;
 }
 
-/*Constructor para inicializar IndexadorHash a partir de una indexación 
-previamente realizada que habrá sido almacenada en 
-?directorioIndexacion? mediante el método ?bool GuardarIndexacion()?. 
+/*Constructor para inicializar IndexadorHash a partir de una indexación
+previamente realizada que habrá sido almacenada en
+?directorioIndexacion? mediante el método ?bool GuardarIndexacion()?.
 Con ello toda la parte privada se inicializará convenientemente, igual
-que si se acabase de indexar la colección de documentos. En caso que no 
-exista el directorio o que no contenga los datos de la indexación se 
+que si se acabase de indexar la colección de documentos. En caso que no
+exista el directorio o que no contenga los datos de la indexación se
 tratará la excepción correspondiente
 */
-IndexadorHash::IndexadorHash(const string &directorioIndexacion) {
+IndexadorHash::IndexadorHash(const string &directorioIndexacion)
+{
     // Comprobamos que el directorio exista
-    if (opendir(directorioIndexacion.c_str()) == NULL) {
+    if (opendir(directorioIndexacion.c_str()) == NULL)
+    {
         cerr << "El directorio " << directorioIndexacion << " no existe" << endl;
     }
     // Abrimos el fichero indexador.dat. Si no existe mostramos error.
     string ficheroIndexador = directorioIndexacion + "/indexador.dat";
     ifstream f(ficheroIndexador.c_str());
-    if (!f) {
+    if (!f)
+    {
         cerr << "No se ha podido abrir el fichero " << ficheroIndexador << endl;
     }
-    // Leemos el indice del fichero
-    // La primera linea indica el tamaño del indice
-    string linea;
-    getline(f, linea);
-    int tam = atoi(linea.c_str());
-    // El resto tam lineas indican el termino y la serializacion de InformacionTermino
-    for (int i = 0; i < tam; i++) {
+    f.exceptions(std::ios::failbit);
+    try
+    {
+        // Leemos el indice del fichero
+        // La primera linea indica el tamaño del indice
+        string linea;
         getline(f, linea);
-        InformacionTermino it;
-        it.Cargar(linea);
-        indice[linea] = it;
+        int tam = atoi(linea.c_str());
+        // El resto tam lineas indican el termino y la serializacion de InformacionTermino
+        for (int i = 0; i < tam; i++)
+        {
+            getline(f, linea);
+            string term = linea;
+            InformacionTermino it;
+            getline(f, linea);
+            it.cargar(linea);
+            indice[term] = it;
+        }
+        // Leemos el indice de documentos del fichero
+        // La primera linea indica el tamaño del indice
+        getline(f, linea);
+        tam = atoi(linea.c_str());
+        // El resto tam lineas indican el nombre del documento y la serializacion de InfDoc
+        for (int i = 0; i < tam; i++)
+        {
+            getline(f, linea);
+            string nomDoc = linea;
+            InfDoc id;
+            getline(f, linea);
+            id.cargar(linea);
+            indiceDocs[nomDoc] = id;
+        }
+        // Leemos el indice de preguntas del fichero
+        // La primera linea indica el tamaño del indice
+        getline(f, linea);
+        tam = atoi(linea.c_str());
+        // El resto tam lineas indican el termino y la serializacion de InformacionTerminoPregunta
+        for (int i = 0; i < tam; i++)
+        {
+            getline(f, linea);
+            string term = linea;
+            InformacionTerminoPregunta itp;
+            getline(f, linea);
+            itp.cargar(linea);
+            indicePregunta[term] = itp;
+        }
+        // Leemos los stopwords del fichero
+        // La primera linea indica el tamaño del unordered_set
+        getline(f, linea);
+        tam = atoi(linea.c_str());
+        // El resto tam lineas indican los stopwords
+        for (int i = 0; i < tam; i++)
+        {
+            getline(f, linea);
+            stopWords.insert(linea);
+        }
+        // Leemos la informacion de la coleccion de documentos
+        getline(f, linea);
+        informacionColeccionDocs.cargar(linea);
+        // Leemos la pregunta
+        getline(f, linea);
+        pregunta = linea;
+        // Leemos la informacion de la pregunta
+        getline(f, linea);
+        infPregunta.cargar(linea);
+        // Leemos el fichero de stopwords
+        getline(f, linea);
+        ficheroStopWords = linea;
+        // Leemos el tokenizador
+        getline(f, linea);
+        string delimitadoresPalabra;
+        bool kcasosEspeciales;
+        bool minuscSinAcentos;
+        delimitadoresPalabra = linea.substr(14, linea.find(" TRATA CASOS ESPECIALES: ") - 14);
+        int pos = linea.find(" TRATA CASOS ESPECIALES: ") + 25;
+        kcasosEspeciales = (linea.substr(pos, linea.find(" MINUSC SIN ACENTOS: ") - pos) == "1") ? true : false;
+        pos = linea.find(" PASAR A MINUSCULAS Y SIN ACENTOS: ") + 34;
+        minuscSinAcentos = (linea.substr(pos) == "1") ? true : false;
+        tok = Tokenizador(delimitadoresPalabra, kcasosEspeciales, minuscSinAcentos);
+        // Leemos el directorio donde se almacena el indice
+        getline(f, linea);
+        directorioIndice = linea;
+        // Leemos el tipo de stemmer
+        getline(f, linea);
+        tipoStemmer = atoi(linea.c_str());
+        // Leemos si se almacena en disco
+        getline(f, linea);
+        almacenarEnDisco = (linea == "1") ? true : false;
+        // Leemos si se almacenan las posiciones de los terminos
+        getline(f, linea);
+        almacenarPosTerm = (linea == "1") ? true : false;
+        // Cerramos el fichero
     }
+    catch (std::ios::failure &e)
+    {
+        cerr << "Error al leer el fichero " << ficheroIndexador << ": " << e.what() << endl;
+    }
+    f.close();
 }
 
 ostream &operator<<(ostream &s, const IndexadorHash &p)
@@ -377,7 +455,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         return false;
     }
     // Obtener el idDoc
-    int idDoc = indiceDocs.size()+1;
+    int idDoc = indiceDocs.size() + 1;
     // Obtener la fecha de modificación
     struct stat atributos;
     stat(nomDoc.c_str(), &atributos);
@@ -409,7 +487,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         unordered_set<string> palabrasDistintas;
         while (getline(f, linea))
         {
-            
+
             // Comprobar si el término es una stopWord
             if (stopWords.find(linea) == stopWords.end())
             {
@@ -427,7 +505,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
                     if (infTerm.existIdDoc(idDoc))
                     {
                         // Obtener la información del término en el documento
-                        InfTermDoc* infTermDoc = infTerm.getInfTermDoc(idDoc);
+                        InfTermDoc *infTermDoc = infTerm.getInfTermDoc(idDoc);
                         // Actualizar la información del término en el documento
                         infTermDoc->addFt();
                         infTermDoc->addPosTerm(numPalabras);
@@ -472,9 +550,9 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         int tamBytes = atributos.st_size;
         time_t fechaModificacion = atributos.st_mtime;
         // Añadir el documento al índice de documentos
-        indiceDocs.insert(make_pair(nomDoc, InfDoc(informacionColeccionDocs.getNumDocs() + 1, 
-                                                    numPalabras, numPalabrasSinStopWords, numPalabrasDistintas, 
-                                                    tamBytes, fechaModificacion)));
+        indiceDocs.insert(make_pair(nomDoc, InfDoc(informacionColeccionDocs.getNumDocs() + 1,
+                                                   numPalabras, numPalabrasSinStopWords, numPalabrasDistintas,
+                                                   tamBytes, fechaModificacion)));
         // Actualizar la información de la colección de documentos
         informacionColeccionDocs.addDoc();
         informacionColeccionDocs.addNumTotalPal(numPalabras);
@@ -491,12 +569,13 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
 }
 
 /* Devuelve true si nomDoc está indexado y se realiza el borrado de
-todos los términos del documento y del documento en los campos privados 
+todos los términos del documento y del documento en los campos privados
 ?indiceDocs? e ?informacionColeccionDocs?*/
 bool IndexadorHash::BorraDoc(const string &nomDoc)
 {
     // Comprobar si el documento está indexado
-    if (indiceDocs.find(nomDoc) != indiceDocs.end()) {
+    if (indiceDocs.find(nomDoc) != indiceDocs.end())
+    {
         // Obtener el idDoc
         int idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
         // Obtener la información del documento
@@ -570,80 +649,82 @@ crearlo previamente
 */
 bool IndexadorHash::GuardarIndexacion() const
 {
-        // Comprobar si el directorio existe y si no crearlo
-        if (mkdir(directorioIndice.c_str(), 0777) == -1 && errno != EEXIST)
-        {
-            cerr << "Error al crear el directorio " << directorioIndice << "\n";
-            return false;
-        }
-
-        // Crear el fichero
-        ofstream f(directorioIndice + "/indexador.dat");
-        f.exceptions(std::ios::failbit);
-        try
-        {
-            if (!f)
-            {
-                cerr << "Error al abrir el fichero " << directorioIndice + "/indexador.dat" << "\n";
-                return false;
-            }
-            // Guardar el ununordered_map indice
-            f << indice.size() << "\n";
-            for (auto it = indice.begin(); it != indice.end(); ++it)
-            {
-                f << it->first << "\n";
-                f << it->second << "\n";
-            }
-            // Guardar el unordered_map indiceDocs
-            f << indiceDocs.size() << "\n";
-            for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
-            {
-                f << it->first << "\n";
-                f << it->second << "\n";
-            }
-            // Guardar el unordered_map indicePregunta
-            f << indicePregunta.size() << "\n";
-            for (auto it = indicePregunta.begin(); it != indicePregunta.end(); ++it)
-            {
-                f << it->first << "\n";
-                f << it->second << "\n";
-            }
-            // Guardar el unordered_set stopWords
-            f << stopWords.size() << "\n";
-            for (auto it = stopWords.begin(); it != stopWords.end(); ++it)
-            {
-                f << *it << "\n";
-            }
-            // Guardar la informacionColeccionDocs
-            f << informacionColeccionDocs << "\n";
-            // Guardar la pregunta
-            f << pregunta << "\n";
-            // Guardar la informacionPregunta
-            f << infPregunta << "\n";
-            // Guardar el ficheroStopWords
-            f << ficheroStopWords << "\n";
-            // Guardar el tokenizador
-            f << tok << "\n";
-            // Guardar el directorioIndice
-            f << directorioIndice << "\n";
-            // Guardar el tipoStemmer
-            f << tipoStemmer << "\n";
-            // Guardar el almacenarEnDisco
-            f << almacenarEnDisco << "\n";
-            // Guardar el almacenarPosTerm
-            f << almacenarPosTerm << "\n";
-        }
-        catch (const std::ios::failure &e)
-        {
-            cerr << "Error al escribir en el fichero " << directorioIndice + "/indexador.dat: " << e.what() << "\n";
-            // Borrar el fichero
-            remove((directorioIndice + "/indexador.dat").c_str());
-            return false;
-        }
-        f.close();
-        return true;
+    // Comprobar si el directorio existe y si no crearlo
+    if (mkdir(directorioIndice.c_str(), 0777) == -1 && errno != EEXIST)
+    {
+        cerr << "Error al crear el directorio " << directorioIndice << "\n";
+        return false;
     }
-bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const {
+
+    // Crear el fichero
+    ofstream f(directorioIndice + "/indexador.dat");
+    f.exceptions(std::ios::failbit);
+    try
+    {
+        if (!f)
+        {
+            cerr << "Error al abrir el fichero " << directorioIndice + "/indexador.dat"
+                 << "\n";
+            return false;
+        }
+        // Guardar el ununordered_map indice
+        f << indice.size() << "\n";
+        for (auto it = indice.begin(); it != indice.end(); ++it)
+        {
+            f << it->first << "\n";
+            f << it->second << "\n";
+        }
+        // Guardar el unordered_map indiceDocs
+        f << indiceDocs.size() << "\n";
+        for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
+        {
+            f << it->first << "\n";
+            f << it->second << "\tfechaModificacion: " << it->second.getFechaModificacion() << "\n";
+        }
+        // Guardar el unordered_map indicePregunta
+        f << indicePregunta.size() << "\n";
+        for (auto it = indicePregunta.begin(); it != indicePregunta.end(); ++it)
+        {
+            f << it->first << "\n";
+            f << it->second << "\n";
+        }
+        // Guardar el unordered_set stopWords
+        f << stopWords.size() << "\n";
+        for (auto it = stopWords.begin(); it != stopWords.end(); ++it)
+        {
+            f << *it << "\n";
+        }
+        // Guardar la informacionColeccionDocs
+        f << informacionColeccionDocs << "\n";
+        // Guardar la pregunta
+        f << pregunta << "\n";
+        // Guardar la informacionPregunta
+        f << infPregunta << "\n";
+        // Guardar el ficheroStopWords
+        f << ficheroStopWords << "\n";
+        // Guardar el tokenizador
+        f << tok << "\n";
+        // Guardar el directorioIndice
+        f << directorioIndice << "\n";
+        // Guardar el tipoStemmer
+        f << tipoStemmer << "\n";
+        // Guardar el almacenarEnDisco
+        f << almacenarEnDisco << "\n";
+        // Guardar el almacenarPosTerm
+        f << almacenarPosTerm;
+    }
+    catch (const std::ios::failure &e)
+    {
+        cerr << "Error al escribir en el fichero " << directorioIndice + "/indexador.dat: " << e.what() << "\n";
+        // Borrar el fichero
+        remove((directorioIndice + "/indexador.dat").c_str());
+        return false;
+    }
+    f.close();
+    return true;
+}
+bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const
+{
     InformacionTermino inf;
     int idDoc;
     if (indiceDocs.find(nomDoc) != indiceDocs.end())
@@ -656,16 +737,15 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
 void IndexadorHash::ImprimirIndexacion() const
 {
     cout << "Terminos indexados: " << endl;
-    /* A continuación aparecerá un listado del contenido del campo 
+    /* A continuación aparecerá un listado del contenido del campo
     privado ?índice? donde para cada término indexado se imprimirá: */
     for (unordered_map<string, InformacionTermino>::const_iterator it = indice.begin(); it != indice.end(); ++it)
         cout << it->first << "\t" << it->second << endl;
-    //cout << termino << "\t" << InformacionTermino << endl;
-    //cout << "Documentos indexados: " << endl;
-    /* A continuación aparecerá un listado del contenido del campo 
+    // cout << termino << "\t" << InformacionTermino << endl;
+    // cout << "Documentos indexados: " << endl;
+    /* A continuación aparecerá un listado del contenido del campo
     privado ?indiceDocs? donde para cada documento indexado se imprimirá:*/
     for (unordered_map<string, InfDoc>::const_iterator it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
         cout << it->first << "\t" << it->second << endl;
-    //cout << nomDoc << "\t" << InfDoc << endl;
-
+    // cout << nomDoc << "\t" << InfDoc << endl;
 }

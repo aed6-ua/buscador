@@ -81,11 +81,7 @@ private:
 
 class InfDoc
 {
-    friend ostream &operator<<(ostream &s, const InfDoc &p)
-    {
-        s << "idDoc: " << p.idDoc << "\tnumPal: " << p.numPal << "\tnumPalSinParada: " << p.numPalSinParada << "\tnumPalDiferentes: " << p.numPalDiferentes << "\ttamBytes: " << p.tamBytes;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InfDoc &p);
 
 public:
     // Copiar todos los atributos de la clase InfDoc
@@ -112,6 +108,8 @@ public:
     int getNumPalDiferentes() const { return numPalDiferentes; }
     // Devuelve el tamaño en bytes del documento
     int getTamBytes() const { return tamBytes; }
+    // Cargar la información de un documento a partir de su serialización
+    void cargar(string serializacion);
 private:
     int idDoc;
     // Identificador del documento. El primer documento indexado en la colección será el identificador 1
@@ -126,11 +124,7 @@ private:
 
 class InfColeccionDocs
 {
-    friend ostream &operator<<(ostream &s, const InfColeccionDocs &p)
-    {
-        s << "numDocs: " << p.numDocs << "\tnumTotalPal: " << p.numTotalPal << "\tnumTotalPalSinParada: " << p.numTotalPalSinParada << "\tnumTotalPalDiferentes: " << p.numTotalPalDiferentes << "\ttamBytes: " << p.tamBytes;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InfColeccionDocs &p);
 
 public:
     InfColeccionDocs(const InfColeccionDocs &);
@@ -149,6 +143,7 @@ public:
     void subNumTotalPalSinParada(int numPalSinParada) { this->numTotalPalSinParada -= numPalSinParada; }
     void subNumTotalPalDiferentes() { this->numTotalPalDiferentes--; }
     void subTamBytes(int tamBytes) { this->tamBytes -= tamBytes; }
+    void cargar(string serializacion);
 private:
     int numDocs; // Nº total de documentos en la colección
     int numTotalPal;
@@ -162,13 +157,7 @@ private:
 
 class InformacionTerminoPregunta
 {
-    friend ostream &operator<<(ostream &s, const InformacionTerminoPregunta &p)
-    {
-        s << "ft: " << p.ft;
-        // A continuación se mostrarían todos los elementos de p.posTerm ("posicion TAB posicion TAB ... posicion, es decir nunca finalizará en un TAB?):
-        // s << "\t" << posicion;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InformacionTerminoPregunta &p);
 
 public:
     // Copiar todos los atributos de la clase InformacionTerminoPregunta
@@ -183,6 +172,7 @@ public:
     // Operador de asignación
     InformacionTerminoPregunta &operator=(const InformacionTerminoPregunta &orig) { this->ft = orig.ft; this->posTerm = orig.posTerm; return *this; }
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    void cargar(string serializacion);
 private:
     int ft; // Frecuencia total del término en la pregunta
     list<int> posTerm;
@@ -195,11 +185,8 @@ private:
 
 class InformacionPregunta
 {
-    friend ostream &operator<<(ostream &s, const InformacionPregunta &p)
-    {
-        s << "numTotalPal: " << p.numTotalPal << "\tnumTotalPalSinParada: " << p.numTotalPalSinParada << "\tnumTotalPalDiferentes: " << p.numTotalPalDiferentes;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InformacionPregunta &p);
+    
 
 public:
     // Copiar todos los atributos de la clase InformacionPregunta
@@ -214,6 +201,7 @@ public:
     // Operador de asignación
     InformacionPregunta &operator=(const InformacionPregunta &orig) { this->numTotalPal = orig.numTotalPal; this->numTotalPalSinParada = orig.numTotalPalSinParada; this->numTotalPalDiferentes = orig.numTotalPalDiferentes; return *this; }
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    void cargar(string serializacion);
 private:
     int numTotalPal;
     // Nº total de palabras en la pregunta

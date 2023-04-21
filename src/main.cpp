@@ -60,15 +60,4 @@ if(a.Existe("pal7"))
 else
 	cout << "pal7 NO SE HA INDEXADO" << endl;
 
-if(a.BorraDoc("corpus_corto/fichero1.txt"))
-	cout << "SE HA BORRADO DE LA INDEXACION: corpus_corto/fichero1.txt" << endl;
-else
-	cout << "NO SE HA BORRADO DE LA INDEXACION: corpus_corto/fichero1.txt" << endl;
-
-if(a.BorraDoc("corpus_corto/fichero7.txt"))
-	cout << "SE HA BORRADO DE LA INDEXACION: corpus_corto/fichero7.txt" << endl;
-else
-	cout << "NO SE HA BORRADO DE LA INDEXACION: corpus_corto/fichero7.txt" << endl;
-
-
 }
