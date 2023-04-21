@@ -27,6 +27,7 @@ public:
     void addFt() { this->ft++; }
     void addPosTerm(const int &pos) { this->posTerm.push_back(pos); }
     int getFt() const { return this->ft; }
+    void cargar(string serializacion);
 private:
     int ft; // Frecuencia del término en el documento
     list<int> posTerm;
@@ -70,6 +71,8 @@ public:
     void eraseInfTermDoc(const int &idDoc) { this->ftc -= this->l_docs[idDoc].getFt(); this->l_docs.erase(idDoc); }
     // Devuelve el número de documentos en los que aparece el término
     int getNumDocs() const { return this->l_docs.size(); }
+    // Cargar la información de un término a partir de su serialización
+    void cargar(string serializacion);
 private:
     int ftc; // Frecuencia total del término en la colección
     unordered_map<int, InfTermDoc> l_docs;

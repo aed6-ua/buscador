@@ -7,10 +7,24 @@ using namespace std;
 ostream &operator<<(ostream &s, const InfTermDoc &p)
 {
     s << "ft: " << p.ft;
-        // A continuación se mostrarían todos los elementos de p.posTerm ("posicion TAB posicion TAB ... posicion, es decir nunca finalizará en un TAB?):
+        // A continuaci?n se mostrar?an todos los elementos de p.posTerm ("posicion TAB posicion TAB ... posicion, es decir nunca finalizar? en un TAB?):
     for (list<int>::const_iterator it = p.posTerm.begin(); it != p.posTerm.end(); ++it)
         s << "\t" << *it;
     return s;
+}
+
+void InfTermDoc::cargar(string serializacion)
+{
+    int pos;
+    // Cargamos la frecuencia del término en el documento (se encuentra después de "ft: ")
+    ft = atoi(serializacion.substr(3, serializacion.find("\t", 3) - 3).c_str());
+    // Obtenemos la lista de posiciones del término en el documento
+    pos = serializacion.find("\t", 3) + 1;
+    posTerm.clear();
+    while (pos < serializacion.size()) {
+        posTerm.push_back(atoi(serializacion.substr(pos, serializacion.find("\t", pos) - pos).c_str()));
+        pos = serializacion.find("\t", pos) + 1;
+    }
 }
 
 // InformacionTermino
@@ -32,6 +46,30 @@ ostream &operator<<(ostream &s, const InformacionTermino &p)
     for (unordered_map<int, InfTermDoc>::const_iterator it = p.l_docs.begin(); it != p.l_docs.end(); ++it)
         s << "\tId.Doc: " << it->first << "\t" << it->second;
     return s;
+}
+
+void InformacionTermino::cargar(string serializacion)
+{
+    int pos;
+    // Cargamos la frecuencia total (se encuentra después de "Frecuencia total: ")
+    ftc = atoi(serializacion.substr(18, serializacion.find("\tfd: ") - 18).c_str());
+    // Obtenemos el tamaño de la lista de documentos (se encuentra después de "\tfd: ")
+    pos = serializacion.find("\tfd: ") + 5;
+    int tamListaDocs = atoi(serializacion.substr(pos, serializacion.find("\tId.Doc: ", pos) - pos).c_str());
+    // Obtenemos la lista de documentos
+    l_docs.clear();
+    pos = serializacion.find("\tId.Doc: ") + 9;
+    for (int i = 0; i < tamListaDocs; i++) {
+        // Obtenemos el id del documento
+        int idDoc = atoi(serializacion.substr(pos, serializacion.find("\tft: ", pos) - pos).c_str());
+        pos = serializacion.find("\tft: ", pos) + 5;
+        // Deserializamos la información del término en el documento
+        InfTermDoc infTermDoc;
+        infTermDoc.cargar(serializacion.substr(pos, serializacion.find("\tId.Doc: ", pos) - pos));
+        // Insertamos el objeto en la lista de documentos
+        l_docs.insert(make_pair(idDoc, infTermDoc));
+        pos = serializacion.find("\tId.Doc: ", pos) + 9;
+    }
 }
 
 
@@ -60,7 +98,7 @@ InfDoc::InfDoc(const InfDoc &infDoc)
     fechaModificacion = infDoc.fechaModificacion;
 }
 
-// Constructor con parÃ¡metros
+// Constructor con parámetros
 InfDoc::InfDoc(int idDoc, int numPal, int numPalSinParada, int numPalDiferentes, int tamBytes, time_t fechaModificacion)
 {
     this->idDoc = idDoc;
@@ -82,7 +120,7 @@ InfDoc::~InfDoc()
     fechaModificacion = 0;
 }
 
-// Operador de asignaciÃ³n
+// Operador de asignación
 InfDoc &InfDoc::operator=(const InfDoc &infDoc)
 {
     idDoc = infDoc.idDoc;
@@ -126,7 +164,7 @@ InfColeccionDocs::~InfColeccionDocs()
     this->tamBytes = 0;
 }
 
-// Operador de asignaciÃ³n
+// Operador de asignación
 InfColeccionDocs &InfColeccionDocs::operator=(const InfColeccionDocs &infColeccionDocs)
 {
     this->numDocs = infColeccionDocs.numDocs;

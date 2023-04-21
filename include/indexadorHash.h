@@ -24,25 +24,6 @@ public:
 
     bool IndexarDirectorio(const string &dirAIndexar);
 
-    /* Se guardará en disco duro (directorio contenido en la variable
-    privada ?directorioIndice?) la indexación actualmente en memoria
-    (incluidos todos los parámetros de la parte privada). La forma de
-    almacenamiento la determinará el alumno. El objetivo es que esta
-    indexación se pueda recuperar posteriormente mediante el constructor
-    ?IndexadorHash(const string& directorioIndexacion)?. Por ejemplo,
-    supongamos que se ejecuta esta secuencia de comandos: ?IndexadorHash
-    a(?./fichStopWords.txt?, ?[ ,.?, ?./dirIndexPrueba?, 0, false);
-    a.Indexar(?./fichConDocsAIndexar.txt?); a.GuardarIndexacion();?,
-    entonces mediante el comando: ?IndexadorHash b(?./dirIndexPrueba?);? se
-    recuperará la indexación realizada en la secuencia anterior, cargándola
-    en ?b?
-    // Devuelve falso si no finaliza la operación (p.ej. por falta de
-    memoria, o el nombre del directorio contenido en ?directorioIndice? no
-    es correcto), mostrando el mensaje de error correspondiente, vaciando
-    los ficheros generados.
-    // En caso que no existiese el directorio directorioIndice, habría que
-    crearlo previamente
-    */
     bool GuardarIndexacion() const;
 
     bool RecuperarIndexacion(const string &directorioIndexacion);

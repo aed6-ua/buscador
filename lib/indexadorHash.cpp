@@ -1,5 +1,6 @@
 #include <sys/stat.h>
 #include <unordered_set>
+#include <dirent.h>
 #include "indexadorHash.h"
 #include "tokenizador.h"
 #include "stemmer.h"
@@ -245,6 +246,39 @@ IndexadorHash &IndexadorHash::operator=(const IndexadorHash &orig)
     almacenarEnDisco = orig.almacenarEnDisco;
     almacenarPosTerm = orig.almacenarPosTerm;
     return *this;
+}
+
+/*Constructor para inicializar IndexadorHash a partir de una indexación 
+previamente realizada que habrá sido almacenada en 
+?directorioIndexacion? mediante el método ?bool GuardarIndexacion()?. 
+Con ello toda la parte privada se inicializará convenientemente, igual
+que si se acabase de indexar la colección de documentos. En caso que no 
+exista el directorio o que no contenga los datos de la indexación se 
+tratará la excepción correspondiente
+*/
+IndexadorHash::IndexadorHash(const string &directorioIndexacion) {
+    // Comprobamos que el directorio exista
+    if (opendir(directorioIndexacion.c_str()) == NULL) {
+        cerr << "El directorio " << directorioIndexacion << " no existe" << endl;
+    }
+    // Abrimos el fichero indexador.dat. Si no existe mostramos error.
+    string ficheroIndexador = directorioIndexacion + "/indexador.dat";
+    ifstream f(ficheroIndexador.c_str());
+    if (!f) {
+        cerr << "No se ha podido abrir el fichero " << ficheroIndexador << endl;
+    }
+    // Leemos el indice del fichero
+    // La primera linea indica el tamaño del indice
+    string linea;
+    getline(f, linea);
+    int tam = atoi(linea.c_str());
+    // El resto tam lineas indican el termino y la serializacion de InformacionTermino
+    for (int i = 0; i < tam; i++) {
+        getline(f, linea);
+        InformacionTermino it;
+        it.Cargar(linea);
+        indice[linea] = it;
+    }
 }
 
 ostream &operator<<(ostream &s, const IndexadorHash &p)
@@ -515,7 +549,26 @@ void IndexadorHash::ListarPalParada() const
         cout << *it << "\n";
 }
 
-bool IndexadorHash::GuardarIndexacion() 
+/* Se guardará en disco duro (directorio contenido en la variable
+privada ?directorioIndice?) la indexación actualmente en memoria
+(incluidos todos los parámetros de la parte privada). La forma de
+almacenamiento la determinará el alumno. El objetivo es que esta
+indexación se pueda recuperar posteriormente mediante el constructor
+?IndexadorHash(const string& directorioIndexacion)?. Por ejemplo,
+supongamos que se ejecuta esta secuencia de comandos: ?IndexadorHash
+a(?./fichStopWords.txt?, ?[ ,.?, ?./dirIndexPrueba?, 0, false);
+a.Indexar(?./fichConDocsAIndexar.txt?); a.GuardarIndexacion();?,
+entonces mediante el comando: ?IndexadorHash b(?./dirIndexPrueba?);? se
+recuperará la indexación realizada en la secuencia anterior, cargándola
+en ?b?
+// Devuelve falso si no finaliza la operación (p.ej. por falta de
+memoria, o el nombre del directorio contenido en ?directorioIndice? no
+es correcto), mostrando el mensaje de error correspondiente, vaciando
+los ficheros generados.
+// En caso que no existiese el directorio directorioIndice, habría que
+crearlo previamente
+*/
+bool IndexadorHash::GuardarIndexacion() const
 {
         // Comprobar si el directorio existe y si no crearlo
         if (mkdir(directorioIndice.c_str(), 0777) == -1 && errno != EEXIST)
