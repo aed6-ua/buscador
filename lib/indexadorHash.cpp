@@ -429,3 +429,79 @@ void IndexadorHash::ListarPalParada() const
     for (unordered_set<string>::const_iterator it = stopWords.begin(); it != stopWords.end(); ++it)
         cout << *it << "\n";
 }
+
+bool IndexadorHash::GuardarIndexacion() 
+{
+        // Comprobar si el directorio existe y si no crearlo
+        if (mkdir(directorioIndice.c_str(), 0777) == -1 && errno != EEXIST)
+        {
+            cerr << "Error al crear el directorio " << directorioIndice << "\n";
+            return false;
+        }
+
+        // Crear el fichero
+        ofstream f(directorioIndice + "/indexador.dat");
+        f.exceptions(std::ios::failbit);
+        try
+        {
+            if (!f)
+            {
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indexador.dat" << "\n";
+                return false;
+            }
+            // Guardar el ununordered_map indice
+            f << indice.size() << "\n";
+            for (auto it = indice.begin(); it != indice.end(); ++it)
+            {
+                f << it->first << "\n";
+                f << it->second << "\n";
+            }
+            // Guardar el unordered_map indiceDocs
+            f << indiceDocs.size() << "\n";
+            for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
+            {
+                f << it->first << "\n";
+                f << it->second << "\n";
+            }
+            // Guardar el unordered_map indicePregunta
+            f << indicePregunta.size() << "\n";
+            for (auto it = indicePregunta.begin(); it != indicePregunta.end(); ++it)
+            {
+                f << it->first << "\n";
+                f << it->second << "\n";
+            }
+            // Guardar el unordered_set stopWords
+            f << stopWords.size() << "\n";
+            for (auto it = stopWords.begin(); it != stopWords.end(); ++it)
+            {
+                f << *it << "\n";
+            }
+            // Guardar la informacionColeccionDocs
+            f << informacionColeccionDocs << "\n";
+            // Guardar la pregunta
+            f << pregunta << "\n";
+            // Guardar la informacionPregunta
+            f << infPregunta << "\n";
+            // Guardar el ficheroStopWords
+            f << ficheroStopWords << "\n";
+            // Guardar el tokenizador
+            f << tok << "\n";
+            // Guardar el directorioIndice
+            f << directorioIndice << "\n";
+            // Guardar el tipoStemmer
+            f << tipoStemmer << "\n";
+            // Guardar el almacenarEnDisco
+            f << almacenarEnDisco << "\n";
+            // Guardar el almacenarPosTerm
+            f << almacenarPosTerm << "\n";
+        }
+        catch (const std::ios::failure &e)
+        {
+            cerr << "Error al escribir en el fichero " << directorioIndice + "/indexador.dat: " << e.what() << "\n";
+            // Borrar el fichero
+            remove((directorioIndice + "/indexador.dat").c_str());
+            return false;
+        }
+        f.close();
+        return true;
+    }

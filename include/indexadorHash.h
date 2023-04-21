@@ -13,12 +13,12 @@ class IndexadorHash
 {
     friend ostream &operator<<(ostream &s, const IndexadorHash &p)
     {
-        s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << endl;
-        s << "Tokenizador: " << p.tok << endl;
-        s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << endl;
-        s << "Stemmer utilizado: " << p.tipoStemmer << endl;
-        s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << endl;
-        s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << endl;
+        s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << "\n";
+        s << "Tokenizador: " << p.tok << "\n";
+        s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << "\n";
+        s << "Stemmer utilizado: " << p.tipoStemmer << "\n";
+        s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << "\n";
+        s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << "\n";
         s << "Se almacenaran las posiciones de los terminos: " << p.almacenarPosTerm;
         return s;
     }
@@ -34,6 +34,25 @@ public:
 
     bool IndexarDirectorio(const string &dirAIndexar);
 
+    /* Se guardará en disco duro (directorio contenido en la variable
+    privada ?directorioIndice?) la indexación actualmente en memoria
+    (incluidos todos los parámetros de la parte privada). La forma de
+    almacenamiento la determinará el alumno. El objetivo es que esta
+    indexación se pueda recuperar posteriormente mediante el constructor
+    ?IndexadorHash(const string& directorioIndexacion)?. Por ejemplo,
+    supongamos que se ejecuta esta secuencia de comandos: ?IndexadorHash
+    a(?./fichStopWords.txt?, ?[ ,.?, ?./dirIndexPrueba?, 0, false);
+    a.Indexar(?./fichConDocsAIndexar.txt?); a.GuardarIndexacion();?,
+    entonces mediante el comando: ?IndexadorHash b(?./dirIndexPrueba?);? se
+    recuperará la indexación realizada en la secuencia anterior, cargándola
+    en ?b?
+    // Devuelve falso si no finaliza la operación (p.ej. por falta de
+    memoria, o el nombre del directorio contenido en ?directorioIndice? no
+    es correcto), mostrando el mensaje de error correspondiente, vaciando
+    los ficheros generados.
+    // En caso que no existiese el directorio directorioIndice, habría que
+    crearlo previamente
+    */
     bool GuardarIndexacion() const;
 
     bool RecuperarIndexacion(const string &directorioIndexacion);
@@ -65,13 +84,13 @@ public:
 
     void VaciarIndicePreg();
 
-    /* Será true si word (aplicándole el tratamiento de stemming y 
-    mayúsculas correspondiente) está indexado, sustituyendo la información 
+    /* Será true si word (aplicándole el tratamiento de stemming y
+    mayúsculas correspondiente) está indexado, sustituyendo la información
     almacenada por ?inf?*/
     bool Actualiza(const string &word, const InformacionTermino &inf) { return Existe(word) ? indice[word] = inf, true : false; }
 
-    /* Será true si se realiza la inserción (p.ej. si word, aplicándole el 
-    tratamiento de stemming y mayúsculas correspondiente, no estaba 
+    /* Será true si se realiza la inserción (p.ej. si word, aplicándole el
+    tratamiento de stemming y mayúsculas correspondiente, no estaba
     previamente indexado)*/
     bool Inserta(const string &word, const InformacionTermino &inf) { return indice.insert(make_pair(word, inf)).second; }
 
@@ -107,15 +126,19 @@ public:
     // Devolverá el valor indicado en la variable privada ?almEnDisco?
     bool DevolverAlmEnDisco() const { return almacenarEnDisco; }
 
-    // Mostrar por pantalla: cout << informacionColeccionDocs << endl;
-    void ListarInfColeccDocs() const { cout << informacionColeccionDocs << endl; }
+    // Mostrar por pantalla: cout << informacionColeccionDocs << "\n";
+    void ListarInfColeccDocs() const { cout << informacionColeccionDocs << "\n"; }
 
     void ListarTerminos() const;
 
     bool ListarTerminos(const string &nomDoc) const;
 
-    // Mostrar por pantalla el contenido el contenido del campo privado ?indiceDocs?: cout << nomDoc << ?\t? << InfDoc << endl;
-    void ListarDocs() const { for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it) cout << it->first << '\t' << it->second << "\n"; }
+    // Mostrar por pantalla el contenido el contenido del campo privado ?indiceDocs?: cout << nomDoc << ?\t? << InfDoc << "\n";
+    void ListarDocs() const
+    {
+        for (auto it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
+            cout << it->first << '\t' << it->second << "\n";
+    }
 
     bool ListarDocs(const string &nomDoc) const;
 
@@ -124,13 +147,12 @@ public:
 private:
     IndexadorHash();
     unordered_map<string, InformacionTermino> indice;
-
     unordered_map<string, InfDoc> indiceDocs;
+    unordered_map<string, InformacionTerminoPregunta> indicePregunta;
+    unordered_set<string> stopWords;
     InfColeccionDocs informacionColeccionDocs;
     string pregunta;
-    unordered_map<string, InformacionTerminoPregunta> indicePregunta;
     InformacionPregunta infPregunta;
-    unordered_set<string> stopWords;
     string ficheroStopWords;
     Tokenizador tok;
     string directorioIndice;
