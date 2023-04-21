@@ -247,6 +247,18 @@ IndexadorHash &IndexadorHash::operator=(const IndexadorHash &orig)
     return *this;
 }
 
+ostream &operator<<(ostream &s, const IndexadorHash &p)
+{
+    s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << endl;
+    s << "Tokenizador: " << p.tok << endl;
+    s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << endl;
+    s << "Stemmer utilizado: " << p.tipoStemmer << endl;
+    s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << endl;
+    s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << endl;
+    s << "Se almacenaran las posiciones de los terminos: " << p.almacenarPosTerm;
+    return s;
+}
+
 /* Devuelve true si nomDoc existe en la colección y muestra por pantalla
 el contenido del campo privado ?indiceDocs? para el documento con nombre
 ?nomDoc?: cout << nomDoc << ?\t? << InfDoc << endl; . Si no existe no se
@@ -331,7 +343,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         return false;
     }
     // Obtener el idDoc
-    int idDoc = indiceDocs.size();
+    int idDoc = indiceDocs.size()+1;
     // Obtener la fecha de modificación
     struct stat atributos;
     stat(nomDoc.c_str(), &atributos);
@@ -363,7 +375,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         unordered_set<string> palabrasDistintas;
         while (getline(f, linea))
         {
-            numPalabras++;
+            
             // Comprobar si el término es una stopWord
             if (stopWords.find(linea) == stopWords.end())
             {
@@ -377,13 +389,38 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
                     InformacionTermino infTerm = indice[linea];
                     // Actualizar la información del término
                     infTerm.addFtc();
+                    // Comprobar si el término está en el documento (si existe el idDoc en el map)
+                    if (infTerm.existIdDoc(idDoc))
+                    {
+                        // Obtener la información del término en el documento
+                        InfTermDoc* infTermDoc = infTerm.getInfTermDoc(idDoc);
+                        // Actualizar la información del término en el documento
+                        infTermDoc->addFt();
+                        infTermDoc->addPosTerm(numPalabras);
+                    }
+                    else
+                    {
+                        // Rellenar la información del término en el documento
+                        InfTermDoc infTermDoc = InfTermDoc();
+                        infTermDoc.addFt();
+                        infTermDoc.addPosTerm(numPalabras);
+                        // Actualizar la información del término en el documento
+                        infTerm.addInfTermDoc(idDoc, infTermDoc);
+                    }
                     Actualiza(linea, infTerm);
                 }
                 else
                 {
                     numTotalPalDiferentes++;
+                    // Rellenar la información del término en el documento
+                    InfTermDoc infTermDoc = InfTermDoc();
+                    infTermDoc.addFt();
+                    infTermDoc.addPosTerm(numPalabras);
+                    // Rellenar la información del término
+                    InformacionTermino infTerm = InformacionTermino(1);
+                    infTerm.addInfTermDoc(idDoc, infTermDoc);
                     // Añadir el término al índice
-                    Inserta(linea, InformacionTermino());
+                    Inserta(linea, infTerm);
                 }
                 // Comprobar si la palabra es única en el documento
                 if (palabrasDistintas.find(linea) == palabrasDistintas.end())
@@ -393,6 +430,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
                     numPalabrasDistintas++;
                 }
             }
+            numPalabras++;
         }
         // Obtener fecha de modificación del documento y tamaño en bytes
         struct stat atributos;
@@ -400,7 +438,9 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         int tamBytes = atributos.st_size;
         time_t fechaModificacion = atributos.st_mtime;
         // Añadir el documento al índice de documentos
-        indiceDocs.insert(make_pair(nomDoc, InfDoc(informacionColeccionDocs.getNumDocs() + 1, numPalabras, numPalabrasSinStopWords, numPalabrasDistintas, tamBytes, fechaModificacion)));
+        indiceDocs.insert(make_pair(nomDoc, InfDoc(informacionColeccionDocs.getNumDocs() + 1, 
+                                                    numPalabras, numPalabrasSinStopWords, numPalabrasDistintas, 
+                                                    tamBytes, fechaModificacion)));
         // Actualizar la información de la colección de documentos
         informacionColeccionDocs.addDoc();
         informacionColeccionDocs.addNumTotalPal(numPalabras);
@@ -416,8 +456,53 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
     return true;
 }
 
+/* Devuelve true si nomDoc está indexado y se realiza el borrado de
+todos los términos del documento y del documento en los campos privados 
+?indiceDocs? e ?informacionColeccionDocs?*/
 bool IndexadorHash::BorraDoc(const string &nomDoc)
 {
+    // Comprobar si el documento está indexado
+    if (indiceDocs.find(nomDoc) != indiceDocs.end()) {
+        // Obtener el idDoc
+        int idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
+        // Obtener la información del documento
+        InfDoc infDoc = indiceDocs.find(nomDoc)->second;
+        // Borrar el documento del índice de documentos
+        indiceDocs.erase(nomDoc);
+        // Actualizar la información de la colección de documentos
+        informacionColeccionDocs.subDoc();
+        informacionColeccionDocs.subNumTotalPal(infDoc.getNumPal());
+        informacionColeccionDocs.subNumTotalPalSinParada(infDoc.getNumPalSinParada());
+        informacionColeccionDocs.subTamBytes(infDoc.getTamBytes());
+        // Borrar los términos del documento del índice
+        auto it = indice.begin();
+        while (it != indice.end())
+        {
+            // Obtener la información del término
+            InformacionTermino infTerm = it->second;
+            // Comprobar si el término está en el documento
+            if (infTerm.existIdDoc(idDoc))
+            {
+                // Borrar el término del documento
+                infTerm.eraseInfTermDoc(idDoc);
+                // Comprobar si el término está en otros documentos
+                if (infTerm.getNumDocs() > 0)
+                {
+                    // Actualizar el término en el índice
+                    indice[it->first] = infTerm;
+                }
+                else
+                {
+                    // Borrar el término del índice
+                    it = indice.erase(it);
+                    informacionColeccionDocs.subNumTotalPalDiferentes();
+                    continue;
+                }
+            }
+            it++;
+        }
+        return true;
+    }
     return false;
 }
 
@@ -505,3 +590,29 @@ bool IndexadorHash::GuardarIndexacion()
         f.close();
         return true;
     }
+bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const {
+    InformacionTermino inf;
+    int idDoc;
+    if (indiceDocs.find(nomDoc) != indiceDocs.end())
+        idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
+    else
+        return false;
+    return Devuelve(word, inf) ? inf.getInfTermDoc(idDoc, infDoc) : false;
+}
+
+void IndexadorHash::ImprimirIndexacion() const
+{
+    cout << "Terminos indexados: " << endl;
+    /* A continuación aparecerá un listado del contenido del campo 
+    privado ?índice? donde para cada término indexado se imprimirá: */
+    for (unordered_map<string, InformacionTermino>::const_iterator it = indice.begin(); it != indice.end(); ++it)
+        cout << it->first << "\t" << it->second << endl;
+    //cout << termino << "\t" << InformacionTermino << endl;
+    //cout << "Documentos indexados: " << endl;
+    /* A continuación aparecerá un listado del contenido del campo 
+    privado ?indiceDocs? donde para cada documento indexado se imprimirá:*/
+    for (unordered_map<string, InfDoc>::const_iterator it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
+        cout << it->first << "\t" << it->second << endl;
+    //cout << nomDoc << "\t" << InfDoc << endl;
+
+}

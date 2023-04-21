@@ -2,6 +2,40 @@
 
 using namespace std;
 
+// InfTermDoc
+
+ostream &operator<<(ostream &s, const InfTermDoc &p)
+{
+    s << "ft: " << p.ft;
+        // A continuación se mostrarían todos los elementos de p.posTerm ("posicion TAB posicion TAB ... posicion, es decir nunca finalizará en un TAB?):
+    for (list<int>::const_iterator it = p.posTerm.begin(); it != p.posTerm.end(); ++it)
+        s << "\t" << *it;
+    return s;
+}
+
+// InformacionTermino
+
+bool InformacionTermino::getInfTermDoc(const int &idDoc, InfTermDoc &infTermDoc) const
+{
+    unordered_map<int, InfTermDoc>::const_iterator it = l_docs.find(idDoc);
+    if (it != l_docs.end()) {
+        infTermDoc = it->second;
+        return true;
+    }
+    return false;
+}
+
+ostream &operator<<(ostream &s, const InformacionTermino &p)
+{
+    s << "Frecuencia total: " << p.ftc << "\tfd: " << p.l_docs.size();
+    // Mostrar todos los elementos de p.l_docs
+    for (unordered_map<int, InfTermDoc>::const_iterator it = p.l_docs.begin(); it != p.l_docs.end(); ++it)
+        s << "\tId.Doc: " << it->first << "\t" << it->second;
+    return s;
+}
+
+
+
 // InfDoc
 
 // Constructor por defecto

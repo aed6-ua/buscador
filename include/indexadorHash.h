@@ -11,17 +11,7 @@ using namespace std;
 
 class IndexadorHash
 {
-    friend ostream &operator<<(ostream &s, const IndexadorHash &p)
-    {
-        s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << "\n";
-        s << "Tokenizador: " << p.tok << "\n";
-        s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << "\n";
-        s << "Stemmer utilizado: " << p.tipoStemmer << "\n";
-        s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << "\n";
-        s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << "\n";
-        s << "Se almacenaran las posiciones de los terminos: " << p.almacenarPosTerm;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const IndexadorHash &p);
 
 public:
     IndexadorHash(const string &fichStopWords, const string &delimitadores,
@@ -69,9 +59,17 @@ public:
 
     void ImprimirIndexacionPregunta();
     void ImprimirPregunta();
-    bool Devuelve(const string &word, InformacionTermino &inf) const;
 
-    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &InfDoc) const;
+    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
+    mayúsculas correspondiente) está indexado, devolviendo su información 
+    almacenada ?inf?. En caso que no esté, devolvería ?inf? vacío*/
+    bool Devuelve(const string &word, InformacionTermino &inf) const { return Existe(word) ? inf = indice.at(word), true : false; }
+
+    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
+    mayúsculas correspondiente) está indexado y aparece en el documento de 
+    nombre nomDoc, en cuyo caso devuelve la información almacenada para word 
+    en el documento. En caso que no esté, devolvería ?InfDoc? vacío*/
+    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const;
 
     // Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
     bool Existe(const string &word) const { return indice.find(word) != indice.end(); }
