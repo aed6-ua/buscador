@@ -1,6 +1,8 @@
 #include <sys/stat.h>
 #include <unordered_set>
 #include <dirent.h>
+#include <cstring>
+#include <filesystem>
 #include "indexadorHash.h"
 #include "tokenizador.h"
 #include "stemmer.h"
@@ -427,11 +429,13 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
             if (fechaModificacion > indiceDocs[linea].getFechaModificacion())
             {
+                // Obtener el idDoc
+                int idDoc = indiceDocs[linea].getIdDoc();
                 // Borrar el documento previamente indexado
                 if (!BorraDoc(linea))
                     return false;
                 // Indexar el nuevo manteniendo el idDoc
-                if (!IndexarDoc(linea))
+                if (!IndexarDoc(linea, idDoc))
                     return false;
             }
         }
@@ -444,7 +448,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
     return true;
 }
 
-bool IndexadorHash::IndexarDoc(const string &nomDoc)
+bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
 {
     // Abrir el documento
     ifstream f;
@@ -455,7 +459,8 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc)
         return false;
     }
     // Obtener el idDoc
-    int idDoc = indiceDocs.size() + 1;
+    if (idDoc == -1)
+        idDoc = indiceDocs.size() + 1;
     // Obtener la fecha de modificación
     struct stat atributos;
     stat(nomDoc.c_str(), &atributos);
@@ -748,4 +753,127 @@ void IndexadorHash::ImprimirIndexacion() const
     for (unordered_map<string, InfDoc>::const_iterator it = indiceDocs.begin(); it != indiceDocs.end(); ++it)
         cout << it->first << "\t" << it->second << endl;
     // cout << nomDoc << "\t" << InfDoc << endl;
+}
+
+/*// Devuelve true si consigue crear el índice para la colección de
+documentos que se encuentra en el directorio (y subdirectorios que
+contenga) dirAIndexar (independientemente de la extensión de los
+mismos). Se considerará que todos los documentos del directorio serán
+ficheros de texto. Los añadirá a los ya existentes anteriormente en el
+índice.
+// Devuelve falso si no finaliza la indexación (p.ej. por falta de
+memoria o porque no exista ?dirAIndexar?), mostrando el mensaje de error
+correspondiente, indicando el documento y término en el que se ha
+quedado, dejando en memoria lo que se haya indexado hasta ese momento.
+// En el caso que aparezcan documentos repetidos o que ya estuviesen
+previamente indexados (ha de coincidir el nombre del documento y el
+directorio en que se encuentre), se mostrará el mensaje de excepción
+correspondiente, y se re-indexarán (borrar el documento previamente
+indexado e indexar el nuevo) en caso que la fecha de modificación del
+documento sea más reciente que la almacenada previamente (class ?InfDoc?
+campo ?fechaModificacion?). Los casos de reindexación mantendrán el
+mismo idDoc.*/
+bool IndexadorHash::IndexarDirectorio(const string &dirAIndexar)
+{
+    char *_emergencyMemory = new char[16384];
+    string documentoActual;
+    try
+    {
+        // Hacer una lista de los ficheros a indexar en el directorio y en sus subdirectorios
+        // y luego indexarlos
+        list<string> listaFicheros;
+        for (const auto &entry : filesystem::recursive_directory_iterator(dirAIndexar))
+            listaFicheros.push_back(entry.path().string());
+
+        // Ordenar la lista de ficheros
+        listaFicheros.sort();
+
+        // Indexar los ficheros
+        for (auto it = listaFicheros.begin(); it != listaFicheros.end(); ++it)
+        {
+            documentoActual = *it;
+            // Comprobar si el documento ya estaba indexado
+            if (indiceDocs.find(*it) != indiceDocs.end())
+            {
+                // Comprobar si el documento ha sido modificado
+                struct stat atributos;
+                stat((*it).c_str(), &atributos);
+                if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
+                {
+                    // Obtener el idDoc del documento
+                    int idDoc = indiceDocs.find(*it)->second.getIdDoc();
+                    // Borrar el documento previamente indexado
+                    BorraDoc(*it);
+                    // Indexar el nuevo documento
+                    IndexarDoc(*it, idDoc);
+                }
+            }
+            else
+            {
+                // Indexar el nuevo documento
+                IndexarDoc(*it);
+            }
+        }
+
+        /*
+        if ((dir = opendir(dirAIndexar.c_str())) != NULL) {
+            while ((ent = readdir(dir)) != NULL) {
+                // Si es un directorio, lo recorremos
+                if (ent->d_type == DT_DIR) {
+                    // Si no es . ni ..
+                    if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+                        // Recorremos el directorio
+                        IndexarDirectorio(dirAIndexar + "/" + ent->d_name);
+                    }
+                }
+                // Si es un fichero, lo indexamos
+                else if (ent->d_type == DT_REG) {
+                    // Comprobar si el documento ya estaba indexado
+                    if (indiceDocs.find(dirAIndexar + "/" + ent->d_name) != indiceDocs.end()) {
+                        // Comprobar si el documento ha sido modificado
+                        struct stat atributos;
+                        stat((dirAIndexar + "/" + ent->d_name).c_str(), &atributos);
+                        time_t fechaModificacion = atributos.st_mtime;
+                        // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
+                        if (fechaModificacion > indiceDocs[dirAIndexar + "/" + ent->d_name].getFechaModificacion()) {
+                            // Obtenemos el idDoc del documento
+                            int idDoc = indiceDocs[dirAIndexar + "/" + ent->d_name].getIdDoc();
+                            // Borrar el documento previamente indexado
+                            BorraDoc(dirAIndexar + "/" + ent->d_name);
+                            // Indexar el nuevo manteniendo el idDoc
+                            IndexarDoc(dirAIndexar + "/" + ent->d_name, idDoc);
+                        }
+                    }
+                    else {
+                        // Indexar el documento
+                        IndexarDoc(dirAIndexar + "/" + ent->d_name);
+                    }
+                }
+            }
+            closedir(dir);
+        } else {
+            // No se pudo abrir el directorio
+            cerr << "No se pudo abrir el directorio " << dirAIndexar << endl;
+            return false;
+        }*/
+        // Borramos la memoria reservada
+        delete[] _emergencyMemory;
+        return true;
+    }
+    catch (bad_alloc &ex)
+    {
+        // Delete the reserved memory so we can print an error message before exiting
+        delete[] _emergencyMemory;
+
+        cerr << "Out of memory while indexing " << documentoActual << endl;
+        return false;
+    }
+    catch (exception &ex)
+    {
+        // Delete the reserved memory so we can print an error message before exiting
+        delete[] _emergencyMemory;
+
+        cerr << "No se ha podido indexar: " << ex.what() << endl;
+        return false;
+    }
 }

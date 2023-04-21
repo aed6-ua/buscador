@@ -121,7 +121,7 @@ public:
 
     bool ListarDocs(const string &nomDoc) const;
 
-    bool IndexarDoc(const string &nomDoc);
+    bool IndexarDoc(const string &nomDoc, int idDoc=-1);
 
 private:
     IndexadorHash();
