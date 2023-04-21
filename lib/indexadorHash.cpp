@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <cstring>
 #include <filesystem>
+#include <math.h>
 #include "indexadorHash.h"
 #include "tokenizador.h"
 #include "stemmer.h"
@@ -503,14 +504,14 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                 if (indice.find(linea) != indice.end())
                 {
                     // Obtener la información del término del índice
-                    InformacionTermino infTerm = indice[linea];
+                    InformacionTermino* infTerm = &(indice[linea]);
                     // Actualizar la información del término
-                    infTerm.addFtc();
+                    infTerm->addFtc();
                     // Comprobar si el término está en el documento (si existe el idDoc en el map)
-                    if (infTerm.existIdDoc(idDoc))
+                    if (infTerm->existIdDoc(idDoc))
                     {
                         // Obtener la información del término en el documento
-                        InfTermDoc *infTermDoc = infTerm.getInfTermDoc(idDoc);
+                        InfTermDoc *infTermDoc = infTerm->getInfTermDoc(idDoc);
                         // Actualizar la información del término en el documento
                         infTermDoc->addFt();
                         infTermDoc->addPosTerm(numPalabras);
@@ -522,9 +523,8 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                         infTermDoc.addFt();
                         infTermDoc.addPosTerm(numPalabras);
                         // Actualizar la información del término en el documento
-                        infTerm.addInfTermDoc(idDoc, infTermDoc);
+                        infTerm->addInfTermDoc(idDoc, infTermDoc);
                     }
-                    Actualiza(linea, infTerm);
                 }
                 else
                 {
@@ -728,7 +728,7 @@ bool IndexadorHash::GuardarIndexacion() const
     f.close();
     return true;
 }
-bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const
+bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc)
 {
     InformacionTermino inf;
     int idDoc;
@@ -874,6 +874,219 @@ bool IndexadorHash::IndexarDirectorio(const string &dirAIndexar)
         delete[] _emergencyMemory;
 
         cerr << "No se ha podido indexar: " << ex.what() << endl;
+        return false;
+    }
+}
+
+/*// Devuelve true si consigue crear el índice para la pregunta ?preg?.
+Antes de realizar la indexación vaciará los campos privados
+indicePregunta e infPregunta
+// Generará la misma información que en la indexación de documentos,
+pero dejándola toda accesible en memoria principal (mediante las
+variables privadas ?pregunta, indicePregunta, infPregunta?)
+// Devuelve falso si no finaliza la operación (p.ej. por falta de
+memoria o bien si la pregunta no contiene ningún término con contenido),
+mostrando el mensaje de error correspondiente
+*/
+bool IndexadorHash::IndexarPregunta(const string &preg)
+{
+    char *_emergencyMemory = new char[16384];
+    try
+    {
+        // Limpiar los campos privados
+        indicePregunta.clear();
+        infPregunta = InformacionPregunta();
+        pregunta = preg;
+        // Tokenizar la pregunta
+        list<string> tokens;
+        tok.Tokenizar(preg, tokens);
+        // Indexar la pregunta
+        int pos = 0;
+        int numTotalPal = 0;
+        int numTotalPalSinParada = 0;
+        int numTotalPalDiferentes = 0;
+        stemmerPorter stemmer = stemmerPorter();
+        for (string term : tokens)
+        {
+            // Comprobar si el término es una stopword
+            if (stopWords.find(term) == stopWords.end())
+            {
+                ++numTotalPalSinParada;
+                // Aplicar stemming
+                stemmer.stemmer(term, tipoStemmer);
+                // Comprobar si el término está en el índice
+                if (indicePregunta.find(term) == indicePregunta.end())
+                {
+                    ++numTotalPalDiferentes;
+                    // Crear la InformacionTerminoPregunta
+                    InformacionTerminoPregunta infTerminoPregunta;
+                    infTerminoPregunta.addFt();
+                    if (almacenarPosTerm)
+                        infTerminoPregunta.addPosTerm(pos);
+                    // Añadir el término al índice
+                    indicePregunta.insert(pair<string, InformacionTerminoPregunta>(term, infTerminoPregunta));
+                }
+                else
+                {
+                    // Aumentar el ft del término
+                    indicePregunta.find(term)->second.addFt();
+                    if (almacenarPosTerm)
+                        indicePregunta.find(term)->second.addPosTerm(pos);
+                }
+            }
+            ++pos;
+            ++numTotalPal;
+        }
+        // Rellenar la InformacionPregunta
+        infPregunta.setNumTotalPal(numTotalPal);
+        infPregunta.setNumTotalPalSinParada(numTotalPalSinParada);
+        infPregunta.setNumTotalPalDiferentes(numTotalPalDiferentes);
+
+        // Borramos la memoria reservada
+        delete[] _emergencyMemory;
+        return true;
+    }
+    catch (bad_alloc &ex)
+    {
+        // Delete the reserved memory so we can print an error message before exiting
+        delete[] _emergencyMemory;
+
+        cerr << "Out of memory while indexing the question" << endl;
+        return false;
+    }
+    catch (exception &ex)
+    {
+        // Delete the reserved memory so we can print an error message before exiting
+        delete[] _emergencyMemory;
+
+        cerr << "No se ha podido indexar la pregunta: " << ex.what() << endl;
+        return false;
+    }
+}
+
+// Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
+bool IndexadorHash::Existe(const string &word)
+{
+    // Aplicar tratamiento de mayúsculas y acentos
+    string wordTratada = pasar_a_minusculas_sin_acentos(word);
+    // Aplicar stemming
+    stemmerPorter stemmer = stemmerPorter();
+    string term = word;
+    stemmer.stemmer(term, tipoStemmer);
+    // Comprobar si el término está en el índice
+    if (indice.find(term) != indice.end())
+        return true;
+    else
+        return false;
+}
+
+string IndexadorHash::pasar_a_minusculas_sin_acentos(const string &str) const
+{
+    string result = "";
+    for (unsigned char c : str)
+    {
+        int code = int(c);
+        if (code < 192)
+            result += tolower(c);
+        else if (code == 209)
+            result += '?';
+        else if (code < 224)
+        {
+            double y = floor((code - 192) / 6);
+            if (y <= 2)
+                result += string(1, ((y + 1) * 4) + 93);
+            else
+                result += string(1, (y * 6) + 93);
+        }
+        else if (code == 241)
+            result += '?';
+        else
+        {
+            double y = floor((code - 224) / 6);
+            if (y <= 2)
+                result += tolower(char(((y + 1) * 4) + 93));
+            else
+                result += tolower(char((y * 6) + 93));
+        }
+    }
+    return result;
+}
+
+/* Será true si se realiza la inserción (p.ej. si word, aplicándole el
+tratamiento de stemming y mayúsculas correspondiente, no estaba
+previamente indexado)*/
+bool IndexadorHash::Inserta(const string &word, const InformacionTermino &inf)
+{
+    // Aplicar tratamiento de mayúsculas y acentos
+    string wordTratada = pasar_a_minusculas_sin_acentos(word);
+    // Aplicar stemming
+    stemmerPorter stemmer = stemmerPorter();
+    string term = word;
+    stemmer.stemmer(term, tipoStemmer);
+    // Comprobar si el término está en el índice
+    if (indiceDocs.find(term) == indiceDocs.end())
+    {
+        // Añadir el término al índice
+        indice.insert(pair<string, InformacionTermino>(term, inf));
+        return true;
+    }
+    else
+        return false;
+}
+
+/*// Devuelve true si hay una pregunta indexada (con al menos un término
+que no sea palabra de parada, o sea, que haya algún término indexado en
+indicePregunta), devolviéndo ?pregunta? en ?preg?
+*/
+bool IndexadorHash::DevuelvePregunta(string &preg) const
+{
+    if (indicePregunta.size() > 0)
+    {
+        preg = pregunta;
+        return true;
+    }
+    else
+        return false;
+}
+
+/*// Devuelve true si word (aplicándole el tratamiento de stemming y
+mayúsculas correspondiente) está indexado en la pregunta, devolviendo su
+información almacenada ?inf?. En caso que no esté, devolvería ?inf?
+vacío*/
+bool IndexadorHash::DevuelvePregunta(const string &word, InformacionTerminoPregunta &inf) const
+{
+    // Aplicar tratamiento de mayúsculas y acentos
+    string wordTratada = pasar_a_minusculas_sin_acentos(word);
+    // Aplicar stemming
+    stemmerPorter stemmer = stemmerPorter();
+    string term = word;
+    stemmer.stemmer(term, tipoStemmer);
+    // Comprobar si el término está en el índice
+    if (indicePregunta.find(term) != indicePregunta.end())
+    {
+        inf = InformacionTerminoPregunta(indicePregunta.find(term)->second);
+        return true;
+    }
+    else
+    {
+        inf = InformacionTerminoPregunta();
+        return false;
+    }
+}
+
+/*// Devuelve true si hay una pregunta indexada, devolviendo su
+información almacenada (campo privado ?infPregunta?) en ?inf?. En caso
+que no esté, devolvería ?inf? vacío*/
+bool IndexadorHash::DevuelvePregunta(InformacionPregunta &inf) const
+{
+    if (indicePregunta.size() > 0)
+    {
+        inf = InformacionPregunta(infPregunta);
+        return true;
+    }
+    else
+    {
+        inf = InformacionPregunta();
         return false;
     }
 }

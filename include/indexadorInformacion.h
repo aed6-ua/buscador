@@ -173,6 +173,8 @@ public:
     InformacionTerminoPregunta &operator=(const InformacionTerminoPregunta &orig) { this->ft = orig.ft; this->posTerm = orig.posTerm; return *this; }
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     void cargar(string serializacion);
+    void addFt() { this->ft++; }
+    void addPosTerm(int pos) { this->posTerm.push_back(pos); }
 private:
     int ft; // Frecuencia total del término en la pregunta
     list<int> posTerm;
@@ -202,6 +204,9 @@ public:
     InformacionPregunta &operator=(const InformacionPregunta &orig) { this->numTotalPal = orig.numTotalPal; this->numTotalPalSinParada = orig.numTotalPalSinParada; this->numTotalPalDiferentes = orig.numTotalPalDiferentes; return *this; }
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     void cargar(string serializacion);
+    void setNumTotalPal(int numTotalPal) { this->numTotalPal = numTotalPal; }
+    void setNumTotalPalSinParada(int numTotalPalSinParada) { this->numTotalPalSinParada = numTotalPalSinParada; }
+    void setNumTotalPalDiferentes(int numTotalPalDiferentes) { this->numTotalPalDiferentes = numTotalPalDiferentes; }
 private:
     int numTotalPal;
     // Nº total de palabras en la pregunta

@@ -33,8 +33,7 @@ public:
 
     bool DevuelvePregunta(string &preg) const;
 
-    bool DevuelvePregunta(const string &word, InformacionTerminoPregunta &inf)
-        const;
+    bool DevuelvePregunta(const string &word, InformacionTerminoPregunta &inf) const;
 
     bool DevuelvePregunta(InformacionPregunta &inf) const;
 
@@ -44,16 +43,16 @@ public:
     /* Devuelve true si word (aplicándole el tratamiento de stemming y 
     mayúsculas correspondiente) está indexado, devolviendo su información 
     almacenada ?inf?. En caso que no esté, devolvería ?inf? vacío*/
-    bool Devuelve(const string &word, InformacionTermino &inf) const { return Existe(word) ? inf = indice.at(word), true : false; }
+    bool Devuelve(const string &word, InformacionTermino &inf) { return Existe(word) ? inf = indice.at(word), true : false; }
 
     /* Devuelve true si word (aplicándole el tratamiento de stemming y 
     mayúsculas correspondiente) está indexado y aparece en el documento de 
     nombre nomDoc, en cuyo caso devuelve la información almacenada para word 
     en el documento. En caso que no esté, devolvería ?InfDoc? vacío*/
-    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const;
+    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc);
 
     // Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
-    bool Existe(const string &word) const { return indice.find(word) != indice.end(); }
+    bool Existe(const string &word);
 
     bool Borra(const string &word);
 
@@ -71,7 +70,7 @@ public:
     /* Será true si se realiza la inserción (p.ej. si word, aplicándole el
     tratamiento de stemming y mayúsculas correspondiente, no estaba
     previamente indexado)*/
-    bool Inserta(const string &word, const InformacionTermino &inf) { return indice.insert(make_pair(word, inf)).second; }
+    bool Inserta(const string &word, const InformacionTermino &inf);
 
     // Devolverá el número de términos diferentes indexados (cardinalidad de campo privado ?índice?)
     int NumPalIndexadas() const { return indice.size(); }
@@ -125,6 +124,7 @@ public:
 
 private:
     IndexadorHash();
+    string pasar_a_minusculas_sin_acentos(const string &str) const;
     unordered_map<string, InformacionTermino> indice;
     unordered_map<string, InfDoc> indiceDocs;
     unordered_map<string, InformacionTerminoPregunta> indicePregunta;
