@@ -11,17 +11,7 @@ using namespace std;
 
 class IndexadorHash
 {
-    friend ostream &operator<<(ostream &s, const IndexadorHash &p)
-    {
-        s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << endl;
-        s << "Tokenizador: " << p.tok << endl;
-        s << "Directorio donde se almacenara el indice generado: " << p.directorioIndice << endl;
-        s << "Stemmer utilizado: " << p.tipoStemmer << endl;
-        s << "Informacion de la coleccion indexada: " << p.informacionColeccionDocs << endl;
-        s << "Se almacenara parte del indice en disco duro: " << p.almacenarEnDisco << endl;
-        s << "Se almacenaran las posiciones de los terminos: " << p.almacenarPosTerm;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const IndexadorHash &p);
 
 public:
     IndexadorHash(const string &fichStopWords, const string &delimitadores,
@@ -50,9 +40,17 @@ public:
 
     void ImprimirIndexacionPregunta();
     void ImprimirPregunta();
-    bool Devuelve(const string &word, InformacionTermino &inf) const;
 
-    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &InfDoc) const;
+    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
+    mayúsculas correspondiente) está indexado, devolviendo su información 
+    almacenada ?inf?. En caso que no esté, devolvería ?inf? vacío*/
+    bool Devuelve(const string &word, InformacionTermino &inf) const { return Existe(word) ? inf = indice.at(word), true : false; }
+
+    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
+    mayúsculas correspondiente) está indexado y aparece en el documento de 
+    nombre nomDoc, en cuyo caso devuelve la información almacenada para word 
+    en el documento. En caso que no esté, devolvería ?InfDoc? vacío*/
+    bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc) const;
 
     // Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
     bool Existe(const string &word) const { return indice.find(word) != indice.end(); }
@@ -124,7 +122,6 @@ public:
 private:
     IndexadorHash();
     unordered_map<string, InformacionTermino> indice;
-
     unordered_map<string, InfDoc> indiceDocs;
     InfColeccionDocs informacionColeccionDocs;
     string pregunta;

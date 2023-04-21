@@ -9,20 +9,14 @@ using namespace std;
 
 class InfTermDoc
 {
-    friend ostream &operator<<(ostream &s, const InfTermDoc &p)
-    {
-        s << "ft: " << p.ft;
-        // A continuación se mostrarían todos los elementos de p.posTerm ("posicion TAB posicion TAB ... posicion, es decir nunca finalizará en un TAB?):
-        // s << "\t" << posicion;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InfTermDoc &p);
 
 public:
     // Constructor de copia
     InfTermDoc(const InfTermDoc &infTermDoc) { this->ft = infTermDoc.ft; this->posTerm = infTermDoc.posTerm;}
 
     // Inicializa ft = 0
-    InfTermDoc() { this->ft = 0; }
+    InfTermDoc() { this->ft = 0; this->posTerm.clear(); }
 
     // Pone ft = 0
     ~InfTermDoc() { this->ft = 0;}
@@ -30,6 +24,9 @@ public:
     // Operador de asignación
     InfTermDoc &operator=(const InfTermDoc &infTermDoc) { this->ft = infTermDoc.ft; this->posTerm = infTermDoc.posTerm; return *this;}
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
+    void addFt() { this->ft++; }
+    void addPosTerm(const int &pos) { this->posTerm.push_back(pos); }
+    int getFt() const { return this->ft; }
 private:
     int ft; // Frecuencia del término en el documento
     list<int> posTerm;
@@ -42,20 +39,17 @@ private:
 
 class InformacionTermino
 {
-    friend ostream &operator<<(ostream &s, const InformacionTermino &p)
-    {
-        s << "Frecuencia total : " << p.ftc << "\tfd : " << p.l_docs.size();
-        // A continuación se mostrarían todos los elementos de p.l_docs:
-        // s << "\tId.Doc : " << idDoc << "\t" << InfTermDoc;
-        return s;
-    }
+    friend ostream &operator<<(ostream &s, const InformacionTermino &p);
 
 public:
     // Constructor de copia
     InformacionTermino(const InformacionTermino &infTerm) { this->ftc = infTerm.ftc; this->l_docs = infTerm.l_docs;} 
 
     // Inicializa ftc = 0
-    InformacionTermino() { this->ftc = 0;}  
+    InformacionTermino() { this->ftc = 0;}
+
+    // Constructor por defecto
+    InformacionTermino(const int &ftc) { this->ftc = ftc; this->l_docs.clear();}
 
     // Pone ftc = 0 y vacía l_docs
     ~InformacionTermino() { this->ftc = 0; this->l_docs.clear();}
@@ -64,7 +58,18 @@ public:
     InformacionTermino &operator=(const InformacionTermino &infTerm) { this->ftc = infTerm.ftc; this->l_docs = infTerm.l_docs; return *this;}
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     void addFtc() { this->ftc++; }
-
+    // Busca el idDoc en la tabla hash l_docs, si lo encuentra devuelve true y en el parámetro infTermDoc devuelve la información del término en el documento
+    bool getInfTermDoc(const int &idDoc, InfTermDoc &infTermDoc) const;
+    // Añade el idDoc a la tabla hash l_docs, si no existe, y devuelve true, si ya existe devuelve false
+    bool addInfTermDoc(const int &idDoc, const InfTermDoc &infTermDoc) { return this->l_docs.insert({idDoc, infTermDoc}).second; }
+    // Obtiene el InfTermDoc del idDoc
+    InfTermDoc* getInfTermDoc(const int &idDoc) { return &this->l_docs[idDoc]; }
+    // Comprobamos si el idDoc existe en la tabla hash l_docs
+    bool existIdDoc(const int &idDoc) const { return this->l_docs.count(idDoc); }
+    // Borra el idDoc de la tabla hash l_docs y restamos la frecuencia del termino en el documento a la frecuencia total del termino en la coleccion
+    void eraseInfTermDoc(const int &idDoc) { this->ftc -= this->l_docs[idDoc].getFt(); this->l_docs.erase(idDoc); }
+    // Devuelve el número de documentos en los que aparece el término
+    int getNumDocs() const { return this->l_docs.size(); }
 private:
     int ftc; // Frecuencia total del término en la colección
     unordered_map<int, InfTermDoc> l_docs;
@@ -94,7 +99,16 @@ public:
     InfDoc &operator=(const InfDoc &);
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     time_t getFechaModificacion() const { return fechaModificacion; }
-
+    // Devuelve el identificador del documento
+    int getIdDoc() const { return idDoc; }
+    // Devuelve el número total de palabras del documento
+    int getNumPal() const { return numPal; }
+    // Devuelve el número total de palabras sin stop-words del documento
+    int getNumPalSinParada() const { return numPalSinParada; }
+    // Devuelve el número total de palabras diferentes que no sean stop-words (sin acumular la frecuencia de cada una de ellas)
+    int getNumPalDiferentes() const { return numPalDiferentes; }
+    // Devuelve el tamaño en bytes del documento
+    int getTamBytes() const { return tamBytes; }
 private:
     int idDoc;
     // Identificador del documento. El primer documento indexado en la colección será el identificador 1
@@ -127,6 +141,11 @@ public:
     void addNumTotalPalSinParada(int numPalSinParada) { this->numTotalPalSinParada += numPalSinParada; }
     void addNumTotalPalDiferentes(int numPalDiferentes) { this->numTotalPalDiferentes += numPalDiferentes; }
     void addTamBytes(int tamBytes) { this->tamBytes += tamBytes; }
+    void subDoc() { this->numDocs--; }
+    void subNumTotalPal(int numPal) { this->numTotalPal -= numPal; }
+    void subNumTotalPalSinParada(int numPalSinParada) { this->numTotalPalSinParada -= numPalSinParada; }
+    void subNumTotalPalDiferentes() { this->numTotalPalDiferentes--; }
+    void subTamBytes(int tamBytes) { this->tamBytes -= tamBytes; }
 private:
     int numDocs; // Nº total de documentos en la colección
     int numTotalPal;
