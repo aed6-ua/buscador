@@ -43,7 +43,7 @@ public:
     /* Devuelve true si word (aplicándole el tratamiento de stemming y 
     mayúsculas correspondiente) está indexado, devolviendo su información 
     almacenada ?inf?. En caso que no esté, devolvería ?inf? vacío*/
-    bool Devuelve(const string &word, InformacionTermino &inf) { return Existe(word) ? inf = indice.at(word), true : false; }
+    bool Devuelve(const string &word, InformacionTermino &inf);
 
     /* Devuelve true si word (aplicándole el tratamiento de stemming y 
     mayúsculas correspondiente) está indexado y aparece en el documento de 
@@ -125,9 +125,14 @@ public:
 private:
     IndexadorHash();
     string pasar_a_minusculas_sin_acentos(const string &str) const;
+    bool AlmacenarEnDisco();
+    bool BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc);
     unordered_map<string, InformacionTermino> indice;
+    unordered_set<string> indice_guardados;
     unordered_map<string, InfDoc> indiceDocs;
+    unordered_set<string> indiceDocs_guardados;
     unordered_map<string, InformacionTerminoPregunta> indicePregunta;
+    unordered_set<string> stopWords_originales;
     unordered_set<string> stopWords;
     InfColeccionDocs informacionColeccionDocs;
     string pregunta;

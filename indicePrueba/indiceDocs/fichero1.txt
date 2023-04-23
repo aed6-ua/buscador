@@ -1,0 +1,1 @@
+idDoc: 1	numPal: 6	numPalSinParada: 4	numPalDiferentes: 3	tamBytes: 30	fechaModificacion: 1681919937
