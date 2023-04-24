@@ -1,1 +1,1 @@
-idDoc: 2	numPal: 5	numPalSinParada: 3	numPalDiferentes: 2	tamBytes: 23	fechaModificacion: 1680164465
+idDoc: 2	numPal: 5	numPalSinParada: 3	numPalDiferentes: 2	tamBytes: 23	fechaModificacion: 1682001051

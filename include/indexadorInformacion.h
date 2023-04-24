@@ -73,6 +73,8 @@ public:
     int getNumDocs() const { return this->l_docs.size(); }
     // Cargar la información de un término a partir de su serialización
     void cargar(string serializacion);
+    // Obtener los idDoc de los documentos en los que aparece el término
+    void getIdDocs(unordered_set<int> &idDocs) const { for (auto it = this->l_docs.begin(); it != this->l_docs.end(); it++) idDocs.insert(it->first); }
 private:
     int ftc; // Frecuencia total del término en la colección
     unordered_map<int, InfTermDoc> l_docs;
@@ -110,6 +112,13 @@ public:
     int getTamBytes() const { return tamBytes; }
     // Cargar la información de un documento a partir de su serialización
     void cargar(string serializacion);
+    // Añade al número total de palabras del documento el número de palabras que se le pasa por parámetro
+    void addNumPal(const int &numPal) { this->numPal += numPal; }
+    // Añade al número total de palabras sin stop-words del documento el número de palabras que se le pasa por parámetro
+    void addNumPalSinParada(const int &numPalSinParada) { this->numPalSinParada += numPalSinParada; }
+    // Añade al número total de palabras diferentes que no sean stop-words (sin acumular la frecuencia de cada una de ellas) el número de palabras que se le pasa por parámetro
+    void addNumPalDiferentes(const int &numPalDiferentes) { this->numPalDiferentes += numPalDiferentes; }
+
 private:
     int idDoc;
     // Identificador del documento. El primer documento indexado en la colección será el identificador 1

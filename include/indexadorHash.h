@@ -38,7 +38,9 @@ public:
     bool DevuelvePregunta(InformacionPregunta &inf) const;
 
     void ImprimirIndexacionPregunta();
-    void ImprimirPregunta();
+    void ImprimirPregunta() {
+        cout << "Pregunta indexada: " << pregunta << endl;
+        cout << "Informacion de la pregunta: " << infPregunta << endl;}
 
     /* Devuelve true si word (aplicándole el tratamiento de stemming y 
     mayúsculas correspondiente) está indexado, devolviendo su información 

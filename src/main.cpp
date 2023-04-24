@@ -1,25 +1,33 @@
 #include <iostream> 
 #include <string>
 #include <list> 
-#include "indexadorHash.h"
+#include "tokenizador.h"
 
 using namespace std;
+
+///////// Comprobación de que vacíe la lista resultado
+
+void imprimirListaSTL(const list<string>& cadena)
+{
+        list<string>::const_iterator itCadena;
+        for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
+        {
+                cout << (*itCadena) << ", ";
+        }
+        cout << endl;
+}
 
 int
 main(void)
 {
-IndexadorHash a("./StopWordsEspanyol.txt", ". ,:", true, true, "./indicePrueba", 1, false, true);
-cout << "IndexadorHash a:\n################\n" << a << endl;
+	bool kCasosEspeciales = true, kpasarAminusculas = false;
 
-IndexadorHash b("./StopWordsIngles.txt", ". ,:", true, false, "./indicePruebaIngles", 2, true, true);
-cout << "IndexadorHash b:\n################\n" << b << endl;
+	list<string> lt1, lt2;
 
-cout << b.DevolverDelimitadores () << endl; 
-cout << b.DevolverDirIndice () << endl; 
-cout << b.DevolverTipoStemming () << endl; 
-cout << b.DevolverAlmEnDisco () << endl; 
-cout << b.DevolverAlmacenarPosTerm () << endl; 
-cout << b.DevolverPasarAminuscSinAcentos () << endl; 
-cout << b.DevolverCasosEspeciales () << endl; 
+Tokenizador a("@.,&", true, false); 
+list<string> tokens; 
+
+a.Tokenizar("...10.000.a.000 ,,23.05 10/12/85 1,23E+10", lt1);
+imprimirListaSTL(lt1);
 
 }
