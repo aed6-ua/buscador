@@ -154,7 +154,7 @@ IndexadorHash::IndexadorHash(const string &fichStopWords, const string &delimita
     {
         stemmerPorter stemmer = stemmerPorter();
         string palabra;
-        while (getline(f, palabra))
+        while (std::getline(f, palabra))
         {
             stopWords_originales.insert(palabra);
             stemmer.stemmer(palabra, tipoStemmer);
@@ -318,7 +318,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
     }
     string linea;
     int contador = 0;
-    while (getline(f, linea))
+    while (std::getline(f, linea))
     {
         // Comprobar si el documento ya está indexado
         if ((indiceDocs.find(linea) != indiceDocs.end()))
@@ -349,7 +349,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             InfDoc infDocGuardado = InfDoc();
             // Abrir el fichero de indiceDocs
             ifstream f;
-            f.open((directorioIndice + "/indiceDocs/" + linea).c_str());
+            f.open((directorioIndice + "/indiceDocs/" + linea.replace(linea.begin(), linea.end(), '/', '-')).c_str());
             if (!f)
             {
                 cerr << "Error al abrir el fichero de indiceDocs " << linea << endl;
@@ -357,7 +357,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             }
             // Leer el fichero de indiceDocs
             string linea;
-            if (getline(f, linea))
+            if (std::getline(f, linea))
             {
                 infDocGuardado.cargar(linea);
             }
@@ -429,7 +429,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
 
         // Palabras distintas del documento
         unordered_set<string> palabrasDistintas;
-        while (getline(f, linea))
+        while (std::getline(f, linea))
         {
             // Aplicar el stemmer
             stemmer.stemmer(linea, tipoStemmer);
@@ -479,7 +479,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                     }
                     // Leer el fichero de indice
                     string linea;
-                    if (getline(f3, linea))
+                    if (std::getline(f3, linea))
                     {
                         infTerm.cargar(linea);
                     }
@@ -626,14 +626,14 @@ bool IndexadorHash::BorraDoc(const string &nomDoc)
     return false;
 }
 
-bool IndexadorHash::BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc)
+bool IndexadorHash::BorraDocGuardado(string &nomDoc, const InfDoc &infDoc)
 {
     // Obtener el idDoc
     int idDoc = infDoc.getIdDoc();
     // Borrar el documento del índice de documentos
     indiceDocs_guardados.erase(nomDoc);
     // Borrar el fichero del documento
-    remove((directorioIndice + "/indiceDocs/" + nomDoc).c_str());
+    remove((directorioIndice + "/indiceDocs/" + nomDoc.replace(nomDoc.begin(), nomDoc.end(), '/', '-')).c_str());
     // Actualizar la información de la colección de documentos
     informacionColeccionDocs.subDoc();
     informacionColeccionDocs.subNumTotalPal(infDoc.getNumPal());
@@ -675,7 +675,9 @@ bool IndexadorHash::BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc)
         InformacionTermino infTerm = InformacionTermino();
         // Abrir el fichero del término
         ifstream f;
-        f.open(directorioIndice + "/indiceDocs/" + *itTerm);
+        string fichero = *itTerm;
+        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (!f.is_open())
         {
             cerr << "Error al abrir el fichero del término " << *itTerm << endl;
@@ -683,7 +685,7 @@ bool IndexadorHash::BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc)
         }
         // Leer la información del término
         string linea;
-        if (getline(f, linea))
+        if (std::getline(f, linea))
         {
             infTerm.cargar(linea);
         }
@@ -704,7 +706,7 @@ bool IndexadorHash::BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc)
             {
                 // Actualizar el término en el índice sobreescribiendo el fichero
                 ofstream f;
-                f.open(directorioIndice + "/indiceDocs/" + *itTerm);
+                f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
                 if (!f.is_open())
                 {
                     cerr << "Error al abrir el fichero del término " << *itTerm << endl;
@@ -721,7 +723,7 @@ bool IndexadorHash::BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc)
                 itTerm = indice_guardados.erase(itTerm);
                 informacionColeccionDocs.subNumTotalPalDiferentes();
                 // Borrar el fichero del término
-                if (remove((directorioIndice + "/indiceDocs/" + *itTerm).c_str()) != 0)
+                if (std::remove((directorioIndice + "/indiceDocs/" + fichero).c_str()) != 0)
                 {
                     cerr << "Error al borrar el fichero del término " << *itTerm << endl;
                     return false;
@@ -912,7 +914,9 @@ bool IndexadorHash::AlmacenarEnDisco()
     auto itDocs = indiceDocs.begin();
     while (itDocs != indiceDocs.end())
     {
-        ofstream f(directorioIndice + "/indiceDocs/" + (itDocs->first).substr((itDocs->first).find_last_of('/') + 1, string::npos));
+        string fichero = itDocs->first;
+        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        ofstream f((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (f.fail())
         {
             cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + itDocs->first
@@ -934,7 +938,7 @@ bool IndexadorHash::AlmacenarEnDisco()
         {
             cerr << "Error al escribir en el fichero " << directorioIndice + "/indiceDocs/" + itDocs->first << ": " << e.what() << "\n";
             // Borrar el fichero
-            remove((directorioIndice + "/indiceDocs/" + itDocs->first).c_str());
+            std::remove((directorioIndice + "/indiceDocs/" + fichero).c_str());
             return false;
         }
         f.close();
@@ -949,14 +953,16 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
 {
     InformacionTermino inf;
     int idDoc;
+    string fichero = nomDoc;
+    fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
     if (indiceDocs.find(nomDoc) != indiceDocs.end())
         idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
     else if (indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end())
     {
-        ifstream f(directorioIndice + "/indiceDocs/" + nomDoc.substr(nomDoc.find_last_of('/') + 1, string::npos));
+        ifstream f((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (f.fail())
         {
-            cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + nomDoc
+            cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero
                  << "\n";
             return false;
         }
@@ -965,13 +971,13 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
         {
             if (!f)
             {
-                cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + nomDoc
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero
                      << "\n";
                 return false;
             }
             InfDoc infDocAux = InfDoc();
             string line;
-            if (getline(f, line))
+            if (std::getline(f, line))
             {
                 infDocAux.cargar(line);
                 idDoc = infDocAux.getIdDoc();
@@ -981,7 +987,7 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
         }
         catch (const std::ios::failure &e)
         {
-            cerr << "Error al leer en el fichero " << directorioIndice + "/indiceDocs/" + nomDoc << ": " << e.what() << "\n";
+            cerr << "Error al leer en el fichero " << directorioIndice + "/indiceDocs/" + fichero << ": " << e.what() << "\n";
             return false;
         }
         f.close();
@@ -1241,7 +1247,7 @@ bool IndexadorHash::Devuelve(const string &word, InformacionTermino &inf)
             }
             // Leer el fichero
             string linea;
-            if (getline(f, linea))
+            if (std::getline(f, linea))
             {
                 inf.cargar(linea);
                 return true;
@@ -1413,76 +1419,76 @@ bool IndexadorHash::RecuperarIndexacion(const string &directorioIndexacion)
         // Leemos el indice del fichero
         // La primera linea indica el tamaño del indice
         string linea;
-        getline(f, linea);
+        std::getline(f, linea);
         int tam = atoi(linea.c_str());
         // El resto tam lineas indican el termino y la serializacion de InformacionTermino
         for (int i = 0; i < tam; i++)
         {
-            getline(f, linea);
+            std::getline(f, linea);
             string term = linea;
             InformacionTermino it;
-            getline(f, linea);
+            std::getline(f, linea);
             it.cargar(linea);
             indice[term] = it;
         }
         // Leemos el indice de documentos del fichero
         // La primera linea indica el tamaño del indice
-        getline(f, linea);
+        std::getline(f, linea);
         tam = atoi(linea.c_str());
         // El resto tam lineas indican el nombre del documento y la serializacion de InfDoc
         for (int i = 0; i < tam; i++)
         {
-            getline(f, linea);
+            std::getline(f, linea);
             string nomDoc = linea;
             InfDoc id;
-            getline(f, linea);
+            std::getline(f, linea);
             id.cargar(linea);
             indiceDocs[nomDoc] = id;
         }
         // Leemos el indice de preguntas del fichero
         // La primera linea indica el tamaño del indice
-        getline(f, linea);
+        std::getline(f, linea);
         tam = atoi(linea.c_str());
         // El resto tam lineas indican el termino y la serializacion de InformacionTerminoPregunta
         for (int i = 0; i < tam; i++)
         {
-            getline(f, linea);
+            std::getline(f, linea);
             string term = linea;
             InformacionTerminoPregunta itp;
-            getline(f, linea);
+            std::getline(f, linea);
             itp.cargar(linea);
             indicePregunta[term] = itp;
         }
         // Leemos el tipo de stemmer
-        getline(f, linea);
+        std::getline(f, linea);
         tipoStemmer = atoi(linea.c_str());
         // Leemos los stopwords del fichero
         // La primera linea indica el tamaño del unordered_set
-        getline(f, linea);
+        std::getline(f, linea);
         tam = atoi(linea.c_str());
         // El resto tam lineas indican los stopwords
         stemmerPorter stemmer = stemmerPorter();
         for (int i = 0; i < tam; i++)
         {
-            getline(f, linea);
+            std::getline(f, linea);
             stopWords_originales.insert(linea);
             stemmer.stemmer(linea, tipoStemmer);
             stopWords.insert(linea);
         }
         // Leemos la informacion de la coleccion de documentos
-        getline(f, linea);
+        std::getline(f, linea);
         informacionColeccionDocs.cargar(linea);
         // Leemos la pregunta
-        getline(f, linea);
+        std::getline(f, linea);
         pregunta = linea;
         // Leemos la informacion de la pregunta
-        getline(f, linea);
+        std::getline(f, linea);
         infPregunta.cargar(linea);
         // Leemos el fichero de stopwords
-        getline(f, linea);
+        std::getline(f, linea);
         ficheroStopWords = linea;
         // Leemos el tokenizador
-        getline(f, linea);
+        std::getline(f, linea);
         string delimitadoresPalabra;
         bool kcasosEspeciales;
         bool minuscSinAcentos;
@@ -1493,14 +1499,14 @@ bool IndexadorHash::RecuperarIndexacion(const string &directorioIndexacion)
         minuscSinAcentos = (linea.substr(pos) == "1") ? true : false;
         tok = Tokenizador(delimitadoresPalabra, kcasosEspeciales, minuscSinAcentos);
         // Leemos el directorio donde se almacena el indice
-        getline(f, linea);
+        std::getline(f, linea);
         directorioIndice = linea;
 
         // Leemos si se almacena en disco
-        getline(f, linea);
+        std::getline(f, linea);
         almacenarEnDisco = (linea == "1") ? true : false;
         // Leemos si se almacenan las posiciones de los terminos
-        getline(f, linea);
+        std::getline(f, linea);
         almacenarPosTerm = (linea == "1") ? true : false;
         // Cerramos el fichero
     }
@@ -1559,21 +1565,23 @@ bool IndexadorHash::Borra(const string &word)
         }
         for (auto itGuardados : indiceDocs_guardados)
         {
+            string fichero = itGuardados;
+            fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
             InfDoc infDoc;
             // Abrimos el fichero del documento
             ifstream f;
             f.exceptions(std::ifstream::failbit | std::ifstream::badbit);
             try
             {
-                f.open((directorioIndice + "/indiceDocs/" + itGuardados).c_str());
+                f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
                 string linea;
-                getline(f, linea);
+                std::getline(f, linea);
                 f.close();
                 infDoc.cargar(linea);
             }
             catch (std::ios::failure &e)
             {
-                cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + itGuardados << ": " << e.what() << endl;
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero << ": " << e.what() << endl;
                 return false;
             }
             // Si el termino esta en el documento, lo borramos
@@ -1593,14 +1601,14 @@ bool IndexadorHash::Borra(const string &word)
                 f2.exceptions(std::ifstream::failbit | std::ifstream::badbit);
                 try
                 {
-                    f2.open((directorioIndice + "/indiceDocs/" + itGuardados).c_str());
+                    f2.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
                     string linea;
                     f2 << infDoc << "\n";
                     f2.close();
                 }
                 catch (std::ios::failure &e)
                 {
-                    cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + itGuardados << ": " << e.what() << endl;
+                    cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero << ": " << e.what() << endl;
                     return false;
                 }
             }
@@ -1616,7 +1624,7 @@ bool IndexadorHash::Borra(const string &word)
         {
             f.open((directorioIndice + "/indice/" + termino).c_str());
             string linea;
-            getline(f, linea);
+            std::getline(f, linea);
             f.close();
             // Cargar la informacion del termino
             InformacionTermino infTerm;
@@ -1640,21 +1648,23 @@ bool IndexadorHash::Borra(const string &word)
             }
             for (auto itGuardados : indiceDocs_guardados)
             {
+                string fichero = itGuardados;
+                fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
                 InfDoc infDoc;
                 // Abrimos el fichero del documento
                 ifstream f;
                 f.exceptions(std::ifstream::failbit | std::ifstream::badbit);
                 try
                 {
-                    f.open((directorioIndice + "/indiceDocs/" + itGuardados).c_str());
+                    f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
                     string linea;
-                    getline(f, linea);
+                    std::getline(f, linea);
                     f.close();
                     infDoc.cargar(linea);
                 }
                 catch (std::ios::failure &e)
                 {
-                    cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + itGuardados << ": " << e.what() << endl;
+                    cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero << ": " << e.what() << endl;
                     return false;
                 }
                 // Si el termino esta en el documento, lo borramos
@@ -1674,14 +1684,14 @@ bool IndexadorHash::Borra(const string &word)
                     f2.exceptions(std::ifstream::failbit | std::ifstream::badbit);
                     try
                     {
-                        f2.open((directorioIndice + "/indiceDocs/" + itGuardados).c_str());
+                        f2.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
                         string linea;
                         f2 << infDoc << "\n";
                         f2.close();
                     }
                     catch (std::ios::failure &e)
                     {
-                        cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + itGuardados << ": " << e.what() << endl;
+                        cerr << "Error al abrir el fichero " << directorioIndice + "/indiceDocs/" + fichero << ": " << e.what() << endl;
                         return false;
                     }
                 }
@@ -1702,4 +1712,67 @@ bool IndexadorHash::Borra(const string &word)
     indice.erase(termino);
     // Devolvemos true
     return true;
+}
+
+void IndexadorHash::VaciarIndiceDocs() {
+    // Vaciamos el indice de documentos
+    indiceDocs.clear();
+    // Borramos cada documento
+    string fichero;
+    for (auto it : indiceDocs_guardados) {
+        fichero = it;
+        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        remove((directorioIndice + "/indiceDocs/" + fichero).c_str());
+    }
+    // Vaciamos el indice de documentos guardados
+    indiceDocs_guardados.clear();
+    // Borramos el directorio de documentos
+    remove((directorioIndice + "/indiceDocs").c_str());
+}
+
+void IndexadorHash::VaciarIndicePreg() {
+    // Vaciamos el indice de pregunta
+    indice.clear();
+    // Borramos los indices guardados
+    for (auto it : indice_guardados) {
+        remove((directorioIndice + "/indice/" + it).c_str());
+    }
+}
+
+void IndexadorHash::ListarTerminos() {
+    InformacionTermino infTerm;
+    for (auto it : indice_guardados) {
+        Devuelve(it, infTerm);
+        cout << it << '\t' << infTerm << endl;
+    }
+    // Recorremos el indice
+    for (auto it = indice.begin(); it != indice.end(); it++) {
+        // Mostramos el termino
+        cout << it->first << '\t' << it->second << endl;
+    }
+}
+
+bool IndexadorHash::ListarTerminos(const string &nomDoc) {
+    if (indiceDocs.find(nomDoc) != indiceDocs.end() || indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end()) {
+        // Recorremos el indice
+        InfTermDoc infTermDoc;
+        for (auto it = indice_guardados.begin(); it != indice_guardados.end(); it++) {
+            // Si el termino esta en el documento, lo mostramos
+            if (Devuelve(*it, nomDoc, infTermDoc)) {
+                cout << *it << '\t' << infTermDoc << endl;
+            }
+        }
+        for (auto it = indice.begin(); it != indice.end(); it++) {
+            // Si el termino esta en el documento, lo mostramos
+            if (Devuelve(it->first, nomDoc, infTermDoc)) {
+                cout << it->first << '\t' << infTermDoc << endl;
+            }
+        }
+        // Devolvemos true
+        return true;
+    }
+    else {
+        // Devolvemos false
+        return false;
+    }
 }

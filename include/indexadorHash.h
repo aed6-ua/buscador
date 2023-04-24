@@ -109,9 +109,9 @@ public:
     // Mostrar por pantalla: cout << informacionColeccionDocs << "\n";
     void ListarInfColeccDocs() const { cout << informacionColeccionDocs << "\n"; }
 
-    void ListarTerminos() const;
+    void ListarTerminos();
 
-    bool ListarTerminos(const string &nomDoc) const;
+    bool ListarTerminos(const string &nomDoc);
 
     // Mostrar por pantalla el contenido el contenido del campo privado ?indiceDocs?: cout << nomDoc << ?\t? << InfDoc << "\n";
     void ListarDocs() const
@@ -128,7 +128,7 @@ private:
     IndexadorHash();
     string pasar_a_minusculas_sin_acentos(const string &str) const;
     bool AlmacenarEnDisco();
-    bool BorraDocGuardado(const string &nomDoc, const InfDoc &infDoc);
+    bool BorraDocGuardado(string &nomDoc, const InfDoc &infDoc);
     unordered_map<string, InformacionTermino> indice;
     unordered_set<string> indice_guardados;
     unordered_map<string, InfDoc> indiceDocs;
