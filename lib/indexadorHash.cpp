@@ -4,6 +4,7 @@
 #include <cstring>
 #include <filesystem>
 #include <math.h>
+#include <algorithm>
 #include "indexadorHash.h"
 #include "tokenizador.h"
 #include "stemmer.h"
@@ -349,17 +350,19 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             InfDoc infDocGuardado = InfDoc();
             // Abrir el fichero de indiceDocs
             ifstream f;
-            f.open((directorioIndice + "/indiceDocs/" + linea.replace(linea.begin(), linea.end(), '/', '-')).c_str());
+            string fichero = linea;
+            replace(fichero.begin(), fichero.end(), '/', '-');
+            f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
             if (!f)
             {
                 cerr << "Error al abrir el fichero de indiceDocs " << linea << endl;
                 return false;
             }
             // Leer el fichero de indiceDocs
-            string linea;
-            if (std::getline(f, linea))
+            string line;
+            if (std::getline(f, line))
             {
-                infDocGuardado.cargar(linea);
+                infDocGuardado.cargar(line);
             }
             f.close();
             // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
@@ -632,8 +635,10 @@ bool IndexadorHash::BorraDocGuardado(string &nomDoc, const InfDoc &infDoc)
     int idDoc = infDoc.getIdDoc();
     // Borrar el documento del índice de documentos
     indiceDocs_guardados.erase(nomDoc);
+    string fichero = nomDoc;
+    replace(fichero.begin(), fichero.end(), '/', '-');
     // Borrar el fichero del documento
-    remove((directorioIndice + "/indiceDocs/" + nomDoc.replace(nomDoc.begin(), nomDoc.end(), '/', '-')).c_str());
+    remove((directorioIndice + "/indiceDocs/" + fichero).c_str());
     // Actualizar la información de la colección de documentos
     informacionColeccionDocs.subDoc();
     informacionColeccionDocs.subNumTotalPal(infDoc.getNumPal());
@@ -676,7 +681,7 @@ bool IndexadorHash::BorraDocGuardado(string &nomDoc, const InfDoc &infDoc)
         // Abrir el fichero del término
         ifstream f;
         string fichero = *itTerm;
-        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        replace(fichero.begin(), fichero.end(), '/', '-');
         f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (!f.is_open())
         {
@@ -879,6 +884,7 @@ bool IndexadorHash::AlmacenarEnDisco()
     auto it = indice.begin();
     while (it != indice.end())
     {
+        cout << directorioIndice + "/indice/" + it->first << "\n";
         ofstream f(directorioIndice + "/indice/" + it->first);
         f.exceptions(std::ios::failbit);
         try
@@ -915,7 +921,7 @@ bool IndexadorHash::AlmacenarEnDisco()
     while (itDocs != indiceDocs.end())
     {
         string fichero = itDocs->first;
-        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        replace(fichero.begin(), fichero.end(), '/', '-');
         ofstream f((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (f.fail())
         {
@@ -954,7 +960,7 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
     InformacionTermino inf;
     int idDoc;
     string fichero = nomDoc;
-    fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+    replace(fichero.begin(), fichero.end(), '/', '-');
     if (indiceDocs.find(nomDoc) != indiceDocs.end())
         idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
     else if (indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end())
@@ -1566,7 +1572,7 @@ bool IndexadorHash::Borra(const string &word)
         for (auto itGuardados : indiceDocs_guardados)
         {
             string fichero = itGuardados;
-            fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+            replace(fichero.begin(), fichero.end(), '/', '-');
             InfDoc infDoc;
             // Abrimos el fichero del documento
             ifstream f;
@@ -1649,7 +1655,7 @@ bool IndexadorHash::Borra(const string &word)
             for (auto itGuardados : indiceDocs_guardados)
             {
                 string fichero = itGuardados;
-                fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+                replace(fichero.begin(), fichero.end(), '/', '-');
                 InfDoc infDoc;
                 // Abrimos el fichero del documento
                 ifstream f;
@@ -1721,7 +1727,7 @@ void IndexadorHash::VaciarIndiceDocs() {
     string fichero;
     for (auto it : indiceDocs_guardados) {
         fichero = it;
-        fichero = fichero.replace(fichero.begin(), fichero.end(), '/', '-');
+        replace(fichero.begin(), fichero.end(), '/', '-');
         remove((directorioIndice + "/indiceDocs/" + fichero).c_str());
     }
     // Vaciamos el indice de documentos guardados
