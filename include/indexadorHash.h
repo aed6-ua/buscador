@@ -125,12 +125,13 @@ public:
     bool IndexarDoc(const string &nomDoc, int idDoc=-1);
 
 private:
+    int id_ficheros_indice = 0;
     IndexadorHash();
     string pasar_a_minusculas_sin_acentos(const string &str) const;
     bool AlmacenarEnDisco();
     bool BorraDocGuardado(string &nomDoc, const InfDoc &infDoc);
     unordered_map<string, InformacionTermino> indice;
-    unordered_set<string> indice_guardados;
+    unordered_map<string, int> indice_guardados;
     unordered_map<string, InfDoc> indiceDocs;
     unordered_set<string> indiceDocs_guardados;
     unordered_map<string, InformacionTerminoPregunta> indicePregunta;

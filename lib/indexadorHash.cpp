@@ -280,10 +280,30 @@ el contenido del campo privado ?indiceDocs? para el documento con nombre
 muestra nada*/
 bool IndexadorHash::ListarDocs(const string &nomDoc) const
 {
+    string nomDoc2 = nomDoc;
     auto it = indiceDocs.find(nomDoc);
     if (it != indiceDocs.end())
     {
         cout << it->first << '\t' << it->second << "\n";
+        return true;
+    }
+    auto itG = indiceDocs_guardados.find(nomDoc);
+    if (itG != indiceDocs_guardados.end())
+    {
+        // Leer el fichero
+        ifstream f;
+        replace(nomDoc2.begin(), nomDoc2.end(), '/', '-');
+        f.open(directorioIndice + "/" + nomDoc2);
+        if (!f)
+        {
+            cerr << "Error al abrir el fichero " << nomDoc2 << endl;
+            return false;
+        }
+        string linea;
+        getline(f, linea);
+        InfDoc infDoc;
+        infDoc.cargar(linea);
+        cout << *itG << '\t' << infDoc << "\n";
         return true;
     }
     return false;
@@ -317,8 +337,76 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
         cerr << "Error al abrir el fichero de documentos " << ficheroDocumentos << endl;
         return false;
     }
-    string linea;
     int contador = 0;
+    /*
+    list <string> listaFicherosAIndexar;
+    ifstream i;
+    i.open(ficheroDocumentos.c_str());
+    if (!i)
+    {
+        cerr << "ERROR: No existe el archivo: " << ficheroDocumentos << endl;
+        i.close();
+        return false;
+    }
+    else
+    {
+        string documentoActual = "";
+        getline(i, documentoActual);
+        while (!i.eof())
+        {
+            getline(i, documentoActual);
+            if (documentoActual.length() != 0)
+                listaFicherosAIndexar.push_back(documentoActual);
+        }
+        i.close();
+        for (list<string>::iterator it = listaFicherosAIndexar.begin(); it != listaFicherosAIndexar.end(); ++it)
+        {
+            if ((*it).length() != 0)
+            {
+                // Comprobar si el documento ya estaba indexado
+                if (indiceDocs.find(*it) != indiceDocs.end())
+                {
+                    // Comprobar si el documento ha sido modificado
+                    struct stat atributos;
+                    stat((*it).c_str(), &atributos);
+                    if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
+                    {
+                        // Obtener el idDoc del documento
+                        int idDoc = indiceDocs.find(*it)->second.getIdDoc();
+                        // Borrar el documento previamente indexado
+                        BorraDoc(*it);
+                        // Indexar el nuevo documento
+                        IndexarDoc(*it, idDoc);
+                    }
+                }
+                else if (indiceDocs_guardados.find(*it) != indiceDocs_guardados.end())
+                {
+                    // Comprobar si el documento ha sido modificado
+                    struct stat atributos;
+                    stat((*it).c_str(), &atributos);
+                    if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
+                    {
+                        // Obtener el idDoc del documento
+                        int idDoc = indiceDocs.find(*it)->second.getIdDoc();
+                        // Borrar el documento previamente indexado
+                        BorraDoc(*it);
+                        // Indexar el nuevo documento
+                        IndexarDoc(*it, idDoc);
+                    }
+                }
+                else
+                {
+                    // Indexar el nuevo documento
+                    IndexarDoc(*it);
+                    ++contador;
+                }
+                if (almacenarEnDisco && contador % LIMITE_INDEXACION_MEMORIA == 0)
+                    AlmacenarEnDisco();
+            }
+        }
+    }*/
+    string linea;
+    
     while (std::getline(f, linea))
     {
         // Comprobar si el documento ya está indexado
@@ -349,10 +437,10 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             time_t fechaModificacion = atributos.st_mtime;
             InfDoc infDocGuardado = InfDoc();
             // Abrir el fichero de indiceDocs
-            ifstream f;
+            ifstream i;
             string fichero = linea;
             replace(fichero.begin(), fichero.end(), '/', '-');
-            f.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
+            i.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
             if (!f)
             {
                 cerr << "Error al abrir el fichero de indiceDocs " << linea << endl;
@@ -360,11 +448,11 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             }
             // Leer el fichero de indiceDocs
             string line;
-            if (std::getline(f, line))
+            if (std::getline(i, line))
             {
                 infDocGuardado.cargar(line);
             }
-            f.close();
+            i.close();
             // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
             if (fechaModificacion > infDocGuardado.getFechaModificacion())
             {
@@ -387,6 +475,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
         if (almacenarEnDisco && contador % LIMITE_INDEXACION_MEMORIA == 0)
             AlmacenarEnDisco();
     }
+    f.close();
     return true;
 }
 
@@ -474,7 +563,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                     InformacionTermino infTerm = InformacionTermino();
                     // Abrir el fichero de indice
                     ifstream f3;
-                    f3.open((directorioIndice + "/indice/" + linea).c_str());
+                    f3.open((directorioIndice + "/indice/" + indice_guardados.find(linea)->second).c_str());
                     if (!f3)
                     {
                         cerr << "Error al abrir el fichero de indice " << linea << endl;
@@ -882,31 +971,31 @@ bool IndexadorHash::AlmacenarEnDisco()
         return false;
     }
     auto it = indice.begin();
+    ofstream f(directorioIndice + "/indice/" + to_string(id_ficheros_indice));
     while (it != indice.end())
     {
-        cout << directorioIndice + "/indice/" + it->first << "\n";
-        ofstream f(directorioIndice + "/indice/" + it->first);
         f.exceptions(std::ios::failbit);
         try
         {
             if (!f)
             {
-                cerr << "Error al abrir el fichero " << directorioIndice + "/indice/" + it->first
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indice/" + to_string(id_ficheros_indice)
                      << "\n";
                 return false;
             }
-            f << it->second;
+            f << it->second << "\n";
         }
         catch (const std::ios::failure &e)
         {
-            cerr << "Error al escribir en el fichero " << directorioIndice + "/indice/" + it->first << ": " << e.what() << "\n";
+            cerr << "Error al escribir en el fichero " << directorioIndice + "/indice/" + to_string(id_ficheros_indice) << ": " << e.what() << "\n";
             // Borrar el fichero
-            remove((directorioIndice + "/indice/" + it->first).c_str());
+            remove((directorioIndice + "/indice/" + to_string(id_ficheros_indice)).c_str());
             return false;
         }
         f.close();
         // Borrar el termino del indice y guardar el nombre en el set indice_guardados
-        indice_guardados.insert(it->first);
+        indice_guardados.insert(pair(it->first, id_ficheros_indice));
+        ++id_ficheros_indice;
         it = indice.erase(it);
     }
     // Guardar el unordered_map indiceDocs
@@ -1058,68 +1147,10 @@ bool IndexadorHash::IndexarDirectorio(const string &dirAIndexar)
             // Hago una lista en un fichero con find>fich
             string cmd = "find " + dirAIndexar + " -follow |sort > .lista_fich";
             system(cmd.c_str());
-            ifstream i;
-            i.open(listaFicheros.c_str());
-            if (!i)
-            {
-                cerr << "ERROR: No existe el archivo: " << listaFicheros << endl;
-                i.close();
-                return false;
-            }
-            else
-            {
-                documentoActual = "";
-                getline(i, documentoActual);
-                while (!i.eof())
-                {
-                    getline(i, documentoActual);
-                    if (documentoActual.length() != 0)
-                        listaFicherosAIndexar.push_back(documentoActual);
-                }
-                i.close();
-                for (list<string>::iterator it = listaFicherosAIndexar.begin(); it != listaFicherosAIndexar.end(); ++it)
-                {
-                    if ((*it).length() != 0)
-                    {
-                        // Comprobar si el documento ya estaba indexado
-                        if (indiceDocs.find(*it) != indiceDocs.end())
-                        {
-                            // Comprobar si el documento ha sido modificado
-                            struct stat atributos;
-                            stat((*it).c_str(), &atributos);
-                            if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
-                            {
-                                // Obtener el idDoc del documento
-                                int idDoc = indiceDocs.find(*it)->second.getIdDoc();
-                                // Borrar el documento previamente indexado
-                                BorraDoc(*it);
-                                // Indexar el nuevo documento
-                                IndexarDoc(*it, idDoc);
-                            }
-                        }
-                        else if (indiceDocs_guardados.find(*it) != indiceDocs_guardados.end())
-                        {
-                            // Comprobar si el documento ha sido modificado
-                            struct stat atributos;
-                            stat((*it).c_str(), &atributos);
-                            if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
-                            {
-                                // Obtener el idDoc del documento
-                                int idDoc = indiceDocs.find(*it)->second.getIdDoc();
-                                // Borrar el documento previamente indexado
-                                BorraDoc(*it);
-                                // Indexar el nuevo documento
-                                IndexarDoc(*it, idDoc);
-                            }
-                        }
-                        else
-                        {
-                            // Indexar el nuevo documento
-                            IndexarDoc(*it);
-                        }
-                    }
-                }
-            }
+            // Elimino la primera linea del fichero
+            cmd = "sed -i '1d' .lista_fich";
+            system(cmd.c_str());
+            Indexar(listaFicheros);
         }
         // Borramos la memoria reservada
         delete[] _emergencyMemory;
