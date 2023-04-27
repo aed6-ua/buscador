@@ -1041,85 +1041,86 @@ bool IndexadorHash::IndexarDirectorio(const string &dirAIndexar)
 {
     char *_emergencyMemory = new char[16384];
     string documentoActual;
+    string listaFicheros = ".lista_fich";
+    list<string> listaFicherosAIndexar;
     try
     {
-        // Hacer una lista de los ficheros a indexar en el directorio y en sus subdirectorios
-        // y luego indexarlos
-        list<string> listaFicheros;
-        for (const auto &entry : filesystem::recursive_directory_iterator(dirAIndexar))
-            listaFicheros.push_back(entry.path().string());
-
-        // Ordenar la lista de ficheros
-        listaFicheros.sort();
-
-        // Indexar los ficheros
-        for (auto it = listaFicheros.begin(); it != listaFicheros.end(); ++it)
+        struct stat dir;
+        // Compruebo la existencia del directorio
+        int err = stat(dirAIndexar.c_str(), &dir);
+        if (err == -1 || !S_ISDIR(dir.st_mode))
         {
-            documentoActual = *it;
-            // Comprobar si el documento ya estaba indexado
-            if (indiceDocs.find(*it) != indiceDocs.end())
+            cerr << "ERROR: No existe el directorio: " << dirAIndexar << endl;
+            return false;
+        }
+        else
+        {
+            // Hago una lista en un fichero con find>fich
+            string cmd = "find " + dirAIndexar + " -follow |sort > .lista_fich";
+            system(cmd.c_str());
+            ifstream i;
+            i.open(listaFicheros.c_str());
+            if (!i)
             {
-                // Comprobar si el documento ha sido modificado
-                struct stat atributos;
-                stat((*it).c_str(), &atributos);
-                if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
-                {
-                    // Obtener el idDoc del documento
-                    int idDoc = indiceDocs.find(*it)->second.getIdDoc();
-                    // Borrar el documento previamente indexado
-                    BorraDoc(*it);
-                    // Indexar el nuevo documento
-                    IndexarDoc(*it, idDoc);
-                }
+                cerr << "ERROR: No existe el archivo: " << listaFicheros << endl;
+                i.close();
+                return false;
             }
             else
             {
-                // Indexar el nuevo documento
-                IndexarDoc(*it);
-            }
-        }
-
-        /*
-        if ((dir = opendir(dirAIndexar.c_str())) != NULL) {
-            while ((ent = readdir(dir)) != NULL) {
-                // Si es un directorio, lo recorremos
-                if (ent->d_type == DT_DIR) {
-                    // Si no es . ni ..
-                    if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
-                        // Recorremos el directorio
-                        IndexarDirectorio(dirAIndexar + "/" + ent->d_name);
-                    }
+                documentoActual = "";
+                getline(i, documentoActual);
+                while (!i.eof())
+                {
+                    getline(i, documentoActual);
+                    if (documentoActual.length() != 0)
+                        listaFicherosAIndexar.push_back(documentoActual);
                 }
-                // Si es un fichero, lo indexamos
-                else if (ent->d_type == DT_REG) {
-                    // Comprobar si el documento ya estaba indexado
-                    if (indiceDocs.find(dirAIndexar + "/" + ent->d_name) != indiceDocs.end()) {
-                        // Comprobar si el documento ha sido modificado
-                        struct stat atributos;
-                        stat((dirAIndexar + "/" + ent->d_name).c_str(), &atributos);
-                        time_t fechaModificacion = atributos.st_mtime;
-                        // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
-                        if (fechaModificacion > indiceDocs[dirAIndexar + "/" + ent->d_name].getFechaModificacion()) {
-                            // Obtenemos el idDoc del documento
-                            int idDoc = indiceDocs[dirAIndexar + "/" + ent->d_name].getIdDoc();
-                            // Borrar el documento previamente indexado
-                            BorraDoc(dirAIndexar + "/" + ent->d_name);
-                            // Indexar el nuevo manteniendo el idDoc
-                            IndexarDoc(dirAIndexar + "/" + ent->d_name, idDoc);
+                i.close();
+                for (list<string>::iterator it = listaFicherosAIndexar.begin(); it != listaFicherosAIndexar.end(); ++it)
+                {
+                    if ((*it).length() != 0)
+                    {
+                        // Comprobar si el documento ya estaba indexado
+                        if (indiceDocs.find(*it) != indiceDocs.end())
+                        {
+                            // Comprobar si el documento ha sido modificado
+                            struct stat atributos;
+                            stat((*it).c_str(), &atributos);
+                            if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
+                            {
+                                // Obtener el idDoc del documento
+                                int idDoc = indiceDocs.find(*it)->second.getIdDoc();
+                                // Borrar el documento previamente indexado
+                                BorraDoc(*it);
+                                // Indexar el nuevo documento
+                                IndexarDoc(*it, idDoc);
+                            }
+                        }
+                        else if (indiceDocs_guardados.find(*it) != indiceDocs_guardados.end())
+                        {
+                            // Comprobar si el documento ha sido modificado
+                            struct stat atributos;
+                            stat((*it).c_str(), &atributos);
+                            if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
+                            {
+                                // Obtener el idDoc del documento
+                                int idDoc = indiceDocs.find(*it)->second.getIdDoc();
+                                // Borrar el documento previamente indexado
+                                BorraDoc(*it);
+                                // Indexar el nuevo documento
+                                IndexarDoc(*it, idDoc);
+                            }
+                        }
+                        else
+                        {
+                            // Indexar el nuevo documento
+                            IndexarDoc(*it);
                         }
                     }
-                    else {
-                        // Indexar el documento
-                        IndexarDoc(dirAIndexar + "/" + ent->d_name);
-                    }
                 }
             }
-            closedir(dir);
-        } else {
-            // No se pudo abrir el directorio
-            cerr << "No se pudo abrir el directorio " << dirAIndexar << endl;
-            return false;
-        }*/
+        }
         // Borramos la memoria reservada
         delete[] _emergencyMemory;
         return true;
@@ -1622,7 +1623,8 @@ bool IndexadorHash::Borra(const string &word)
         // Borrarlo del indice
         indice.erase(termino);
     }
-    else if (indice_guardados.find(termino) != indice_guardados.end()) {
+    else if (indice_guardados.find(termino) != indice_guardados.end())
+    {
         // Abrir el fichero
         ifstream f;
         f.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -1712,7 +1714,6 @@ bool IndexadorHash::Borra(const string &word)
         remove((directorioIndice + "/indice/" + termino).c_str());
         // Borrarlo del indice
         indice_guardados.erase(termino);
-
     }
     // Borramos el termino del indice
     indice.erase(termino);
@@ -1720,12 +1721,14 @@ bool IndexadorHash::Borra(const string &word)
     return true;
 }
 
-void IndexadorHash::VaciarIndiceDocs() {
+void IndexadorHash::VaciarIndiceDocs()
+{
     // Vaciamos el indice de documentos
     indiceDocs.clear();
     // Borramos cada documento
     string fichero;
-    for (auto it : indiceDocs_guardados) {
+    for (auto it : indiceDocs_guardados)
+    {
         fichero = it;
         replace(fichero.begin(), fichero.end(), '/', '-');
         remove((directorioIndice + "/indiceDocs/" + fichero).c_str());
@@ -1736,48 +1739,60 @@ void IndexadorHash::VaciarIndiceDocs() {
     remove((directorioIndice + "/indiceDocs").c_str());
 }
 
-void IndexadorHash::VaciarIndicePreg() {
+void IndexadorHash::VaciarIndicePreg()
+{
     // Vaciamos el indice de pregunta
     indice.clear();
     // Borramos los indices guardados
-    for (auto it : indice_guardados) {
+    for (auto it : indice_guardados)
+    {
         remove((directorioIndice + "/indice/" + it).c_str());
     }
 }
 
-void IndexadorHash::ListarTerminos() {
+void IndexadorHash::ListarTerminos()
+{
     InformacionTermino infTerm;
-    for (auto it : indice_guardados) {
+    for (auto it : indice_guardados)
+    {
         Devuelve(it, infTerm);
         cout << it << '\t' << infTerm << endl;
     }
     // Recorremos el indice
-    for (auto it = indice.begin(); it != indice.end(); it++) {
+    for (auto it = indice.begin(); it != indice.end(); it++)
+    {
         // Mostramos el termino
         cout << it->first << '\t' << it->second << endl;
     }
 }
 
-bool IndexadorHash::ListarTerminos(const string &nomDoc) {
-    if (indiceDocs.find(nomDoc) != indiceDocs.end() || indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end()) {
+bool IndexadorHash::ListarTerminos(const string &nomDoc)
+{
+    if (indiceDocs.find(nomDoc) != indiceDocs.end() || indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end())
+    {
         // Recorremos el indice
         InfTermDoc infTermDoc;
-        for (auto it = indice_guardados.begin(); it != indice_guardados.end(); it++) {
+        for (auto it = indice_guardados.begin(); it != indice_guardados.end(); it++)
+        {
             // Si el termino esta en el documento, lo mostramos
-            if (Devuelve(*it, nomDoc, infTermDoc)) {
+            if (Devuelve(*it, nomDoc, infTermDoc))
+            {
                 cout << *it << '\t' << infTermDoc << endl;
             }
         }
-        for (auto it = indice.begin(); it != indice.end(); it++) {
+        for (auto it = indice.begin(); it != indice.end(); it++)
+        {
             // Si el termino esta en el documento, lo mostramos
-            if (Devuelve(it->first, nomDoc, infTermDoc)) {
+            if (Devuelve(it->first, nomDoc, infTermDoc))
+            {
                 cout << it->first << '\t' << infTermDoc << endl;
             }
         }
         // Devolvemos true
         return true;
     }
-    else {
+    else
+    {
         // Devolvemos false
         return false;
     }
