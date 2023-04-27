@@ -132,6 +132,7 @@ private:
     bool BorraDocGuardado(string &nomDoc, const InfDoc &infDoc);
     unordered_map<string, InformacionTermino> indice;
     unordered_map<string, int> indice_guardados;
+    unordered_map<string, InformacionTermino> indice_actualizar;
     unordered_map<string, InfDoc> indiceDocs;
     unordered_set<string> indiceDocs_guardados;
     unordered_map<string, InformacionTerminoPregunta> indicePregunta;

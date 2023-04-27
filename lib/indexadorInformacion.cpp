@@ -19,14 +19,14 @@ void InfTermDoc::cargar(string serializacion)
     // Cargamos la frecuencia del término en el documento (se encuentra después de "ft: ")
     ft = atoi(serializacion.substr(0,serializacion.find("\t")).c_str());
     // Obtenemos la lista de posiciones del término en el documento
-    pos = serializacion.find("\t") + 1;
+    pos = serializacion.find("\t");
     posTerm.clear();
-    while (pos < (serializacion.size() - 1))
+    while (pos != -1)
     {
+        ++pos;
         posTerm.push_back(atoi(serializacion.substr(pos, serializacion.find("\t", pos) - pos).c_str()));
-        pos = serializacion.find("\t", pos) + 1;
+        pos = serializacion.find("\t", pos);
     }
-    posTerm.push_back(atoi(serializacion.substr(pos, serializacion.find(("\n" || "\tId.Doc: "), pos) - pos).c_str()));
 }
 
 // InformacionTermino
