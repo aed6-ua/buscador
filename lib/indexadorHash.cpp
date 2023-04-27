@@ -557,23 +557,24 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                         infTerm->addInfTermDoc(idDoc, infTermDoc);
                     }
                 }
-                else if (indice_guardados.find(linea) != indice_guardados.end())
+                else if (auto itG = indice_guardados.find(linea); itG != indice_guardados.end())
                 {
                     // Obtener la información del término del índice
                     InformacionTermino infTerm = InformacionTermino();
                     // Abrir el fichero de indice
                     ifstream f3;
-                    f3.open((directorioIndice + "/indice/" + indice_guardados.find(linea)->second).c_str());
+                    string fichero = directorioIndice + "/indice/" + to_string(itG->second);
+                    f3.open(fichero.c_str());
                     if (!f3)
                     {
-                        cerr << "Error al abrir el fichero de indice " << linea << endl;
+                        cerr << "Error al abrir el fichero de indice " << fichero << endl;
                         return false;
                     }
                     // Leer el fichero de indice
-                    string linea;
-                    if (std::getline(f3, linea))
+                    string line;
+                    if (std::getline(f3, line))
                     {
-                        infTerm.cargar(linea);
+                        infTerm.cargar(line);
                     }
                     f3.close();
                     // Actualizar la información del término
@@ -600,10 +601,10 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                     }
                     // Guardar el fichero de indice
                     ofstream f2;
-                    f2.open((directorioIndice + "/indice/" + linea).c_str());
+                    f2.open(fichero.c_str());
                     if (!f2)
                     {
-                        cerr << "Error al abrir el fichero de indice " << linea << endl;
+                        cerr << "Error al abrir el fichero de indice " << fichero << endl;
                         return false;
                     }
                     f2 << infTerm;
@@ -629,15 +630,6 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                     // Añadir la palabra al conjunto de palabras distintas del documento
                     palabrasDistintas.insert(linea);
                     numPalabrasDistintas++;
-                }
-                // Guardar indexación si se ha alcanzado el número de palabras indicado y almacenarEnDisco es true
-                if (almacenarEnDisco && numPalabrasSinStopWords >= LIMITE_INDEXACION_MEMORIA)
-                {
-                    // Guardar el índice en disco
-                    if (!GuardarIndexacion())
-                        return false;
-                    // Vaciar el índice de memoria
-                    // todo
                 }
             }
             numPalabras++;
