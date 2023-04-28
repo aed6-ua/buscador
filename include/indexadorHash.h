@@ -129,7 +129,8 @@ private:
     IndexadorHash();
     string pasar_a_minusculas_sin_acentos(const string &str) const;
     bool AlmacenarEnDisco();
-    bool BorraDocGuardado(string &nomDoc, const InfDoc &infDoc);
+    bool BorraDocGuardado(string &nomDoc, const int &idDoc, const InfDoc &infDoc);
+    bool BorraDocIndice(const string &nomDoc, const int &idDoc, const std::unordered_map<std::string, InfDoc>::iterator &itDoc);
     unordered_map<string, InformacionTermino> indice;
     unordered_map<string, int> indice_guardados;
     unordered_map<string, InformacionTermino> indice_actualizar;

@@ -33,73 +33,21 @@ aparece tokenizado
 ?almPosTerm? inicializará la variable privada ?almacenarPosTerm?
 Los índices (p.ej. índice, indiceDocs e informacionColeccionDocs)
 quedarán vacíos*/
-
 IndexadorHash::IndexadorHash()
 {
     indice = unordered_map<string, InformacionTermino>();
-    // Índice de términos indexados accesible por el término
     indiceDocs = unordered_map<string, InfDoc>();
-    // Índice de documentos indexados accesible por el nombre del documento
     informacionColeccionDocs = InfColeccionDocs();
-    // Información recogida de la colección de documentos indexada
     pregunta = "";
-    // Pregunta indexada actualmente. Si no hay ninguna indexada, contendría el valor ??
     indicePregunta = unordered_map<string, InformacionTerminoPregunta>();
-    // Índice de términos indexados en una pregunta. Se almacenará en memoria principal
     infPregunta = InformacionPregunta();
-    // Información recogida de la pregunta indexada. Se almacenará en memoria principal
     stopWords = unordered_set<string>();
-    /* Palabras de parada. Se almacenará en memoria principal. El filtrado
-    de palabras de parada se realizará, tanto en la pregunta como en los
-    documentos, teniendo en cuenta el parámetro minuscSinAcentos y
-    tipoStemmer. Es decir que se aplicará el mismo proceso a las palabras de
-    parada almacenadas en el fichero antes de realizar el filtrado (p.ej. si
-    se aplica el pasar a minúsculas los términos del documento/pregunta a
-    indexar, para comprobar si se ha de eliminar el término, éste se
-    comparará con la versión de palabras de parada en minúsculas). Esto se
-    pide así para casos en los que en el documento/pregunta aparezca: ?La
-    casa de Él? y estén almacenadas como stopWords ?la, el?, si se activa el
-    parámetro minuscSinAcentos, entonces debería filtrar ?La, Él?, si no
-    hubiese estado activo ese parámetro, entonces no se hubiesen filtrado.*/
     ficheroStopWords = "";
-    // Nombre del fichero que contiene las palabras de parada
     tok = Tokenizador();
-    /* Tokenizador que se usará en la indexación. Se inicializará con los
-    parámetros del constructor: detectComp y minuscSinAcentos, los cuales
-    determinarán qué término se ha de indexar (p.ej. si se activa
-    minuscSinAcentos, entonces se guardarán los términos en minúsculas y sin
-    acentos)*/
     directorioIndice = "";
-    /* ?directorioIndice? será el directorio del disco duro donde se
-    almacenará el índice. En caso que contenga la cadena vacía se creará en
-    el directorio donde se ejecute el indexador*/
     tipoStemmer = 0;
-    /* 0 = no se aplica stemmer: se indexa el término tal y como aparece
-    tokenizado
-    // Los siguientes valores harán que los términos a indexar se les
-    aplique el stemmer y se almacene solo dicho stem.
-    // 1 = stemmer de Porter para español
-    // 2 = stemmer de Porter para inglés
-    // Para el stemmer de Porter se utilizarán los archivos
-    stemmer.cpp y stemmer.h, concretamente las funciones de nombre
-    ?stemmer?*/
     almacenarEnDisco = false;
-    /* Esta opción (cuando almacenarEnDisco == true) está ideada para poder
-    indexar colecciones de documentos lo suficientemente grandes para que su
-    indexación no quepa en memoria, por lo que si es true, mientras se va
-    generando el índice, se almacenará la mínima parte de los índices de los
-    documentos en memoria principal, p.ej. solo la estructura ?indice? para
-    saber las palabras indexadas, guardando únicamente punteros a las
-    posiciones de los archivos almacenados en disco que contendrán el resto
-    de información asociada a cada término (lo mismo para indiceDocs). Se
-    valorará el equilibrio para conseguir una indexación independientemente
-    del tamaño del corpus a indexar, pero reduciendo el número de accesos a
-    disco. Para los datos de la indexación de la pregunta no habría que
-    hacer nada. En caso de que esta variable tenga valor false, se
-    almacenará todo el índice en memoria principal (tal y como se ha
-    descrito anteriormente).*/
     almacenarPosTerm = false;
-    // Si es true se almacenará la posición en la que aparecen los términos dentro del documento en la clase InfTermDoc
 }
 
 IndexadorHash::IndexadorHash(const string &fichStopWords, const string &delimitadores,
@@ -293,7 +241,7 @@ bool IndexadorHash::ListarDocs(const string &nomDoc) const
         // Leer el fichero
         ifstream f;
         replace(nomDoc2.begin(), nomDoc2.end(), '/', '-');
-        f.open(directorioIndice + "/" + nomDoc2);
+        f.open(directorioIndice + "/indiceDocs/" + nomDoc2);
         if (!f)
         {
             cerr << "Error al abrir el fichero " << nomDoc2 << endl;
@@ -338,91 +286,25 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
         return false;
     }
     int contador = 0;
-    /*
-    list <string> listaFicherosAIndexar;
-    ifstream i;
-    i.open(ficheroDocumentos.c_str());
-    if (!i)
-    {
-        cerr << "ERROR: No existe el archivo: " << ficheroDocumentos << endl;
-        i.close();
-        return false;
-    }
-    else
-    {
-        string documentoActual = "";
-        getline(i, documentoActual);
-        while (!i.eof())
-        {
-            getline(i, documentoActual);
-            if (documentoActual.length() != 0)
-                listaFicherosAIndexar.push_back(documentoActual);
-        }
-        i.close();
-        for (list<string>::iterator it = listaFicherosAIndexar.begin(); it != listaFicherosAIndexar.end(); ++it)
-        {
-            if ((*it).length() != 0)
-            {
-                // Comprobar si el documento ya estaba indexado
-                if (indiceDocs.find(*it) != indiceDocs.end())
-                {
-                    // Comprobar si el documento ha sido modificado
-                    struct stat atributos;
-                    stat((*it).c_str(), &atributos);
-                    if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
-                    {
-                        // Obtener el idDoc del documento
-                        int idDoc = indiceDocs.find(*it)->second.getIdDoc();
-                        // Borrar el documento previamente indexado
-                        BorraDoc(*it);
-                        // Indexar el nuevo documento
-                        IndexarDoc(*it, idDoc);
-                    }
-                }
-                else if (indiceDocs_guardados.find(*it) != indiceDocs_guardados.end())
-                {
-                    // Comprobar si el documento ha sido modificado
-                    struct stat atributos;
-                    stat((*it).c_str(), &atributos);
-                    if (difftime(atributos.st_mtime, indiceDocs.find(*it)->second.getFechaModificacion()) > 0)
-                    {
-                        // Obtener el idDoc del documento
-                        int idDoc = indiceDocs.find(*it)->second.getIdDoc();
-                        // Borrar el documento previamente indexado
-                        BorraDoc(*it);
-                        // Indexar el nuevo documento
-                        IndexarDoc(*it, idDoc);
-                    }
-                }
-                else
-                {
-                    // Indexar el nuevo documento
-                    IndexarDoc(*it);
-                    ++contador;
-                }
-                if (almacenarEnDisco && contador % LIMITE_INDEXACION_MEMORIA == 0)
-                    AlmacenarEnDisco();
-            }
-        }
-    }*/
     string linea;
 
     while (std::getline(f, linea))
     {
         // Comprobar si el documento ya está indexado
-        if ((indiceDocs.find(linea) != indiceDocs.end()))
+        auto itDoc = indiceDocs.find(linea);
+        if (itDoc != indiceDocs.end())
         {
             // Comprobar si el documento ha sido modificado
             struct stat atributos;
             stat(linea.c_str(), &atributos);
             time_t fechaModificacion = atributos.st_mtime;
             // Si la fecha de modificación es anterior a la del documento indexado, no se indexa
-            if (fechaModificacion > indiceDocs[linea].getFechaModificacion())
+            if (fechaModificacion > itDoc->second.getFechaModificacion())
             {
                 // Obtener el idDoc
-                int idDoc = indiceDocs[linea].getIdDoc();
+                int idDoc = itDoc->second.getIdDoc();
                 // Borrar el documento previamente indexado
-                if (!BorraDoc(linea))
+                if (!BorraDocIndice(linea, idDoc, itDoc))
                     return false;
                 // Indexar el nuevo manteniendo el idDoc
                 if (!IndexarDoc(linea, idDoc))
@@ -441,7 +323,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             string fichero = linea;
             replace(fichero.begin(), fichero.end(), '/', '-');
             i.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
-            if (!f)
+            if (!i)
             {
                 cerr << "Error al abrir el fichero de indiceDocs " << linea << endl;
                 return false;
@@ -459,7 +341,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
                 // Obtener el idDoc
                 int idDoc = infDocGuardado.getIdDoc();
                 // Borrar el documento previamente indexado
-                if (!BorraDocGuardado(linea, infDocGuardado))
+                if (!BorraDocGuardado(linea, idDoc, infDocGuardado))
                     return false;
                 // Indexar el nuevo manteniendo el idDoc
                 if (!IndexarDoc(linea, idDoc))
@@ -477,7 +359,7 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             if (!AlmacenarEnDisco())
                 cerr << "ERROR: al almacenar en disco" << endl;
         }
-        //cout << "Indexados " << contador << " documentos" << endl;
+        // cout << "Indexados " << contador << " documentos" << endl;
     }
     f.close();
     if (almacenarEnDisco)
@@ -680,7 +562,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                         InformacionTermino infTerm = InformacionTermino(1);
                         infTerm.addInfTermDoc(idDoc, infTermDoc);
                         // Añadir el término al índice
-                        Inserta(linea, infTerm);
+                        indice.insert(pair<string, InformacionTermino>(linea, infTerm));
                     }
                 }
 
@@ -725,55 +607,142 @@ todos los términos del documento y del documento en los campos privados
 bool IndexadorHash::BorraDoc(const string &nomDoc)
 {
     // Comprobar si el documento está indexado
-    if (indiceDocs.find(nomDoc) != indiceDocs.end())
+    auto itDoc = indiceDocs.find(nomDoc);
+    if (itDoc != indiceDocs.end())
     {
         // Obtener el idDoc
-        int idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
-        // Obtener la información del documento
-        InfDoc infDoc = indiceDocs.find(nomDoc)->second;
-        // Borrar el documento del índice de documentos
-        indiceDocs.erase(nomDoc);
-        // Actualizar la información de la colección de documentos
-        informacionColeccionDocs.subDoc();
-        informacionColeccionDocs.subNumTotalPal(infDoc.getNumPal());
-        informacionColeccionDocs.subNumTotalPalSinParada(infDoc.getNumPalSinParada());
-        informacionColeccionDocs.subTamBytes(infDoc.getTamBytes());
-        // Borrar los términos del documento del índice
-        auto it = indice.begin();
-        while (it != indice.end())
+        int idDoc = itDoc->second.getIdDoc();
+        if (BorraDocIndice(nomDoc, idDoc, itDoc))
+            return true;
+    }
+    auto itDoc2 = indiceDocs_guardados.find(nomDoc);
+    if (itDoc2 != indiceDocs_guardados.end())
+    {
+        InfDoc infDocGuardado = InfDoc();
+        // Abrir el fichero de indiceDocs
+        ifstream i;
+        string fichero = nomDoc;
+        replace(fichero.begin(), fichero.end(), '/', '-');
+        i.open((directorioIndice + "/indiceDocs/" + fichero).c_str());
+        if (!i)
         {
-            // Obtener la información del término
-            InformacionTermino infTerm = it->second;
-            // Comprobar si el término está en el documento
-            if (infTerm.existIdDoc(idDoc))
-            {
-                // Borrar el término del documento
-                infTerm.eraseInfTermDoc(idDoc);
-                // Comprobar si el término está en otros documentos
-                if (infTerm.getNumDocs() > 0)
-                {
-                    // Actualizar el término en el índice
-                    indice[it->first] = infTerm;
-                }
-                else
-                {
-                    // Borrar el término del índice
-                    it = indice.erase(it);
-                    informacionColeccionDocs.subNumTotalPalDiferentes();
-                    continue;
-                }
-            }
-            it++;
+            cerr << "Error al abrir el fichero de indiceDocs " << nomDoc << endl;
+            return false;
         }
-        return true;
+        // Leer el fichero de indiceDocs
+        string line;
+        if (std::getline(i, line))
+        {
+            infDocGuardado.cargar(line);
+        }
+        i.close();
+        // Obtener el idDoc
+        int idDoc = infDocGuardado.getIdDoc();
+        if (BorraDocGuardado(fichero, idDoc, infDocGuardado))
+            return true;
     }
     return false;
 }
 
-bool IndexadorHash::BorraDocGuardado(string &nomDoc, const InfDoc &infDoc)
+bool IndexadorHash::BorraDocIndice(const string &nomDoc, const int &idDoc, const std::unordered_map<std::string, InfDoc>::iterator &itDoc)
 {
-    // Obtener el idDoc
-    int idDoc = infDoc.getIdDoc();
+    // Actualizar la información de la colección de documentos
+    informacionColeccionDocs.subDoc();
+    informacionColeccionDocs.subNumTotalPal(itDoc->second.getNumPal());
+    informacionColeccionDocs.subNumTotalPalSinParada(itDoc->second.getNumPalSinParada());
+    informacionColeccionDocs.subTamBytes(itDoc->second.getTamBytes());
+    // Borrar el documento del índice de documentos
+    indiceDocs.erase(nomDoc);
+    // Borrar los términos del documento del índice
+    auto it = indice.begin();
+    while (it != indice.end())
+    {
+        // Comprobar si el término está en el documento
+        if (it->second.existIdDoc(idDoc))
+        {
+            // Borrar el término del documento
+            it->second.eraseInfTermDoc(idDoc);
+            // Comprobar si el término está en otros documentos
+            if (it->second.getNumDocs() <= 0)
+            {
+                // Borrar el término del índice
+                it = indice.erase(it);
+                informacionColeccionDocs.subNumTotalPalDiferentes();
+                continue;
+            }
+        }
+        it++;
+    }
+    // Borramos los términos del documento del índice guardado
+    auto itTerm = indice_guardados.begin();
+    while (itTerm != indice_guardados.end())
+    {
+        // Obtener la información del término
+        InformacionTermino infTerm = InformacionTermino();
+        // Abrir el fichero del término
+        ifstream f;
+        string fichero = directorioIndice + "/indiceDocs/" + to_string(itTerm->second);
+        f.open(fichero.c_str());
+        if (!f.is_open())
+        {
+            cerr << "Error al abrir el fichero del término " << fichero << endl;
+            return false;
+        }
+        // Leer la información del término
+        string linea;
+        if (std::getline(f, linea))
+        {
+            infTerm.cargar(linea);
+        }
+        else
+        {
+            cerr << "Error al leer la información del término " << fichero << endl;
+            return false;
+        }
+        // Cerrar el fichero del término
+        f.close();
+        // Comprobar si el término está en el documento
+        if (infTerm.existIdDoc(idDoc))
+        {
+            // Borrar el término del documento
+            infTerm.eraseInfTermDoc(idDoc);
+            // Comprobar si el término está en otros documentos
+            if (infTerm.getNumDocs() > 0)
+            {
+                // Actualizar el término en el índice sobreescribiendo el fichero
+                ofstream f;
+                f.open(fichero.c_str());
+                if (!f.is_open())
+                {
+                    cerr << "Error al abrir el fichero del término " << fichero << endl;
+                    return false;
+                }
+                // Escribir la información del término
+                f << infTerm;
+                // Cerrar el fichero del término
+                f.close();
+            }
+            else
+            {
+                // Borrar el término del índice
+                itTerm = indice_guardados.erase(itTerm);
+                informacionColeccionDocs.subNumTotalPalDiferentes();
+                // Borrar el fichero del término
+                if (std::remove(fichero.c_str()) != 0)
+                {
+                    cerr << "Error al borrar el fichero del término " << fichero << endl;
+                    return false;
+                }
+                continue;
+            }
+        }
+        ++it;
+    }
+    return true;
+}
+
+bool IndexadorHash::BorraDocGuardado(string &nomDoc, const int &idDoc, const InfDoc &infDoc)
+{
     // Borrar el documento del índice de documentos
     indiceDocs_guardados.erase(nomDoc);
     string fichero = nomDoc;
@@ -1081,20 +1050,27 @@ bool IndexadorHash::AlmacenarEnDisco()
         // Actualizar l_docs
         unordered_set<int> l_docs_actualizar;
         it2->second.getIdDocs(l_docs_actualizar);
-        for (auto item : l_docs_actualizar) {
-            if (inf.existIdDoc(item)) {
+        for (auto item : l_docs_actualizar)
+        {
+            if (inf.existIdDoc(item))
+            {
                 InfTermDoc *infTermDoc = inf.getInfTermDoc(item);
                 infTermDoc->setFt(infTermDoc->getFt() + it2->second.getInfTermDoc(item)->getFt());
-                if (almacenarPosTerm) {
+                if (almacenarPosTerm)
+                {
                     list<int> *posTerm = it2->second.getInfTermDoc(item)->getPosTerm();
-                    for (auto item2 : *posTerm) {
+                    for (auto item2 : *posTerm)
+                    {
                         infTermDoc->addPosTerm(item2);
                     }
                 }
-            } else {
+            }
+            else
+            {
                 InfTermDoc infTermDoc = InfTermDoc();
                 infTermDoc.setFt(it2->second.getInfTermDoc(item)->getFt());
-                if (almacenarPosTerm) {
+                if (almacenarPosTerm)
+                {
                     infTermDoc.setPosTerm(*(it2->second.getInfTermDoc(item)->getPosTerm()));
                 }
                 inf.addInfTermDoc(item, infTermDoc);
@@ -1174,11 +1150,15 @@ bool IndexadorHash::Devuelve(const string &word, const string &nomDoc, InfTermDo
 {
     InformacionTermino inf;
     int idDoc;
+    auto itDocs = indiceDocs.find(nomDoc);
+    if (itDocs != indiceDocs.end())
+    {
+        idDoc = itDocs->second.getIdDoc();
+        return Devuelve(word, inf) ? inf.getInfTermDoc(idDoc, infDoc) : false;
+    }
     string fichero = nomDoc;
     replace(fichero.begin(), fichero.end(), '/', '-');
-    if (indiceDocs.find(nomDoc) != indiceDocs.end())
-        idDoc = indiceDocs.find(nomDoc)->second.getIdDoc();
-    else if (indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end())
+    if (indiceDocs_guardados.find(nomDoc) != indiceDocs_guardados.end())
     {
         ifstream f((directorioIndice + "/indiceDocs/" + fichero).c_str());
         if (f.fail())
@@ -1257,7 +1237,6 @@ bool IndexadorHash::IndexarDirectorio(const string &dirAIndexar)
     char *_emergencyMemory = new char[16384];
     string documentoActual;
     string listaFicheros = ".lista_fich";
-    list<string> listaFicherosAIndexar;
     try
     {
         struct stat dir;
