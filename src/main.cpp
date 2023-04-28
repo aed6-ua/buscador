@@ -1,25 +1,40 @@
-#include <iostream>
+#include <iostream> 
 #include <string>
-#include <list>
-#include <sys/resource.h>
-#include "indexadorHash.h"
+#include <list> 
+#include "tokenizador.h"
+
 using namespace std;
-double getcputime(void)
+
+///////// Comprobación de que vacíe la lista resultado
+
+void imprimirListaSTL(const list<string>& cadena)
 {
-        struct timeval tim;
-        struct rusage ru;
-        getrusage(RUSAGE_SELF, &ru);
-        tim = ru.ru_utime;
-        double t = (double)tim.tv_sec + (double)tim.tv_usec / 1000000.0;
-        tim = ru.ru_stime;
-        t += (double)tim.tv_sec + (double)tim.tv_usec / 1000000.0;
-        return t;
+        list<string>::const_iterator itCadena;
+        for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
+        {
+                cout << (*itCadena) << ", ";
+        }
+        cout << endl;
 }
-main()
+
+int
+main(void)
 {
-        long double aa = getcputime();
-        IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false,
-                        "./indicePruebaEspanyol", 0, true, true);
-        b.Indexar("listaFicheros.txt");
-        cout << "Ha tardado " << getcputime() - aa << " segundos" << endl;
+	bool kCasosEspeciales = true, kpasarAminusculas = false;
+
+	list<string> lt1, lt2;
+
+Tokenizador a("-#:/.", true, false); 
+list<string> tokens; 
+
+a.Tokenizar("http:", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("http:////ab/", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("http:////ab.", tokens);
+	imprimirListaSTL(tokens);
+
+
 }

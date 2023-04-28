@@ -8,7 +8,7 @@
 #include "indexadorHash.h"
 #include "tokenizador.h"
 #include "stemmer.h"
-int LIMITE_INDEXACION_MEMORIA = 700;
+int LIMITE_INDEXACION_MEMORIA = 100;
 using namespace std;
 
 // IndexadorHash
@@ -477,11 +477,12 @@ bool IndexadorHash::Indexar(const string &ficheroDocumentos)
             if (!AlmacenarEnDisco())
                 cerr << "ERROR: al almacenar en disco" << endl;
         }
-        cout << "Indexados " << contador << " documentos" << endl;
+        //cout << "Indexados " << contador << " documentos" << endl;
     }
     f.close();
-    if (!AlmacenarEnDisco())
-        cerr << "ERROR: al almacenar en disco" << endl;
+    if (almacenarEnDisco)
+        if (!AlmacenarEnDisco())
+            cerr << "ERROR: al almacenar en disco" << endl;
     return true;
 }
 
@@ -1047,6 +1048,81 @@ bool IndexadorHash::AlmacenarEnDisco()
         indice_guardados.insert(pair(it->first, id_ficheros_indice));
         ++id_ficheros_indice;
         it = indice.erase(it);
+    }
+    // Recorrer el indice de actualizaciones y guardar los terminos en el fichero correspondiente
+    auto it2 = indice_actualizar.begin();
+    while (it2 != indice_actualizar.end())
+    {
+        InformacionTermino inf;
+        ifstream f(directorioIndice + "/indice/" + to_string(indice_guardados[it2->first]));
+        f.exceptions(std::ios::failbit);
+        try
+        {
+            if (!f)
+            {
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indice/" + to_string(indice_guardados[it2->first])
+                     << "\n";
+                return false;
+            }
+            string linea;
+            getline(f, linea);
+            inf.cargar(linea);
+        }
+        catch (const std::ios::failure &e)
+        {
+            cerr << "Error al escribir en el fichero " << directorioIndice + "/indice/" + to_string(indice_guardados[it2->first]) << ": " << e.what() << "\n";
+            // Borrar el fichero
+            remove((directorioIndice + "/indice/" + to_string(indice_guardados[it2->first])).c_str());
+            return false;
+        }
+        f.close();
+        // Actualizar el termino sumando la informacion del indice_actualizar
+        inf.setFtc(it2->second.getFtc() + inf.getFtc());
+        // Actualizar l_docs
+        unordered_set<int> l_docs_actualizar;
+        it2->second.getIdDocs(l_docs_actualizar);
+        for (auto item : l_docs_actualizar) {
+            if (inf.existIdDoc(item)) {
+                InfTermDoc *infTermDoc = inf.getInfTermDoc(item);
+                infTermDoc->setFt(infTermDoc->getFt() + it2->second.getInfTermDoc(item)->getFt());
+                if (almacenarPosTerm) {
+                    list<int> *posTerm = it2->second.getInfTermDoc(item)->getPosTerm();
+                    for (auto item2 : *posTerm) {
+                        infTermDoc->addPosTerm(item2);
+                    }
+                }
+            } else {
+                InfTermDoc infTermDoc = InfTermDoc();
+                infTermDoc.setFt(it2->second.getInfTermDoc(item)->getFt());
+                if (almacenarPosTerm) {
+                    infTermDoc.setPosTerm(*(it2->second.getInfTermDoc(item)->getPosTerm()));
+                }
+                inf.addInfTermDoc(item, infTermDoc);
+            }
+        }
+        // Escribir la informacion del termino en el fichero
+        ofstream f2(directorioIndice + "/indice/" + to_string(indice_guardados[it2->first]));
+        f2.exceptions(std::ios::failbit);
+        try
+        {
+            if (!f2)
+            {
+                cerr << "Error al abrir el fichero " << directorioIndice + "/indice/" + to_string(indice_guardados[it2->first])
+                     << "\n";
+                return false;
+            }
+            f2 << inf;
+        }
+        catch (const std::ios::failure &e)
+        {
+            cerr << "Error al escribir en el fichero " << directorioIndice + "/indice/" + to_string(indice_guardados[it2->first]) << ": " << e.what() << "\n";
+            // Borrar el fichero
+            remove((directorioIndice + "/indice/" + to_string(indice_guardados[it2->first])).c_str());
+            return false;
+        }
+        f2.close();
+        // Borrar el termino del indice_actualizar
+        it2 = indice_actualizar.erase(it2);
     }
     // Guardar el unordered_map indiceDocs
     // Creamos una carpeta donde se guardaran los ficheros de los documentos. Los ficheros tendrán el nombre del documento y contendrán la informacion del documento

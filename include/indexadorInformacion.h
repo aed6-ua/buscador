@@ -26,7 +26,10 @@ public:
     InfTermDoc &operator=(const InfTermDoc &infTermDoc) { this->ft = infTermDoc.ft; this->posTerm = infTermDoc.posTerm; return *this;}
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     void addFt() { this->ft++; }
+    void setFt(const int &ft) { this->ft = ft; }
     void addPosTerm(const int &pos) { this->posTerm.push_back(pos); }
+    list<int>* getPosTerm() { return &this->posTerm; }
+    void setPosTerm(const list<int> &posTerm) { this->posTerm = posTerm; }
     int getFt() const { return this->ft; }
     void cargar(string serializacion);
 private:
@@ -60,6 +63,8 @@ public:
     InformacionTermino &operator=(const InformacionTermino &infTerm) { this->ftc = infTerm.ftc; this->l_docs = infTerm.l_docs; return *this;}
     // Añadir cuantos métodos se consideren necesarios para manejar la parte privada de la clase
     void addFtc() { this->ftc++; }
+    void setFtc(const int &ftc) { this->ftc = ftc; }
+    int getFtc() const { return this->ftc; }
     // Busca el idDoc en la tabla hash l_docs, si lo encuentra devuelve true y en el parámetro infTermDoc devuelve la información del término en el documento
     bool getInfTermDoc(const int &idDoc, InfTermDoc &infTermDoc) const;
     // Añade el idDoc a la tabla hash l_docs, si no existe, y devuelve true, si ya existe devuelve false
