@@ -572,7 +572,47 @@ bool Tokenizador::PasarAminuscSinAcentos() const {
 }
 
 string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
-    string result = "";
+    static const unsigned char acentos[256] = {
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ','!','"','#','$','%','&',' ',
+        '(',')','*','+',',','-','.','/','0','1',
+        '2','3','4','5','6','7','8','9',':',';',
+        '<','=','>','?','@','a','b','c','d','r',
+        'f','g','h','i','j','k','l','m','n','o',
+        'p','q','r','s','t','u','v','w','x','y',
+        'z',' ',' ',' ',' ',' ',' ','a','b','c',
+        'd','e','f','g','h','i','j','k','l','m',
+        'n','o','p','q','r','s','t','u','v','w',
+        'x','y','z',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ','a','a','a','a','a','a','a',
+        'c','e','e','e','e','i','i','i','i','d','n',
+        'o','o','o','o','o','o','/','o','u','u',
+        'u','u','y','b','y','n','a','a','a','a',
+        'a','a','c','e','e','e','i','i','i','i',
+        'd','n','o','o','o','o','o','o','o','u',
+        'u','u','u','y','b','y'
+    };
+    string resultado = "";
+    for (char c : str) {
+        if (c >= 0x41 && c <= 0x5a) {
+            resultado += acentos[c];
+        } else if (c >= 0xc0) {
+            resultado += acentos[c];
+        } else {
+            // No es una letra acentuada, se agrega tal cual
+            resultado += c;
+        }
+    }
+    return resultado;
+    /*string result = "";
     for (unsigned char c : str) {
         int code = int(c);
         if (code < 192)
@@ -597,7 +637,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
         }
         
     }
-    return result;
+    return result;*/
 }
 
 // Operador de salida de un tokenizador

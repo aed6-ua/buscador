@@ -1319,34 +1319,46 @@ bool IndexadorHash::Existe(const string &word)
 
 string IndexadorHash::pasar_a_minusculas_sin_acentos(const string &str) const
 {
-    string result = "";
-    for (unsigned char c : str)
-    {
-        int code = int(c);
-        if (code < 192)
-            result += tolower(c);
-        else if (code == 209)
-            result += '?';
-        else if (code < 224)
-        {
-            double y = floor((code - 192) / 6);
-            if (y <= 2)
-                result += string(1, ((y + 1) * 4) + 93);
-            else
-                result += string(1, (y * 6) + 93);
-        }
-        else if (code == 241)
-            result += '?';
-        else
-        {
-            double y = floor((code - 224) / 6);
-            if (y <= 2)
-                result += tolower(char(((y + 1) * 4) + 93));
-            else
-                result += tolower(char((y * 6) + 93));
+    static const unsigned char acentos[256] = {
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ','!','"','#','$','%','&',' ',
+        '(',')','*','+',',','-','.','/','0','1',
+        '2','3','4','5','6','7','8','9',':',';',
+        '<','=','>','?','@','a','b','c','d','r',
+        'f','g','h','i','j','k','l','m','n','o',
+        'p','q','r','s','t','u','v','w','x','y',
+        'z',' ',' ',' ',' ',' ',' ','a','b','c',
+        'd','e','f','g','h','i','j','k','l','m',
+        'n','o','p','q','r','s','t','u','v','w',
+        'x','y','z',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+        ' ',' ','a','a','a','a','a','a','a',
+        'c','e','e','e','e','i','i','i','i','d','n',
+        'o','o','o','o','o','o','/','o','u','u',
+        'u','u','y','b','y','n','a','a','a','a',
+        'a','a','c','e','e','e','i','i','i','i',
+        'd','n','o','o','o','o','o','o','o','u',
+        'u','u','u','y','b','y'
+    };
+    string resultado = "";
+    for (char c : str) {
+        if (c >= 0x41 && c <= 0x5a) {
+            resultado += acentos[c];
+        } else if (c >= 0xc0) {
+            resultado += acentos[c];
+        } else {
+            // No es una letra acentuada, se agrega tal cual
+            resultado += c;
         }
     }
-    return result;
+    return resultado;
 }
 
 /* Será true si se realiza la inserción (p.ej. si word, aplicándole el
