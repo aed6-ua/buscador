@@ -29,6 +29,7 @@ public:
     bool RecuperarIndexacion(const string &directorioIndexacion);
 
     void ImprimirIndexacion() const;
+
     bool IndexarPregunta(const string &preg);
 
     bool DevuelvePregunta(string &preg) const;
@@ -38,6 +39,7 @@ public:
     bool DevuelvePregunta(InformacionPregunta &inf) const;
 
     void ImprimirIndexacionPregunta();
+    
     void ImprimirPregunta() {
         cout << "Pregunta indexada: " << pregunta << endl;
         cout << "Informacion de la pregunta: " << infPregunta << endl;}
@@ -131,13 +133,15 @@ private:
     bool AlmacenarEnDisco();
     bool BorraDocGuardado(string &nomDoc, const int &idDoc, const InfDoc &infDoc);
     bool BorraDocIndice(const string &nomDoc, const int &idDoc, const std::unordered_map<std::string, InfDoc>::iterator &itDoc);
-    unordered_map<string, InformacionTermino> indice;
+    
     unordered_map<string, int> indice_guardados;
-    unordered_map<string, InformacionTermino> indice_actualizar;
-    unordered_map<string, InfDoc> indiceDocs;
     unordered_set<string> indiceDocs_guardados;
-    unordered_map<string, InformacionTerminoPregunta> indicePregunta;
+    unordered_map<string, InformacionTermino> indice_actualizar;
     unordered_set<string> stopWords_originales;
+
+    unordered_map<string, InformacionTermino> indice;
+    unordered_map<string, InfDoc> indiceDocs;
+    unordered_map<string, InformacionTerminoPregunta> indicePregunta;
     unordered_set<string> stopWords;
     InfColeccionDocs informacionColeccionDocs;
     string pregunta;

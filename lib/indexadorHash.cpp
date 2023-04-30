@@ -67,31 +67,7 @@ IndexadorHash::IndexadorHash(const string &fichStopWords, const string &delimita
     // Información recogida de la pregunta indexada. Se almacenará en memoria principal
 
     ficheroStopWords = fichStopWords;
-    // Nombre del fichero que contiene las palabras de parada
-
-    /* Palabras de parada. Se almacenará en memoria principal. El filtrado
-    de palabras de parada se realizará, tanto en la pregunta como en los
-    documentos, teniendo en cuenta el parámetro minuscSinAcentos y
-    tipoStemmer. Es decir que se aplicará el mismo proceso a las palabras de
-    parada almacenadas en el fichero antes de realizar el filtrado (p.ej. si
-    se aplica el pasar a minúsculas los términos del documento/pregunta a
-    indexar, para comprobar si se ha de eliminar el término, éste se
-    comparará con la versión de palabras de parada en minúsculas). Esto se
-    pide así para casos en los que en el documento/pregunta aparezca: ?La
-    casa de Él? y estén almacenadas como stopWords ?la, el?, si se activa el
-    parámetro minuscSinAcentos, entonces debería filtrar ?La, Él?, si no
-    hubiese estado activo ese parámetro, entonces no se hubiesen filtrado.
-    */
     tipoStemmer = tStemmer;
-    /* 0 = no se aplica stemmer: se indexa el término tal y como aparece
-    tokenizado
-    // Los siguientes valores harán que los términos a indexar se les
-    aplique el stemmer y se almacene solo dicho stem.
-    // 1 = stemmer de Porter para español
-    // 2 = stemmer de Porter para inglés
-    // Para el stemmer de Porter se utilizarán los archivos
-    stemmer.cpp y stemmer.h, concretamente las funciones de nombre
-    ?stemmer?*/
     stopWords = unordered_set<string>();
     // Almacenar las stopWords en un unordered_set a partir del fichero de stopWords
     ifstream f(ficheroStopWords.c_str());
@@ -111,35 +87,10 @@ IndexadorHash::IndexadorHash(const string &fichStopWords, const string &delimita
         }
         f.close();
     }
-
     tok = Tokenizador(delimitadores, detectComp, minuscSinAcentos);
-    /* Tokenizador que se usará en la indexación. Se inicializará con los
-    parámetros del constructor: detectComp y minuscSinAcentos, los cuales
-    determinarán qué término se ha de indexar (p.ej. si se activa
-    minuscSinAcentos, entonces se guardarán los términos en minúsculas y sin
-    acentos)*/
     directorioIndice = dirIndice;
-    /* ?directorioIndice? será el directorio del disco duro donde se
-    almacenará el índice. En caso que contenga la cadena vacía se creará en
-    el directorio donde se ejecute el indexador*/
-
     almacenarEnDisco = almEnDisco;
-    /* Esta opción (cuando almacenarEnDisco == true) está ideada para poder
-    indexar colecciones de documentos lo suficientemente grandes para que su
-    indexación no quepa en memoria, por lo que si es true, mientras se va
-    generando el índice, se almacenará la mínima parte de los índices de los
-    documentos en memoria principal, p.ej. solo la estructura ?indice? para
-    saber las palabras indexadas, guardando únicamente punteros a las
-    posiciones de los archivos almacenados en disco que contendrán el resto
-    de información asociada a cada término (lo mismo para indiceDocs). Se
-    valorará el equilibrio para conseguir una indexación independientemente
-    del tamaño del corpus a indexar, pero reduciendo el número de accesos a
-    disco. Para los datos de la indexación de la pregunta no habría que
-    hacer nada. En caso de que esta variable tenga valor false, se
-    almacenará todo el índice en memoria principal (tal y como se ha
-    descrito anteriormente).*/
     almacenarPosTerm = almPosTerm;
-    // Si es true se almacenará la posición en la que aparecen los términos dentro del documento en la clase InfTermDoc
 }
 
 IndexadorHash::IndexadorHash(const IndexadorHash &orig)
@@ -158,6 +109,10 @@ IndexadorHash::IndexadorHash(const IndexadorHash &orig)
     tipoStemmer = orig.tipoStemmer;
     almacenarEnDisco = orig.almacenarEnDisco;
     almacenarPosTerm = orig.almacenarPosTerm;
+    id_ficheros_indice = orig.id_ficheros_indice;
+    indice_guardados = orig.indice_guardados;
+    indiceDocs_guardados = orig.indiceDocs_guardados;
+    indice_actualizar = orig.indice_actualizar;
 }
 
 IndexadorHash::~IndexadorHash()
@@ -194,6 +149,10 @@ IndexadorHash &IndexadorHash::operator=(const IndexadorHash &orig)
     tipoStemmer = orig.tipoStemmer;
     almacenarEnDisco = orig.almacenarEnDisco;
     almacenarPosTerm = orig.almacenarPosTerm;
+    id_ficheros_indice = orig.id_ficheros_indice;
+    indice_guardados = orig.indice_guardados;
+    indiceDocs_guardados = orig.indiceDocs_guardados;
+    indice_actualizar = orig.indice_actualizar;
     return *this;
 }
 
@@ -272,19 +231,15 @@ bool IndexadorHash::ListarDocs(const string &nomDoc) const
     en caso que la fecha de modificación del documento sea más reciente que
     la almacenada previamente (class ?InfDoc? campo ?fechaModificacion?).
     Los casos de reindexación mantendrán el mismo idDoc.*/
-
 bool IndexadorHash::Indexar(const string &ficheroDocumentos)
 {
-    /*Devuelve true si consigue crear el índice para la colección de
-    documentos detallada en ficheroDocumentos, el cual contendrá un nombre
-    de documento por línea. Los añadirá a los ya existentes anteriormente en
-    el índice.*/
-    ifstream f(ficheroDocumentos.c_str());
+    ifstream f(ficheroDocumentos);
     if (!f)
     {
         cerr << "Error al abrir el fichero de documentos " << ficheroDocumentos << endl;
         return false;
     }
+    bool success = true;
     int contador = 0;
     string linea;
 
@@ -451,56 +406,7 @@ bool IndexadorHash::IndexarDoc(const string &nomDoc, int idDoc)
                 {
                     auto itG = indice_guardados.find(linea);
                     if (itG != indice_guardados.end())
-                    { /*// Obtener la información del término del índice
-                        InformacionTermino infTerm = InformacionTermino();
-                        // Abrir el fichero de indice
-                        ifstream f3;
-                        string fichero = directorioIndice + "/indice/" + to_string(itG->second);
-                        f3.open(fichero.c_str());
-                        if (!f3)
-                        {
-                            cerr << "Error al abrir el fichero de indice " << fichero << endl;
-                            return false;
-                        }
-                        // Leer el fichero de indice
-                        string line;
-                        if (std::getline(f3, line))
-                        {
-                            infTerm.cargar(line);
-                        }
-                        f3.close();
-                        // Actualizar la información del término
-                        infTerm.addFtc();
-                        // Comprobar si el término está en el documento (si existe el idDoc en el map)
-                        if (infTerm.existIdDoc(idDoc))
-                        {
-                            // Obtener la información del término en el documento
-                            InfTermDoc *infTermDoc = infTerm.getInfTermDoc(idDoc);
-                            // Actualizar la información del término en el documento
-                            infTermDoc->addFt();
-                            if (almacenarPosTerm)
-                                infTermDoc->addPosTerm(numPalabras);
-                        }
-                        else
-                        {
-                            // Rellenar la información del término en el documento
-                            InfTermDoc infTermDoc = InfTermDoc();
-                            infTermDoc.addFt();
-                            if (almacenarPosTerm)
-                                infTermDoc.addPosTerm(numPalabras);
-                            // Actualizar la información del término en el documento
-                            infTerm.addInfTermDoc(idDoc, infTermDoc);
-                        }
-                        // Guardar el fichero de indice
-                        ofstream f2;
-                        f2.open(fichero.c_str());
-                        if (!f2)
-                        {
-                            cerr << "Error al abrir el fichero de indice " << fichero << endl;
-                            return false;
-                        }
-                        f2 << infTerm;
-                        f2.close();*/
+                    {
                         auto ac = indice_actualizar.find(linea);
                         if (ac != indice_actualizar.end())
                         {
@@ -955,25 +861,7 @@ bool IndexadorHash::GuardarIndexacion() const
     return true;
 }
 
-/* Se guardará en disco duro (directorio contenido en la variable
-privada ?directorioIndice?) la indexación actualmente en memoria
-(incluidos todos los parámetros de la parte privada). La forma de
-almacenamiento la determinará el alumno. El objetivo es que esta
-indexación se pueda recuperar posteriormente mediante el constructor
-?IndexadorHash(const string& directorioIndexacion)?. Por ejemplo,
-supongamos que se ejecuta esta secuencia de comandos: ?IndexadorHash
-a(?./fichStopWords.txt?, ?[ ,.?, ?./dirIndexPrueba?, 0, false);
-a.Indexar(?./fichConDocsAIndexar.txt?); a.GuardarIndexacion();?,
-entonces mediante el comando: ?IndexadorHash b(?./dirIndexPrueba?);? se
-recuperará la indexación realizada en la secuencia anterior, cargándola
-en ?b?
-// Devuelve falso si no finaliza la operación (p.ej. por falta de
-memoria, o el nombre del directorio contenido en ?directorioIndice? no
-es correcto), mostrando el mensaje de error correspondiente, vaciando
-los ficheros generados.
-// En caso que no existiese el directorio directorioIndice, habría que
-crearlo previamente
-*/
+// Función auxiliar para almacenar en disco
 bool IndexadorHash::AlmacenarEnDisco()
 {
     // Comprobar si el directorio existe y si no crearlo
@@ -1014,7 +902,7 @@ bool IndexadorHash::AlmacenarEnDisco()
         }
         f.close();
         // Borrar el termino del indice y guardar el nombre en el set indice_guardados
-        indice_guardados.insert(pair(it->first, id_ficheros_indice));
+        indice_guardados.insert(pair<string, int>(it->first, id_ficheros_indice));
         ++id_ficheros_indice;
         it = indice.erase(it);
     }
