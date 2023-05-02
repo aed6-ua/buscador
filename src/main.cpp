@@ -1,24 +1,66 @@
 #include <iostream> 
 #include <string>
-#include <list>
-#include <sys/resource.h>
-#include "indexadorHash.h"
+#include <list> 
+#include "tokenizador.h"
+
 using namespace std;
-double getcputime(void) { 
-struct timeval tim; 
-struct rusage ru; 
-getrusage(RUSAGE_SELF, &ru); 
-tim=ru.ru_utime; 
-double t=(double)tim.tv_sec + (double)tim.tv_usec / 1000000.0; 
-tim=ru.ru_stime; 
-t+=(double)tim.tv_sec + (double)tim.tv_usec / 1000000.0; 
-return t; 
-}
-main() {
-long double aa=getcputime();
-IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false, 
-"./indicePruebaEspanyol", 0, false, true);
-b.Indexar("listaFicheros.txt");
-cout << "Ha tardado " << getcputime() - aa << " segundos" << endl;
+
+///////// Comprobaci?n de que vac?e la lista resultado
+
+void imprimirListaSTL(const list<string>& cadena)
+{
+        list<string>::const_iterator itCadena;
+        for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
+        {
+                cout << (*itCadena) << ", ";
+        }
+        cout << endl;
 }
 
+int
+main(void)
+{
+	bool kCasosEspeciales = true, kpasarAminusculas = false;
+
+	list<string> lt1, lt2;
+
+Tokenizador a("-#", true, false); 
+list<string> tokens; 
+
+a.Tokenizar("MS-DOS p1 p2 UN-DOS-TRES", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1 -MS-DOS p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1 MS-DOS#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1#MS-DOS#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.DelimitadoresPalabra("/ ");
+a.Tokenizar("MS-DOS p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1 -MS-DOS p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1 MS-DOS#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("pal1#MS-DOS#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+
+a.PasarAminuscSinAcentos(true);
+a.Tokenizar("pal1#MS-DOSaA#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+a.DelimitadoresPalabra("/-");
+a.CasosEspeciales (false);
+a.Tokenizar("pal1#MS-DOSaA#p3 p1 p2", tokens);
+	imprimirListaSTL(tokens);
+
+
+}

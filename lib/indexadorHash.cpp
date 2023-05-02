@@ -1326,7 +1326,7 @@ string IndexadorHash::pasar_a_minusculas_sin_acentos(const string &str) const
         ' ',' ',' ','!','"','#','$','%','&',' ',
         '(',')','*','+',',','-','.','/','0','1',
         '2','3','4','5','6','7','8','9',':',';',
-        '<','=','>','?','@','a','b','c','d','r',
+        '<','=','>','?','@','a','b','c','d','e',
         'f','g','h','i','j','k','l','m','n','o',
         'p','q','r','s','t','u','v','w','x','y',
         'z',' ',' ',' ',' ',' ',' ','a','b','c',
@@ -1366,12 +1366,13 @@ tratamiento de stemming y mayúsculas correspondiente, no estaba
 previamente indexado)*/
 bool IndexadorHash::Inserta(const string &word, const InformacionTermino &inf)
 {
+    string wordTratada = word;
     // Aplicar tratamiento de mayúsculas y acentos
     if (tok.PasarAminuscSinAcentos())
-        string wordTratada = pasar_a_minusculas_sin_acentos(word);
+        wordTratada = pasar_a_minusculas_sin_acentos(wordTratada);
     // Aplicar stemming
     stemmerPorter stemmer = stemmerPorter();
-    string term = word;
+    string term = wordTratada;
     stemmer.stemmer(term, tipoStemmer);
     // Comprobar si el término está en el índice
     if (indiceDocs.find(term) == indiceDocs.end())
@@ -1406,11 +1407,12 @@ vacío*/
 bool IndexadorHash::DevuelvePregunta(const string &word, InformacionTerminoPregunta &inf) const
 {
     // Aplicar tratamiento de mayúsculas y acentos
+    string wordTratada = word;
     if (tok.PasarAminuscSinAcentos())
-        string wordTratada = pasar_a_minusculas_sin_acentos(word);
+        wordTratada = pasar_a_minusculas_sin_acentos(wordTratada);
     // Aplicar stemming
     stemmerPorter stemmer = stemmerPorter();
-    string term = word;
+    string term = wordTratada;
     stemmer.stemmer(term, tipoStemmer);
     // Comprobar si el término está en el índice
     if (indicePregunta.find(term) != indicePregunta.end())
@@ -1791,12 +1793,26 @@ void IndexadorHash::VaciarIndiceDocs()
     indiceDocs_guardados.clear();
     // Borramos el directorio de documentos
     remove((directorioIndice + "/indiceDocs").c_str());
+    // Vaciamos la informacion de la coleccion de documentos
+    informacionColeccionDocs = InfColeccionDocs();
+    // Vaciamos el indice de palabras
+    indice.clear();
+    // Borramos el fichero de palabras
+    for (auto it : indice_guardados)
+    {
+        remove((directorioIndice + "/indice/" + to_string(it.second)).c_str());
+    }
+    // Vaciamos el indice de palabras guardadas
+    indice_guardados.clear();
+    indice_actualizar.clear();
+    // Borramos el directorio de palabras
+    remove((directorioIndice + "/indice").c_str());
 }
 
 void IndexadorHash::VaciarIndicePreg()
 {
     // Vaciamos el indice de pregunta
-    indice.clear();
+    indicePregunta.clear();
 }
 
 void IndexadorHash::ListarTerminos()
