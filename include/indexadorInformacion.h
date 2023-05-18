@@ -159,6 +159,8 @@ public:
     void subNumTotalPalDiferentes() { this->numTotalPalDiferentes--; }
     void subTamBytes(int tamBytes) { this->tamBytes -= tamBytes; }
     void cargar(string serializacion);
+    void getNumTotalPal(int &numPal) const { numPal = this->numTotalPal; }
+    void getNumTotalPalSinParada(int &numPalSinParada) const { numPalSinParada = this->numTotalPalSinParada; }
 private:
     int numDocs; // Nº total de documentos en la colección
     int numTotalPal;
@@ -166,7 +168,7 @@ private:
     int numTotalPalSinParada;
     // Nº total de palabras sin stop-words en la colección
     int numTotalPalDiferentes;
-    // Nº total de palabras diferentes en la colección que no sean stopwords (sin acumular la frecuencia de cada una de ellas)
+    // Nº total de palabras diferentes en la colección que no sean stop words (sin acumular la frecuencia de cada una de ellas)
     int tamBytes; // Tamaño total en bytes de la colección
 };
 

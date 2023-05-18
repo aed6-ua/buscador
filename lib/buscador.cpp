@@ -1,5 +1,6 @@
 #include "buscador.h"
 #include <stdexcept>
+#include <cmath>
 
 ResultadoRI::ResultadoRI(const double &kvSimilitud, const long int &kidDoc,
                          const int &np)
@@ -126,13 +127,13 @@ bool Buscador::Buscar(const int& numDocumentos) {
         DevolverIndicePregunta(indicePregunta);
         // Obtener la lista de documentos indexados
         unordered_map<string, InfDoc> indiceDocs;
-        DevuelveIndiceDocs(indiceDocs);
+        DevolverIndiceDocs(indiceDocs);
 
         // Obtener la lista de documentos indexados
         //vector<string> listaDocs = ListarDocs();
 
         // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
-        //for (const auto& docID : listaDocs) {
+        for (const auto& doc : indiceDocs) {
             double valor = 0.0;
             //InfDoc docInf;
             //DevuelveInfoDoc(docID, docInf);
@@ -142,13 +143,13 @@ bool Buscador::Buscar(const int& numDocumentos) {
                 InfTermDoc infTermDoc;
 
                 // Si el término aparece en el documento actual
-                if (Devuelve(palabra.first, docID, infTermDoc)) {
+                if (Devuelve(palabra.first, doc.first, infTermDoc)) {
                     InformacionTermino terminoInf;
                     Devuelve(palabra.first, terminoInf);
 
-                    double idf = log10((informacionColeccionDocs.NumDocs() - terminoInf.NumDocs() + 0.5) / (terminoInf.NumDocs() + 0.5));
-                    double tf = infTermDoc.Frecuencia();
-                    double docLength = docInf.NumPalSinParada();
+                    double idf = log10((NumDocs() - infTermDoc.getFt() + 0.5) / (infTermDoc.getFt() + 0.5));
+                    double tf = infTermDoc.getFt();
+                    double docLength = doc.second.getNumPalSinParada();
                     double avgDocLength = informacionColeccionDocs.MediaPalSinParada();
 
                     if (formSimilitud == 0) {
@@ -163,7 +164,7 @@ bool Buscador::Buscar(const int& numDocumentos) {
             if (valor > 0) {
                 docsOrdenados.push_back(make_pair(docID, valor));
             }
-        //}
+        }
 
         // Ordenar la lista de documentos por sus valores de similitud en orden descendente
         sort(docsOrdenados.begin(), docsOrdenados.end(), [](const pair<string, double>& a, const pair<string, double>& b) {
