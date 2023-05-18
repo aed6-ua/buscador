@@ -126,6 +126,10 @@ public:
 
     bool IndexarDoc(const string &nomDoc, int idDoc=-1);
 
+
+    bool DevolverIndicePregunta(unordered_map<string, InformacionTerminoPregunta> &indicePregunta) const { indicePregunta = this->indicePregunta; return true; }
+    bool DevolverIndiceDocs(unordered_map<string, InfDoc> &indiceDocs) const { indiceDocs = this->indiceDocs; return true; }
+
 private:
     int id_ficheros_indice = 0;
     IndexadorHash();

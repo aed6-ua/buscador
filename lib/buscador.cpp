@@ -38,7 +38,7 @@ ostream &operator<<(ostream &s, const Buscador &p)
 {
     string preg;
     s << "Buscador : " << endl;
-    if (DevuelvePregunta(preg))
+    if (p.DevuelvePregunta(preg))
         s << "\tPregunta indexada : " << preg << endl;
     else
         s << "\tNo hay ninguna pregunta indexada" << endl;
@@ -119,17 +119,26 @@ bool Buscador::Buscar(const int& numDocumentos) {
             return false;
         }
 
+        string pregunta;
+        DevuelvePregunta(pregunta);
+        //Lista de terminos de pregunta
+        unordered_map<string, InformacionTerminoPregunta> indicePregunta;
+        DevolverIndicePregunta(indicePregunta);
         // Obtener la lista de documentos indexados
-        vector<string> listaDocs = ListarDocs();
+        unordered_map<string, InfDoc> indiceDocs;
+        DevuelveIndiceDocs(indiceDocs);
+
+        // Obtener la lista de documentos indexados
+        //vector<string> listaDocs = ListarDocs();
 
         // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
-        for (const auto& docID : listaDocs) {
+        //for (const auto& docID : listaDocs) {
             double valor = 0.0;
-            InfDoc docInf;
-            DevuelveInfoDoc(docID, docInf);
+            //InfDoc docInf;
+            //DevuelveInfoDoc(docID, docInf);
 
             // Recorrer los términos de la pregunta
-            for (auto& palabra : preguntaInf) {
+            for (auto& palabra : indicePregunta) {
                 InfTermDoc infTermDoc;
 
                 // Si el término aparece en el documento actual
@@ -154,7 +163,7 @@ bool Buscador::Buscar(const int& numDocumentos) {
             if (valor > 0) {
                 docsOrdenados.push_back(make_pair(docID, valor));
             }
-        }
+        //}
 
         // Ordenar la lista de documentos por sus valores de similitud en orden descendente
         sort(docsOrdenados.begin(), docsOrdenados.end(), [](const pair<string, double>& a, const pair<string, double>& b) {
