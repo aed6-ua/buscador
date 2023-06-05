@@ -147,6 +147,14 @@ bool Buscador::Buscar(const int& numDocumentos) {
                     InformacionTermino terminoInf;
                     Devuelve(palabra.first, terminoInf);
 
+                    // Formula DFR
+                    if (formSimilitud == 0) {
+                        //peso en la query del término palabra de la query (frecuencia del término en la query entre el número de términos de la query)
+                        double wq = palabra.second.getFt() / preguntaInf.getNumTotalPalSinParada();
+                        //peso en el documento del término palabra
+                        double lambda = terminoInf.getFtc()/NumDocs();
+                        double wd = (log10(1+(lambda) + terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt()) * log10((1+lambda)/lambda)) * ((terminoInf.getFtc()+1)/);
+                    }
                     double idf = log10((NumDocs() - infTermDoc.getFt() + 0.5) / (infTermDoc.getFt() + 0.5));
                     double tf = infTermDoc.getFt();
                     double docLength = doc.second.getNumPalSinParada();

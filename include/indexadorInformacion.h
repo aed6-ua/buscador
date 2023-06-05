@@ -192,6 +192,7 @@ public:
     void cargar(string serializacion);
     void addFt() { this->ft++; }
     void addPosTerm(int pos) { this->posTerm.push_back(pos); }
+    int getFt() const { return this->ft; }
 private:
     int ft; // Frecuencia total del término en la pregunta
     list<int> posTerm;
@@ -224,6 +225,7 @@ public:
     void setNumTotalPal(int numTotalPal) { this->numTotalPal = numTotalPal; }
     void setNumTotalPalSinParada(int numTotalPalSinParada) { this->numTotalPalSinParada = numTotalPalSinParada; }
     void setNumTotalPalDiferentes(int numTotalPalDiferentes) { this->numTotalPalDiferentes = numTotalPalDiferentes; }
+    int getNumTotalPalSinParada() const { return this->numTotalPal; }
 private:
     int numTotalPal;
     // Nº total de palabras en la pregunta
