@@ -5,7 +5,7 @@ OPTIONS= -g
 DEBUG= #-D DEBUG
 LIBDIR=lib
 INCLUDEDIR=include
-_OBJ= indexadorHash.o tokenizador.o stemmer.o indexadorInformacion.o
+_OBJ= indexadorHash.o tokenizador.o stemmer.o indexadorInformacion.o buscador.o
 OBJ = $(patsubst %,$(LIBDIR)/%,$(_OBJ))
 
 all: indexador

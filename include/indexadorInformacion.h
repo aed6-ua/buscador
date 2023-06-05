@@ -159,8 +159,8 @@ public:
     void subNumTotalPalDiferentes() { this->numTotalPalDiferentes--; }
     void subTamBytes(int tamBytes) { this->tamBytes -= tamBytes; }
     void cargar(string serializacion);
-    void getNumTotalPal(int &numPal) const { numPal = this->numTotalPal; }
-    void getNumTotalPalSinParada(int &numPalSinParada) const { numPalSinParada = this->numTotalPalSinParada; }
+    int getNumTotalPal() const { return this->numTotalPal; }
+    int getNumTotalPalSinParada() const { return this->numTotalPalSinParada; }
 private:
     int numDocs; // Nº total de documentos en la colección
     int numTotalPal;

@@ -1,12 +1,12 @@
 4
 pal3
-Frecuencia total: 1	fd: 1	Id.Doc: 1	ft: 1	4
+Frecuencia total: 1	fd: 1	Id.Doc: 1	ft: 1
 pal2
-Frecuencia total: 3	fd: 2	Id.Doc: 2	ft: 2	0	2	Id.Doc: 1	ft: 1	2
+Frecuencia total: 3	fd: 2	Id.Doc: 2	ft: 2	Id.Doc: 1	ft: 1
 pal4
-Frecuencia total: 1	fd: 1	Id.Doc: 2	ft: 1	3
+Frecuencia total: 1	fd: 1	Id.Doc: 2	ft: 1
 pal1
-Frecuencia total: 2	fd: 1	Id.Doc: 1	ft: 2	0	3
+Frecuencia total: 2	fd: 1	Id.Doc: 1	ft: 2
 2
 corpus_corto/fichero2.txt
 idDoc: 2	numPal: 5	numPalSinParada: 3	numPalDiferentes: 2	tamBytes: 23	fechaModificacion: 1680164465
@@ -366,4 +366,4 @@ numTotalPal: 0	numTotalPalSinParada: 0	numTotalPalDiferentes: 0
 DELIMITADORES: . ,: TRATA CASOS ESPECIALES: 0 PASAR A MINUSCULAS Y SIN ACENTOS: 0
 ./indicePrueba
 0
-1
+0

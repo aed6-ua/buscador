@@ -38,14 +38,14 @@ public:
     void ImprimirResultadoBusqueda(const int &numDocumentos = 99999) const;
     bool ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero) const;
 
-    int DevolverFormulaSimilitud() const;
-    bool CambiarFormulaSimilitud(const int &f);
+    int DevolverFormulaSimilitud() const { return formSimilitud; }
+    bool CambiarFormulaSimilitud(const int &f) { if (f == 0 || f == 1) { formSimilitud = f; return true; } else return false; }
 
     void CambiarParametrosDFR(const double &kc);
-    double DevolverParametrosDFR() const;
+    double DevolverParametrosDFR() const { return c; }
 
     void CambiarParametrosBM25(const double &kk1, const double &kb);
-    void DevolverParametrosBM25(double &kk1, double &kb) const;
+    void DevolverParametrosBM25(double &kk1, double &kb) const { kk1 = k1; kb = b;}
 
 private:
     Buscador();

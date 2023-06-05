@@ -130,6 +130,7 @@ public:
     bool DevolverIndicePregunta(unordered_map<string, InformacionTerminoPregunta> &indicePregunta) const { indicePregunta = this->indicePregunta; return true; }
     bool DevolverIndiceDocs(unordered_map<string, InfDoc> &indiceDocs) const { indiceDocs = this->indiceDocs; return true; }
     int NumDocs() const { return informacionColeccionDocs.getNumDocs(); }
+    int NumTotalPal() const { return informacionColeccionDocs.getNumTotalPal(); }
 
 private:
     int id_ficheros_indice = 0;

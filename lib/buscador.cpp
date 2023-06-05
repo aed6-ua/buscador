@@ -128,6 +128,9 @@ bool Buscador::Buscar(const int& numDocumentos) {
         // Obtener la lista de documentos indexados
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
+        int numTotalPal = NumTotalPal();
+        int numDocs = NumDocs();
+        double avgDocLength = numTotalPal / numDocs;
 
         // Obtener la lista de documentos indexados
         //vector<string> listaDocs = ListarDocs();
@@ -146,42 +149,33 @@ bool Buscador::Buscar(const int& numDocumentos) {
                 if (Devuelve(palabra.first, doc.first, infTermDoc)) {
                     InformacionTermino terminoInf;
                     Devuelve(palabra.first, terminoInf);
+                    double docLength = doc.second.getNumPalSinParada();
 
                     // Formula DFR
                     if (formSimilitud == 0) {
                         //peso en la query del término palabra de la query (frecuencia del término en la query entre el número de términos de la query)
-                        double wq = palabra.second.getFt() / preguntaInf.getNumTotalPalSinParada();
+                        double w_tq = palabra.second.getFt() / preguntaInf.getNumTotalPalSinParada();
                         //peso en el documento del término palabra
-                        double lambda = terminoInf.getFtc()/NumDocs();
-                        double wd = (log10(1+(lambda) + terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt()) * log10((1+lambda)/lambda)) * ((terminoInf.getFtc()+1)/);
+                        double lambda = terminoInf.getFtc()/numDocs;
+                        double f_td = terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt() * log10(1+(c*avgDocLength)/docLength);
+                        double w_td = (log10(1+lambda) + f_td * log10((1+lambda)/lambda)) * ((terminoInf.getFtc()+1)/(terminoInf.getNumDocs() * (f_td + 1)));
+                        valor += w_tq * w_td;
                     }
-                    double idf = log10((NumDocs() - infTermDoc.getFt() + 0.5) / (infTermDoc.getFt() + 0.5));
-                    double tf = infTermDoc.getFt();
-                    double docLength = doc.second.getNumPalSinParada();
-                    double avgDocLength = informacionColeccionDocs.MediaPalSinParada();
-
-                    if (formSimilitud == 0) {
-                        valor += idf * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * docLength / avgDocLength));
-                    } else {
-                        valor += (tf / (tf + c)) * idf;
+                    else {
+                        // Formula BM25
+                        double aux = terminoInf.getNumDocs() + 0.5;
+                        double idf = log10((numDocs - aux) / aux);
+                        double f_qd = terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt();
+                        double aux2 = (f_qd * (k1 + 1)) / (f_qd + k1 * (1 - b + b * (docLength / avgDocLength)));
+                        valor += idf * aux2;
                     }
                 }
             }
 
             // Almacenar el valor de similitud calculado para el documento actual
             if (valor > 0) {
-                docsOrdenados.push_back(make_pair(docID, valor));
+                docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0));
             }
-        }
-
-        // Ordenar la lista de documentos por sus valores de similitud en orden descendente
-        sort(docsOrdenados.begin(), docsOrdenados.end(), [](const pair<string, double>& a, const pair<string, double>& b) {
-            return a.second > b.second;
-        });
-
-        // Recortar la lista de documentos a los numDocumentos más relevantes
-        if (docsOrdenados.size() > numDocumentos) {
-            docsOrdenados.resize(numDocumentos);
         }
 
         return true;
