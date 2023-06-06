@@ -1,6 +1,7 @@
 #include "buscador.h"
 #include <stdexcept>
 #include <cmath>
+#include <algorithm>
 
 ResultadoRI::ResultadoRI(const double &kvSimilitud, const long int &kidDoc,
                          const int &np, const string &nd)
@@ -26,6 +27,13 @@ bool ResultadoRI::operator<(const ResultadoRI &lhs) const
         return (vSimilitud < lhs.vSimilitud);
     else
         return (numPregunta > lhs.numPregunta);
+}
+bool ResultadoRI::operator>(const ResultadoRI &lhs) const
+{
+    if (numPregunta == lhs.numPregunta)
+        return (vSimilitud > lhs.vSimilitud);
+    else
+        return (numPregunta < lhs.numPregunta);
 }
 ostream &operator<<(ostream &os, const ResultadoRI &res)
 {
@@ -65,6 +73,9 @@ Buscador::Buscador(const string &directorioIndexacion, const int &f) : Indexador
     c = 2;
     k1 = 1.2;
     b = 0.75;
+
+    // Reservar memoria para el vector de resultados
+    docsOrdenadosVector.reserve(10000);
 }
 
 Buscador::Buscador(const Buscador &buscador) : IndexadorHash(buscador)
@@ -75,7 +86,8 @@ Buscador::Buscador(const Buscador &buscador) : IndexadorHash(buscador)
         c = buscador.c;
         k1 = buscador.k1;
         b = buscador.b;
-        docsOrdenados = buscador.docsOrdenados;
+        // docsOrdenados = buscador.docsOrdenados;
+        docsOrdenadosVector = buscador.docsOrdenadosVector;
     }
     catch (const std::exception &e)
     {
@@ -99,7 +111,8 @@ Buscador &Buscador::operator=(const Buscador &buscador)
             c = buscador.c;
             k1 = buscador.k1;
             b = buscador.b;
-            docsOrdenados = buscador.docsOrdenados;
+            // docsOrdenados = buscador.docsOrdenados;
+            docsOrdenadosVector = buscador.docsOrdenadosVector;
         }
         catch (const std::exception &e)
         {
@@ -114,7 +127,8 @@ bool Buscador::Buscar(const int &numDocumentos)
     try
     {
         // Limpiar el vector docsOrdenados antes de empezar una nueva búsqueda
-        docsOrdenados = priority_queue<ResultadoRI>();
+        // docsOrdenados = priority_queue<ResultadoRI>();
+        docsOrdenadosVector.clear();
 
         // Verificar si hay una pregunta indexada
         InformacionPregunta preguntaInf;
@@ -132,9 +146,9 @@ bool Buscador::Buscar(const int &numDocumentos)
         // Obtener la lista de documentos indexados
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
-        int numTotalPal = NumTotalPal();
+        int numTotalPal = NumTotalPalSinParada();
         int numDocs = NumDocs();
-        double avgDocLength = numTotalPal / numDocs;
+        double avgDocLength = (double)numTotalPal / (double)numDocs;
 
         // Obtener la lista de documentos indexados
         // vector<string> listaDocs = ListarDocs();
@@ -149,41 +163,49 @@ bool Buscador::Buscar(const int &numDocumentos)
             // Recorrer los términos de la pregunta
             for (auto &palabra : indicePregunta)
             {
-                InfTermDoc infTermDoc;
 
-                // Si el término aparece en el documento actual
-                if (Devuelve(palabra.first, doc.first, infTermDoc))
+                InformacionTermino* terminoInf;
+
+                // Si el término está indexado
+                if (Devuelve(palabra.first, &terminoInf))
                 {
-                    InformacionTermino terminoInf;
-                    Devuelve(palabra.first, terminoInf);
-                    double docLength = doc.second.getNumPalSinParada();
+                    
+                    // Obtener la información del término en el documento
+                    if (terminoInf->existIdDoc(doc.second.getIdDoc()))
+                    {
+                        InfTermDoc *infTermDoc;
+                        infTermDoc = terminoInf->getInfTermDoc(doc.second.getIdDoc());
+                        double docLength = doc.second.getNumPalSinParada();
 
-                    // Formula DFR
-                    if (formSimilitud == 0)
-                    {
-                        // peso en la query del término palabra de la query (frecuencia del término en la query entre el número de términos de la query)
-                        double w_tq = (double)palabra.second.getFt() / (double)preguntaInf.getNumTotalPalSinParada();
-                        // peso en el documento del término palabra
-                        double lambda = (double)terminoInf.getFtc() / (double)numDocs;
-                        double f_td = terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt() * log2(1 + (c * avgDocLength) / docLength);
-                        double w_td = (log2(1 + lambda) + f_td * log2((1 + lambda) / lambda)) * ((terminoInf.getFtc() + 1) / (terminoInf.getNumDocs() * (f_td + 1)));
-                        valor += w_tq * w_td;
-                    }
-                    else
-                    {
-                        // Formula BM25
-                        double idf = log2((numDocs - terminoInf.getNumDocs() + 0.5) / terminoInf.getNumDocs() + 0.5);
-                        double f_qd = terminoInf.getInfTermDoc(doc.second.getIdDoc())->getFt();
-                        double aux2 = (f_qd * (k1 + 1)) / (f_qd + k1 * (1 - b + b * (docLength / avgDocLength)));
-                        valor += idf * aux2;
+                        // Formula DFR
+                        if (formSimilitud == 0)
+                        {
+                            // peso en la query del término palabra de la query (frecuencia del término en la query entre el número de términos de la query)
+                            double w_tq = (double)palabra.second.getFt() / (double)preguntaInf.getNumTotalPalSinParada();
+                            // peso en el documento del término palabra
+                            double lambda = (double)terminoInf->getFtc() / (double)numDocs;
+                            double f_td = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt() * log2(1 + (c * avgDocLength) / docLength);
+                            double w_td = (log2(1 + lambda) + f_td * log2((1 + lambda) / lambda)) * ((terminoInf->getFtc() + 1) / (terminoInf->getNumDocs() * (f_td + 1)));
+                            valor += w_tq * w_td;
+                        }
+                        else
+                        {
+                            // Formula BM25
+                            double idf = log2((numDocs - terminoInf->getNumDocs() + 0.5) / (terminoInf->getNumDocs() + 0.5));
+                            double f_qd = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt();
+                            double aux2 = (double)(f_qd * (k1 + 1)) / (double)(f_qd + k1 * (1 - b + b * ((double)docLength / (double)avgDocLength)));
+                            valor += idf * aux2;
+                        }
                     }
                 }
             }
 
             // Almacenar el valor de similitud calculado para el documento actual
-            docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
         }
-
+        // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
+        sort(docsOrdenadosVector.begin(), docsOrdenadosVector.end(), greater<ResultadoRI>());
         return true;
     }
     catch (...)
@@ -220,7 +242,8 @@ documento, pregunta y término en el que se ha quedado.
     try
     {
         // Limpiar el vector docsOrdenados antes de empezar una nueva búsqueda
-        docsOrdenados = priority_queue<ResultadoRI>();
+        // docsOrdenados = priority_queue<ResultadoRI>();
+        docsOrdenadosVector.clear();
 
         // Verificar si hay una pregunta indexada
         InformacionPregunta preguntaInf;
@@ -279,12 +302,13 @@ void Buscador::ImprimirResultadoBusqueda(const int &numDocumentos)
         string nombreDoc = "";
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
-        while (!docsOrdenados.empty())
+        // while (!docsOrdenados.empty())
+        for (auto &resultado : docsOrdenadosVector)
         {
             // Una linea por cada documento con el siguiente formato:
             // NumPregunta FormulaSimilitud NomDocumento Posicion PuntuacionDoc PreguntaIndexada
-            
-            ResultadoRI resultado = docsOrdenados.top();
+
+            // ResultadoRI resultado = docsOrdenados.top();
             if (numPreguntaAnterior != resultado.NumPregunta())
             {
                 numDocs = 0;
@@ -304,11 +328,12 @@ void Buscador::ImprimirResultadoBusqueda(const int &numDocumentos)
                 // Nombre del documento sin el directorio y sin la extension
                 nombreDoc = resultado.NombreDoc().substr(resultado.NombreDoc().find_last_of("/\\") + 1);
                 nombreDoc = nombreDoc.substr(0, nombreDoc.find_last_of("."));
-
+                std::cout.setf(std::ios::fixed);
+                std::cout.precision(6);
                 std::cout << resultado.NumPregunta() << " " << (formSimilitud == 0 ? "DFR" : "BM25") << " " << nombreDoc << " " << posicion << " " << resultado.VSimilitud() << " " << nombrePregunta << "\n";
             }
             numPreguntaAnterior = resultado.NumPregunta();
-            docsOrdenados.pop();
+            // docsOrdenados.pop();
         }
     }
     catch (...)
@@ -317,9 +342,10 @@ void Buscador::ImprimirResultadoBusqueda(const int &numDocumentos)
     }
 }
 
-bool Buscador::ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero) {
+bool Buscador::ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero)
+{
     /*
-    // Lo mismo que ?ImprimirResultadoBusqueda()? pero guardando la salida 
+    // Lo mismo que ?ImprimirResultadoBusqueda()? pero guardando la salida
 en el fichero de nombre ?nombreFichero?
 // Devolverá false si no consigue crear correctamente el archivo*/
     try
@@ -338,12 +364,13 @@ en el fichero de nombre ?nombreFichero?
         }
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
-        while (!docsOrdenados.empty())
+        // while (!docsOrdenados.empty())
+        for (auto &resultado : docsOrdenadosVector)
         {
             // Una linea por cada documento con el siguiente formato:
             // NumPregunta FormulaSimilitud NomDocumento Posicion PuntuacionDoc PreguntaIndexada
-            
-            ResultadoRI resultado = docsOrdenados.top();
+
+            // ResultadoRI resultado = docsOrdenados.top();
             if (numPreguntaAnterior != resultado.NumPregunta())
             {
                 numDocs = 0;
@@ -363,11 +390,12 @@ en el fichero de nombre ?nombreFichero?
                 // Nombre del documento sin el directorio y sin la extension
                 nombreDoc = resultado.NombreDoc().substr(resultado.NombreDoc().find_last_of("/\\") + 1);
                 nombreDoc = nombreDoc.substr(0, nombreDoc.find_last_of("."));
-
+                std::cout.setf(std::ios::fixed);
+                std::cout.precision(6);
                 f << resultado.NumPregunta() << " " << (formSimilitud == 0 ? "DFR" : "BM25") << " " << nombreDoc << " " << posicion << " " << resultado.VSimilitud() << " " << nombrePregunta << "\n";
             }
             numPreguntaAnterior = resultado.NumPregunta();
-            docsOrdenados.pop();
+            // docsOrdenados.pop();
         }
         f.close();
         return true;

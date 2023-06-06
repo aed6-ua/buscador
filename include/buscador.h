@@ -17,16 +17,8 @@ public:
     long int IdDoc() const;
     int NumPregunta() const { return numPregunta; }
     bool operator<(const ResultadoRI &lhs) const;
+    bool operator>(const ResultadoRI &lhs) const;
     string NombreDoc() const { return nombreDoc; }
-    // Operador de comparacion para la cola de prioridad
-    bool operator>(const ResultadoRI &lhs) const
-    {
-        // Se ordena por menor numero de pregunta y luego por mayor similitud
-        if (numPregunta == lhs.numPregunta)
-            return (vSimilitud > lhs.vSimilitud);
-        else
-            return (numPregunta < lhs.numPregunta);
-    }
 
 private:
     double vSimilitud;
@@ -76,7 +68,8 @@ public:
 private:
     Buscador();
 
-    priority_queue<ResultadoRI> docsOrdenados;
+    //priority_queue<ResultadoRI> docsOrdenados;
+    vector<ResultadoRI> docsOrdenadosVector;
     int formSimilitud;
     double c;
     double k1;

@@ -44,18 +44,18 @@ public:
         cout << "Pregunta indexada: " << pregunta << endl;
         cout << "Informacion de la pregunta: " << infPregunta << endl;}
 
-    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
-    mayúsculas correspondiente) está indexado, devolviendo su información 
-    almacenada ?inf?. En caso que no esté, devolvería ?inf? vacío*/
+    /* Devuelve true si word (aplicï¿½ndole el tratamiento de stemming y 
+    mayï¿½sculas correspondiente) estï¿½ indexado, devolviendo su informaciï¿½n 
+    almacenada ?inf?. En caso que no estï¿½, devolverï¿½a ?inf? vacï¿½o*/
     bool Devuelve(const string &word, InformacionTermino &inf);
 
-    /* Devuelve true si word (aplicándole el tratamiento de stemming y 
-    mayúsculas correspondiente) está indexado y aparece en el documento de 
-    nombre nomDoc, en cuyo caso devuelve la información almacenada para word 
-    en el documento. En caso que no esté, devolvería ?InfDoc? vacío*/
+    /* Devuelve true si word (aplicï¿½ndole el tratamiento de stemming y 
+    mayï¿½sculas correspondiente) estï¿½ indexado y aparece en el documento de 
+    nombre nomDoc, en cuyo caso devuelve la informaciï¿½n almacenada para word 
+    en el documento. En caso que no estï¿½, devolverï¿½a ?InfDoc? vacï¿½o*/
     bool Devuelve(const string &word, const string &nomDoc, InfTermDoc &infDoc);
 
-    // Devuelve true si word (aplicándole el tratamiento de stemming y mayúsculas correspondiente) aparece como término indexado
+    // Devuelve true si word (aplicï¿½ndole el tratamiento de stemming y mayï¿½sculas correspondiente) aparece como tï¿½rmino indexado
     bool Existe(const string &word);
 
     bool Borra(const string &word);
@@ -66,17 +66,17 @@ public:
 
     void VaciarIndicePreg();
 
-    /* Será true si word (aplicándole el tratamiento de stemming y
-    mayúsculas correspondiente) está indexado, sustituyendo la información
+    /* Serï¿½ true si word (aplicï¿½ndole el tratamiento de stemming y
+    mayï¿½sculas correspondiente) estï¿½ indexado, sustituyendo la informaciï¿½n
     almacenada por ?inf?*/
     bool Actualiza(const string &word, const InformacionTermino &inf) { return Existe(word) ? indice[word] = inf, true : false; }
 
-    /* Será true si se realiza la inserción (p.ej. si word, aplicándole el
-    tratamiento de stemming y mayúsculas correspondiente, no estaba
+    /* Serï¿½ true si se realiza la inserciï¿½n (p.ej. si word, aplicï¿½ndole el
+    tratamiento de stemming y mayï¿½sculas correspondiente, no estaba
     previamente indexado)*/
     bool Inserta(const string &word, const InformacionTermino &inf);
 
-    // Devolverá el número de términos diferentes indexados (cardinalidad de campo privado ?índice?)
+    // Devolverï¿½ el nï¿½mero de tï¿½rminos diferentes indexados (cardinalidad de campo privado ?ï¿½ndice?)
     int NumPalIndexadas() const { return indice.size(); }
 
     // Devuelve el contenido del campo privado ?ficheroStopWords?
@@ -84,7 +84,7 @@ public:
 
     void ListarPalParada() const;
 
-    // Devolverá el número de palabras de parada almacenadas
+    // Devolverï¿½ el nï¿½mero de palabras de parada almacenadas
     int NumPalParada() const { return stopWords.size(); }
 
     // Devuelve los delimitadores utilizados por el tokenizador
@@ -93,19 +93,19 @@ public:
     // Devuelve si el tokenizador analiza los casos especiales
     bool DevolverCasosEspeciales() const { return tok.CasosEspeciales(); }
 
-    // Devuelve si el tokenizador pasa a minúsculas y sin acentos
+    // Devuelve si el tokenizador pasa a minï¿½sculas y sin acentos
     bool DevolverPasarAminuscSinAcentos() const { return tok.PasarAminuscSinAcentos(); }
 
     // Devuelve el valor de almacenarPosTerm
     bool DevolverAlmacenarPosTerm() const { return almacenarPosTerm; }
 
-    // Devuelve ?directorioIndice? (el directorio del disco duro donde se almacenará el índice)
+    // Devuelve ?directorioIndice? (el directorio del disco duro donde se almacenarï¿½ el ï¿½ndice)
     string DevolverDirIndice() const { return directorioIndice; }
 
-    // Devolverá el tipo de stemming realizado en la indexación de acuerdo con el valor indicado en la variable privada ?tipoStemmer?
+    // Devolverï¿½ el tipo de stemming realizado en la indexaciï¿½n de acuerdo con el valor indicado en la variable privada ?tipoStemmer?
     int DevolverTipoStemming() const { return tipoStemmer; }
 
-    // Devolverá el valor indicado en la variable privada ?almEnDisco?
+    // Devolverï¿½ el valor indicado en la variable privada ?almEnDisco?
     bool DevolverAlmEnDisco() const { return almacenarEnDisco; }
 
     // Mostrar por pantalla: cout << informacionColeccionDocs << "\n";
@@ -131,6 +131,8 @@ public:
     bool DevolverIndiceDocs(unordered_map<string, InfDoc> &indiceDocs) const { indiceDocs = this->indiceDocs; return true; }
     int NumDocs() const { return informacionColeccionDocs.getNumDocs(); }
     int NumTotalPal() const { return informacionColeccionDocs.getNumTotalPal(); }
+    int NumTotalPalSinParada() const { return informacionColeccionDocs.getNumTotalPalSinParada(); }
+    bool Devuelve(const string &word, InformacionTermino * * inf);
 
 private:
     int id_ficheros_indice = 0;

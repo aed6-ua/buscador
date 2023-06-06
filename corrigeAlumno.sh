@@ -23,7 +23,7 @@ MAKE1=makefile
 # Fichero que contiene el main en el makefile
 MAIN=main.cpp
 # Nombre del ejecutable en el makefile
-EJE=indexador
+EJE=buscador
 #################################################
 
 # Directorio raiz

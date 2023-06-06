@@ -438,14 +438,14 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr, const string &NomFichSal)
 // false en caso contrario enviando a cerr el mensaje correspondiente(p.ej.que no exista el
 // archivo i)
 
-bool Tokenizador::Tokenizar(const string &NomFichEntr)
+bool Tokenizador::Tokenizar(const string &NomFichEntr, vector<string> &salida)
 {
     ifstream i;
     ofstream f;
     string cadena;
     list<string> tokens;
     list<string>::iterator itS;
-    string salida = "";
+    //string ssalida = "";
     i.open(NomFichEntr.c_str());
     if (!i)
     {
@@ -461,17 +461,22 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr)
             if (cadena.length() != 0)
             {
                 Tokenizar(cadena, tokens);
+                // Almacenamos los tokens en el vector salida
+                salida.insert(salida.end(), tokens.begin(), tokens.end());
+                /*
                 for (itS = tokens.begin(); itS != tokens.end(); itS++)
                 {
-                    salida += (*itS) + "\n";
+                    ssalida += (*itS) + "\n";
                 }
+                */
             }
         }
     }
     i.close();
-    //f.open((NomFichEntr + ".tk").c_str());
-    //f << salida;
-    //f.close();
+    /*
+    f.open((NomFichEntr + ".tk").c_str());
+    f << ssalida;
+    f.close();*/
     return true;
 }
 
@@ -481,7 +486,7 @@ bool Tokenizador::TokenizarListaFicheros(const string &NomFichEntr)
     ifstream i;
     ofstream f;
     string cadena;
-    list<string> tokens;
+    vector<string> tokens;
     i.open(NomFichEntr.c_str());
     if (!i)
     {
@@ -496,7 +501,7 @@ bool Tokenizador::TokenizarListaFicheros(const string &NomFichEntr)
             getline(i, cadena);
             if (cadena.length() != 0)
             {
-                Tokenizar(cadena);
+                Tokenizar(cadena, tokens);
             }
         }
     }

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <unordered_set>
 #include <bitset>
+#include <vector>
 
 using namespace std;
 
@@ -47,7 +48,7 @@ public:
     // false en caso contrario enviando a cerr
     // el mensaje
     // correspondiente(p.ej.que no exista el archivo i)
-    bool Tokenizar(const string &i);
+    bool Tokenizar(const string &i, vector<string> &tokens);
     // Tokeniza el fichero i guardando la salida en un fichero de nombre i
     // a?adi?ndole extensi?n.tk(sin eliminar previamente la extensi?n de i
     // por ejemplo,
