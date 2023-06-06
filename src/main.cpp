@@ -1,24 +1,40 @@
-#include <iostream> 
+#include <iostream>
 #include <string>
+#include <list>
+#include <sys/resource.h>
+#include "tokenizador.h"
 #include "buscador.h"
-#include "indexadorHash.h"
 using namespace std;
-main() {
-IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false, 
-"./indicePrueba", 0, false, false);
-b.Indexar("./listaFicheros_corto.txt");
-b.GuardarIndexacion();
-Buscador a("./indicePrueba", 0);
-cout << "Buscador: " << a;
-cout << a.DevolverTipoStemming () << endl;
-// Estaría accediendo al método de la clase ?IndexadorHash? de la 
-//que ?Buscador? está heredando
-a.IndexarPregunta("documentos sobre la Guerra Civil española");
-if(a.Buscar(20))
-a.ImprimirResultadoBusqueda(10);
-if(a.CambiarFormulaSimilitud(1))
+double getcputime(void)
 {
-if(a.Buscar(20))
-a.ImprimirResultadoBusqueda(10);
+	struct timeval tim;
+	struct rusage ru;
+	getrusage(RUSAGE_SELF, &ru);
+	tim = ru.ru_utime;
+	double t = (double)tim.tv_sec + (double)tim.tv_usec / 1000000.0;
+	tim = ru.ru_stime;
+	t += (double)tim.tv_sec + (double)tim.tv_usec / 1000000.0;
+	return t;
 }
+main()
+{
+	IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false,
+					"./indicePruebaEspanyol", 0, false, false);
+	b.Indexar("ficherosTimes.txt");
+	b.GuardarIndexacion();
+	Buscador a("./indicePruebaEspanyol", 0);
+a.IndexarPregunta("KENNEDY ADMINISTRATION PRESSURE ON NGO DINH DIEM TO STOP SUPPRESSING THE BUDDHISTS . ");
+double aa=getcputime();
+a.Buscar(423);
+a.ImprimirResultadoBusqueda(423);
+double bb=getcputime()-aa;
+cout << "\nHa tardado " << bb << " segundos\n\n";
+time_t inicioB, finB;
+time(&inicioB);
+double aaB=getcputime();
+a.Buscar("/home/dudu/ei/tokenizador/CorpusTime/Preguntas/", 423, 1, 
+83);
+a.ImprimirResultadoBusqueda(423);
+double bbB=getcputime()-aaB;
+cout << "\nHa tardado " << bbB << " segundos\n\n";
 }
