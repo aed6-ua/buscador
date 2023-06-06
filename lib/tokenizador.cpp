@@ -469,9 +469,9 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr)
         }
     }
     i.close();
-    f.open((NomFichEntr + ".tk").c_str());
-    f << salida;
-    f.close();
+    //f.open((NomFichEntr + ".tk").c_str());
+    //f << salida;
+    //f.close();
     return true;
 }
 
