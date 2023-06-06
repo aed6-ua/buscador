@@ -12,14 +12,27 @@ class ResultadoRI
     friend ostream &operator<<(ostream &, const ResultadoRI &);
 
 public:
-    ResultadoRI(const double &kvSimilitud, const long int &kidDoc, const int &np);
+    ResultadoRI(const double &kvSimilitud, const long int &kidDoc, const int &np, const string &nd);
     double VSimilitud() const;
     long int IdDoc() const;
+    int NumPregunta() const { return numPregunta; }
     bool operator<(const ResultadoRI &lhs) const;
-private : 
+    string NombreDoc() const { return nombreDoc; }
+    // Operador de comparacion para la cola de prioridad
+    bool operator>(const ResultadoRI &lhs) const
+    {
+        // Se ordena por menor numero de pregunta y luego por mayor similitud
+        if (numPregunta == lhs.numPregunta)
+            return (vSimilitud > lhs.vSimilitud);
+        else
+            return (numPregunta < lhs.numPregunta);
+    }
+
+private:
     double vSimilitud;
     long int idDoc;
     int numPregunta;
+    string nombreDoc;
 };
 
 class Buscador : public IndexadorHash
@@ -35,17 +48,30 @@ public:
     bool Buscar(const int &numDocumentos = 99999);
     bool Buscar(const string &dirPreguntas, const int &numDocumentos, const int &numPregInicio, const int &numPregFin);
 
-    void ImprimirResultadoBusqueda(const int &numDocumentos = 99999) const;
-    bool ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero) const;
+    void ImprimirResultadoBusqueda(const int &numDocumentos = 99999);
+    bool ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero);
 
     int DevolverFormulaSimilitud() const { return formSimilitud; }
-    bool CambiarFormulaSimilitud(const int &f) { if (f == 0 || f == 1) { formSimilitud = f; return true; } else return false; }
+    bool CambiarFormulaSimilitud(const int &f)
+    {
+        if (f == 0 || f == 1)
+        {
+            formSimilitud = f;
+            return true;
+        }
+        else
+            return false;
+    }
 
     void CambiarParametrosDFR(const double &kc);
     double DevolverParametrosDFR() const { return c; }
 
     void CambiarParametrosBM25(const double &kk1, const double &kb);
-    void DevolverParametrosBM25(double &kk1, double &kb) const { kk1 = k1; kb = b;}
+    void DevolverParametrosBM25(double &kk1, double &kb) const
+    {
+        kk1 = k1;
+        kb = b;
+    }
 
 private:
     Buscador();
