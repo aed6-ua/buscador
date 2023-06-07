@@ -18,13 +18,13 @@ main() {
 IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false, "./indicePruebaEspanyol", 0, false, false);
 b.Indexar("ficherosTimes.txt");
 b.GuardarIndexacion();
-Buscador a("./indicePruebaEspanyol", 0);
+Buscador a("./indicePruebaEspanyol", 1);
 a.IndexarPregunta("KENNEDY ADMINISTRATION PRESSURE ON NGO DINH DIEM TO STOP SUPPRESSING THE BUDDHISTS . ");
 double aa=getcputime();
 a.Buscar(423);
 a.ImprimirResultadoBusqueda(423);
 double bb=getcputime()-aa;
-cout << "\nHa tardado " << bb << " segundos\n\n";
+
 time_t inicioB, finB;
 time(&inicioB);
 double aaB=getcputime();
@@ -32,6 +32,7 @@ a.Buscar("/home/edu/ei/tokenizador/CorpusTime/Preguntas/", 423, 1,
 83);
 a.ImprimirResultadoBusqueda(423);
 double bbB=getcputime()-aaB;
+cout << "\nHa tardado " << bb << " segundos\n\n";
 cout << "\nHa tardado " << bbB << " segundos\n\n";
 }
 

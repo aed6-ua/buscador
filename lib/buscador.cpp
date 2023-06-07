@@ -175,6 +175,7 @@ bool Buscador::Buscar(const int &numDocumentos)
                         InfTermDoc *infTermDoc;
                         infTermDoc = terminoInf->getInfTermDoc(doc.second.getIdDoc());
                         double docLength = doc.second.getNumPalSinParada();
+                        double termNumDocs = terminoInf->getNumDocs();
 
                         // Formula DFR
                         if (formSimilitud == 0)
@@ -182,21 +183,20 @@ bool Buscador::Buscar(const int &numDocumentos)
                             // peso en la query del término palabra de la query (frecuencia del término en la query entre el número de términos de la query)
                             double w_tq = (double)palabra.second.getFt() / (double)preguntaInf.getNumTotalPalSinParada();
                             // peso en el documento del término palabra
-                            double lambda = (double)terminoInf->getFtc() / (double)numDocs;
-                            double f_td = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt() * log2(1 + (c * avgDocLength) / docLength);
-                            double w_td = (log2(1 + lambda) + f_td * log2((1 + lambda) / lambda)) * ((terminoInf->getFtc() + 1) / (terminoInf->getNumDocs() * (f_td + 1)));
+                            double ftc = terminoInf->getFtc();
+                            double lambda = ftc / (double)numDocs;
+                            double f_td = infTermDoc->getFt() * log2(1 + (c * avgDocLength) / docLength);
+                            double w_td = (log2(1 + lambda) + f_td * log2((1 + lambda) / lambda)) * ((ftc + 1) / (termNumDocs * (f_td + 1)));
                             valor += w_tq * w_td;
                         }
                         else
                         {
                             // Formula BM25
-                            double idf = log2((numDocs - terminoInf->getNumDocs() + 0.5) / (terminoInf->getNumDocs() + 0.5));
-                            double f_qd = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt();
+                            double idf = log2((numDocs - termNumDocs + 0.5) / (termNumDocs + 0.5));
+                            double f_qd = infTermDoc->getFt();
                             double aux2 = (double)(f_qd * (k1 + 1)) / (double)(f_qd + k1 * (1 - b + b * ((double)docLength / (double)avgDocLength)));
                             valor += idf * aux2;
                         }
-
-                        
                     }
                 }
             }
@@ -303,7 +303,7 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
                                 double w_tq = (double)palabra.second.getFt() / (double)preguntaInf.getNumTotalPalSinParada();
                                 // peso en el documento del término palabra
                                 double lambda = (double)terminoInf->getFtc() / (double)numDocs;
-                                double f_td = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt() * log2(1 + (c * avgDocLength) / docLength);
+                                double f_td = infTermDoc->getFt() * log2(1 + (c * avgDocLength) / docLength);
                                 double w_td = (log2(1 + lambda) + f_td * log2((1 + lambda) / lambda)) * ((terminoInf->getFtc() + 1) / (terminoInf->getNumDocs() * (f_td + 1)));
                                 valor += w_tq * w_td;
                             }
@@ -311,7 +311,7 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
                             {
                                 // Formula BM25
                                 double idf = log2((numDocs - terminoInf->getNumDocs() + 0.5) / (terminoInf->getNumDocs() + 0.5));
-                                double f_qd = terminoInf->getInfTermDoc(doc.second.getIdDoc())->getFt();
+                                double f_qd = infTermDoc->getFt();
                                 double aux2 = (double)(f_qd * (k1 + 1)) / (double)(f_qd + k1 * (1 - b + b * ((double)docLength / (double)avgDocLength)));
                                 valor += idf * aux2;
                             }

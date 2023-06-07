@@ -1315,8 +1315,19 @@ bool IndexadorHash::Devuelve(const string &word, InformacionTermino * * inf)
     stemmerPorter stemmer = stemmerPorter();
     string term = word;
     stemmer.stemmer(term, tipoStemmer);
-    if (!almacenarEnDisco)
-        return Existe(term) ? *inf = &(indice.at(term)), true : false;
+    if (!almacenarEnDisco) {
+        //return Existe(term) ? *inf = &(indice.at(term)), true : false;
+        try
+        {
+            *inf = &(indice.at(term));
+            return true;
+        }
+        catch(const std::out_of_range& e)
+        {
+            return false;
+        }
+        
+    }
     else
     {
         auto itG = indice_guardados.find(term);
