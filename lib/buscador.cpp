@@ -73,9 +73,6 @@ Buscador::Buscador(const string &directorioIndexacion, const int &f) : Indexador
     c = 2;
     k1 = 1.2;
     b = 0.75;
-
-    // Reservar memoria para el vector de resultados
-    docsOrdenadosVector.reserve(10000);
 }
 
 Buscador::Buscador(const Buscador &buscador) : IndexadorHash(buscador)
@@ -126,6 +123,8 @@ bool Buscador::Buscar(const int &numDocumentos)
 {
     try
     {
+        // Reservar memoria para el vector de resultados
+        docsOrdenadosVector.reserve(numDocumentos);
         // Limpiar el vector docsOrdenados antes de empezar una nueva búsqueda
         // docsOrdenados = priority_queue<ResultadoRI>();
         docsOrdenadosVector.clear();
@@ -203,7 +202,8 @@ bool Buscador::Buscar(const int &numDocumentos)
             }
             // Almacenar el valor de similitud calculado para el documento actual
             // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-            docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            //docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            docsOrdenadosVector.emplace_back(valor, doc.second.getIdDoc(), 0, doc.first);
         }
         // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
         sort(docsOrdenadosVector.begin(), docsOrdenadosVector.end(), greater<ResultadoRI>());
@@ -227,7 +227,8 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
         // Limpiar el vector docsOrdenados antes de empezar una nueva búsqueda
         // docsOrdenados = priority_queue<ResultadoRI>();
         docsOrdenadosVector.clear();
-
+        // Reservar memoria para el vector de resultados
+        docsOrdenadosVector.reserve(numDocumentos* (numPregFin - numPregInicio + 1));
         // Obtener la lista de documentos indexados
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
@@ -238,6 +239,7 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
         // Obtener la lista de documentos indexados
         // vector<string> listaDocs = ListarDocs();
         vector<ResultadoRI> docsOrdenadosVectorAux;
+        docsOrdenadosVectorAux.reserve(numDocumentos);
         // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
         for (int i = numPregInicio; i <= numPregFin; i++)
         {
@@ -320,7 +322,8 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
                 }
                 // Almacenar el valor de similitud calculado para el documento actual
                 // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-                docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
+                //docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
+                docsOrdenadosVectorAux.emplace_back(valor, doc.second.getIdDoc(), i, doc.first);
             }
             // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
             sort(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), greater<ResultadoRI>());
@@ -328,10 +331,13 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
             if (numDocumentos < docsOrdenadosVectorAux.size())
                 docsOrdenadosVectorAux.erase(docsOrdenadosVectorAux.begin() + numDocumentos, docsOrdenadosVectorAux.end());
             // Almacenar los resultados de la búsqueda en el vector docsOrdenadosVector
+            /*
             for (auto &resultado : docsOrdenadosVectorAux)
             {
                 docsOrdenadosVector.push_back(resultado);
-            }
+            }*/
+            //docsOrdenadosVector.insert(docsOrdenadosVector.end(), docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end());
+            std::move(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), std::back_inserter(docsOrdenadosVector));
         }
         return true;
     }
