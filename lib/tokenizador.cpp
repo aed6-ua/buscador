@@ -121,6 +121,28 @@ void Tokenizador::TokenizarSimple(const string &str, list<string> &tokens)
     }
 }
 
+void Tokenizador::TokenizarSimple2(const string &str, vector<string> &tokens)
+{
+    // Reseteamos el bitset de delimiters porque en TokenizarEspeciales se puede haber modificado
+    delimitersBitset.reset();
+    for (unsigned char c : delimiters) // loop through each character in s
+        delimitersBitset[c] = 1; // set the bit for c to 1
+    std::string token; // temporary string to store token
+    for (unsigned char c : str) { // loop through each character in str
+        if (delimitersBitset[c]) { // if c is a delimiter
+            if (!token.empty()) { // if token is not empty
+                tokens.push_back(token); // add token to vector
+                token.clear(); // clear token
+            }
+        } else { // if c is not a delimiter
+            token += c; // append c to token
+        }
+    }
+    if (!token.empty()) { // if token is not empty after loop
+        tokens.push_back(token); // add last token to vector
+    }
+}
+
 void Tokenizador::TokenizarEspeciales(const string &str, list<string> &tokens) {
     
     // A?adir el espacio y el salto de l?nea al set de delimitadores
@@ -460,9 +482,20 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr, vector<string> &salida)
             getline(i, cadena);
             if (cadena.length() != 0)
             {
-                Tokenizar(cadena, tokens);
-                // Almacenamos los tokens en el vector salida
-                salida.insert(salida.end(), tokens.begin(), tokens.end());
+                // Limpiar la lista de tokens
+                tokens.clear();
+                if (casosEspeciales) {
+                    if (pasarAminuscSinAcentos)
+                        TokenizarEspeciales(pasar_a_minusculas_sin_acentos(cadena), tokens);
+                    else
+                        TokenizarEspeciales(cadena, tokens);
+                    salida.insert(salida.end(), tokens.begin(), tokens.end());
+                }
+                else
+                    if (pasarAminuscSinAcentos)
+                        TokenizarSimple2(pasar_a_minusculas_sin_acentos(cadena), salida);
+                    else
+                        TokenizarSimple2(cadena, salida);
                 /*
                 for (itS = tokens.begin(); itS != tokens.end(); itS++)
                 {

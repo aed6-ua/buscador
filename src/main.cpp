@@ -1,38 +1,40 @@
 #include <iostream> 
 #include <string>
-#include <list>
-#include <sys/resource.h>
-#include "buscador.h"
+#include <list> 
+#include "tokenizador.h"
+
 using namespace std;
-double getcputime(void) { 
-struct timeval tim; 
-struct rusage ru; 
-getrusage(RUSAGE_SELF, &ru); 
-tim=ru.ru_utime; 
-double t=(double)tim.tv_sec + (double)tim.tv_usec / 1000000.0; 
-tim=ru.ru_stime; 
-t+=(double)tim.tv_sec + (double)tim.tv_usec / 1000000.0; 
-return t; 
-}
-main() {
-IndexadorHash b("./StopWordsEspanyol.txt", ". ,:", false, false, "./indicePruebaEspanyol", 0, false, false);
-b.Indexar("ficherosTimes.txt");
-b.GuardarIndexacion();
-Buscador a("./indicePruebaEspanyol", 1);
-a.IndexarPregunta("KENNEDY ADMINISTRATION PRESSURE ON NGO DINH DIEM TO STOP SUPPRESSING THE BUDDHISTS . ");
-double aa=getcputime();
-a.Buscar(423);
-a.ImprimirResultadoBusqueda(423);
-double bb=getcputime()-aa;
 
-time_t inicioB, finB;
-time(&inicioB);
-double aaB=getcputime();
-a.Buscar("/home/edu/ei/tokenizador/CorpusTime/Preguntas/", 423, 1, 
-83);
-a.ImprimirResultadoBusqueda(423);
-double bbB=getcputime()-aaB;
-cout << "\nHa tardado " << bb << " segundos\n\n";
-cout << "\nHa tardado " << bbB << " segundos\n\n";
+///////// Comprobación de que vacíe la lista resultado
+
+void imprimirListaSTL(const list<string>& cadena)
+{
+        list<string>::const_iterator itCadena;
+        for(itCadena=cadena.begin();itCadena!=cadena.end();itCadena++)
+        {
+                cout << (*itCadena) << ", ";
+        }
+        cout << endl;
 }
 
+int
+main(void)
+{
+	bool kCasosEspeciales = true, kpasarAminusculas = false;
+
+	list<string> lt1, lt2;
+
+Tokenizador a("", true, false); 
+list<string> tokens; 
+
+a.Tokenizar("http:", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("http:////ab/", tokens);
+	imprimirListaSTL(tokens);
+
+a.Tokenizar("http:////ab.", tokens);
+	imprimirListaSTL(tokens);
+
+
+}

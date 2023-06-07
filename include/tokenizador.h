@@ -112,6 +112,7 @@ private:
     // Si true pasar? el token a min?sculas y quitar? acentos, antes de
     // realizar la tokenizaci?n
     void TokenizarSimple(const string &str, list<string> &tokens);
+    void TokenizarSimple2(const string &str, vector<string> &tokens);
     // void TokenizarEspeciales(const string &str, list<string> &tokens) const;
     //  M?todo auxiliar para tokenizar teniendo en cuenta los casos especiales
     // void TokenizarEspecialesEstados(const string &str, list<string> &tokens);
