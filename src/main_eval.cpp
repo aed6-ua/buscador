@@ -4,7 +4,7 @@
 #include "buscador.h"
 using namespace std;
 main() {
-IndexadorHash b("./StopWordsIngles.txt", ". ,:", false, false, "./indiceEval", 0, false, false);
+IndexadorHash b("./StopWordsIngles.txt", ",;:.-/+*\\ '\"{}[]()<>?!??&#=\t\n\r@", false, true, "./indiceEval", 2, false, false);
 b.Indexar("ficherosTimes.txt");
 b.GuardarIndexacion();
 Buscador a("./indiceEval", 0);

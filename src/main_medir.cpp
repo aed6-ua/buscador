@@ -28,7 +28,7 @@ cout << "\nHa tardado " << bb << " segundos\n\n";
 time_t inicioB, finB;
 time(&inicioB);
 double aaB=getcputime();
-a.Buscar("/home/tad/12-13/eiBuscador/CorpusTime/Preguntas/", 423, 1, 
+a.Buscar("/home/edu/ei/tokenizador/CorpusTime/Preguntas/", 423, 1, 
 83);
 a.ImprimirResultadoBusqueda(423);
 double bbB=getcputime()-aaB;

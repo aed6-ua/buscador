@@ -1602,9 +1602,21 @@ bool IndexadorHash::RecuperarIndexacion(const string &directorioIndexacion)
         bool kcasosEspeciales;
         bool minuscSinAcentos;
         delimitadoresPalabra = linea.substr(14, linea.find(" TRATA CASOS ESPECIALES: ") - 14);
+        if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos) {
+            delimitadoresPalabra += "\n";
+            std::getline(f, linea);
+            if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos) {
+                delimitadoresPalabra += "\r";
+                std::getline(f, linea);
+                delimitadoresPalabra += linea.substr(0, linea.find(" TRATA CASOS ESPECIALES: "));
+            } else {
+                delimitadoresPalabra += linea.substr(0, linea.find(" TRATA CASOS ESPECIALES: "));
+            }
+            
+        }
         int pos = linea.find(" TRATA CASOS ESPECIALES: ") + 25;
         kcasosEspeciales = (linea.substr(pos, linea.find(" MINUSC SIN ACENTOS: ") - pos) == "1") ? true : false;
-        pos = linea.find(" PASAR A MINUSCULAS Y SIN ACENTOS: ") + 34;
+        pos = linea.find(" PASAR A MINUSCULAS Y SIN ACENTOS: ") + 35;
         minuscSinAcentos = (linea.substr(pos) == "1") ? true : false;
         tok = Tokenizador(delimitadoresPalabra, kcasosEspeciales, minuscSinAcentos);
         // Leemos el directorio donde se almacena el indice

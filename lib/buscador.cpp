@@ -197,12 +197,13 @@ bool Buscador::Buscar(const int &numDocumentos)
                             valor += idf * aux2;
                         }
 
-                        // Almacenar el valor de similitud calculado para el documento actual
-                        // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-                        docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+                        
                     }
                 }
             }
+            // Almacenar el valor de similitud calculado para el documento actual
+            // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
         }
         // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
         sort(docsOrdenadosVector.begin(), docsOrdenadosVector.end(), greater<ResultadoRI>());
@@ -220,27 +221,6 @@ bool Buscador::Buscar(const int &numDocumentos)
 
 bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, const int &numPregInicio, const int &numPregFin)
 {
-    /*
-    // Realizará la búsqueda entre el número de pregunta ?numPregInicio? y
-?numPregFin?, ambas preguntas incluidas. El corpus de preguntas estará
-en el directorio ?dirPreguntas?, y tendrá la estructura de cada pregunta
-en un fichero independiente, de nombre el número de pregunta, y
-extensión ?.txt? (p.ej. 1.txt 2.txt 3.txt ... 83.txt). Esto significa
-que habrá que indexar cada pregunta por separado y ejecutar una búsqueda
-por cada pregunta añadiendo los resultados de cada pregunta (junto con
-su número de pregunta) en la variable privada ?docsOrdenados?. Asimismo,
-se supone que previamente se mantendrá la indexación del corpus.
-// Se guardarán los primeros ?numDocumentos? documentos más relevantes
-para cada pregunta en la variable privada ?docsOrdenados?. Se
-almacenarán solo los documentos que compartan algún término (no de
-parada) con la query (aunque ese número de documentos sea inferior a
-?numDocumentos?).
-// La búsqueda se realiza con la fórmula de similitud indicada en la
-variable privada ?formSimilitud?.
-// Devuelve falso si no finaliza la búsqueda (p.ej. por falta de
-memoria), mostrando el mensaje de error correspondiente, indicando el
-documento, pregunta y término en el que se ha quedado.
-    */
 
     try
     {
@@ -257,11 +237,11 @@ documento, pregunta y término en el que se ha quedado.
 
         // Obtener la lista de documentos indexados
         // vector<string> listaDocs = ListarDocs();
-
+        vector<ResultadoRI> docsOrdenadosVectorAux;
         // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
         for (int i = numPregInicio; i <= numPregFin; i++)
         {
-            vector<ResultadoRI> docsOrdenadosVectorAux;
+            docsOrdenadosVectorAux.clear();
             string pregunta;
             string nombrePregunta = dirPreguntas + to_string(i) + ".txt";
             ifstream f(nombrePregunta);
@@ -334,12 +314,13 @@ documento, pregunta y término en el que se ha quedado.
                                 valor += idf * aux2;
                             }
 
-                            // Almacenar el valor de similitud calculado para el documento actual
-                            // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-                            docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
+                           
                         }
                     }
                 }
+                // Almacenar el valor de similitud calculado para el documento actual
+                // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+                docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
             }
             // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
             sort(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), greater<ResultadoRI>());
@@ -415,10 +396,6 @@ void Buscador::ImprimirResultadoBusqueda(const int &numDocumentos)
 
 bool Buscador::ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero)
 {
-    /*
-    // Lo mismo que ?ImprimirResultadoBusqueda()? pero guardando la salida
-en el fichero de nombre ?nombreFichero?
-// Devolverá false si no consigue crear correctamente el archivo*/
     try
     {
         // Imprimir los resultados de la búsqueda
