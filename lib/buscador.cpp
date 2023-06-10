@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
+#include <sstream>
 
 ResultadoRI::ResultadoRI(const double &kvSimilitud, const long int &kidDoc,
                          const int &np, const string &nd)
@@ -73,6 +74,24 @@ Buscador::Buscador(const string &directorioIndexacion, const int &f) : Indexador
     c = 2;
     k1 = 1.2;
     b = 0.75;
+}
+
+Buscador::Buscador(const string &directorioVectores, const int &f, const bool &b) : IndexadorHash(directorioVectores, b)
+{
+    if (f == 3)
+    {
+        formSimilitud = f;
+    }
+    else
+    {
+        throw std::invalid_argument("Valor incorrecto para la variable formSimilitud. Debe ser 0 (DFR) o 1 (BM25).");
+    }
+
+    // Inicializar constantes del modelo
+    c = 2;
+    k1 = 1.2;
+    this->b = 0.75;
+    embeddingsActivo = true;
 }
 
 Buscador::Buscador(const Buscador &buscador) : IndexadorHash(buscador)
@@ -202,7 +221,7 @@ bool Buscador::Buscar(const int &numDocumentos)
             }
             // Almacenar el valor de similitud calculado para el documento actual
             // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-            //docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
+            // docsOrdenadosVector.push_back(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
             docsOrdenadosVector.emplace_back(valor, doc.second.getIdDoc(), 0, doc.first);
         }
         // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
@@ -228,7 +247,7 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
         // docsOrdenados = priority_queue<ResultadoRI>();
         docsOrdenadosVector.clear();
         // Reservar memoria para el vector de resultados
-        docsOrdenadosVector.reserve(numDocumentos* (numPregFin - numPregInicio + 1));
+        docsOrdenadosVector.reserve(numDocumentos * (numPregFin - numPregInicio + 1));
         // Obtener la lista de documentos indexados
         unordered_map<string, InfDoc> indiceDocs;
         DevolverIndiceDocs(indiceDocs);
@@ -315,14 +334,12 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
                                 double aux2 = (double)(f_qd * (k1 + 1)) / (double)(f_qd + k1 * (1 - b + b * ((double)docLength / (double)avgDocLength)));
                                 valor += idf * aux2;
                             }
-
-                           
                         }
                     }
                 }
                 // Almacenar el valor de similitud calculado para el documento actual
                 // docsOrdenados.push(ResultadoRI(valor, doc.second.getIdDoc(), 0, doc.first));
-                //docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
+                // docsOrdenadosVectorAux.push_back(ResultadoRI(valor, doc.second.getIdDoc(), i, doc.first));
                 docsOrdenadosVectorAux.emplace_back(valor, doc.second.getIdDoc(), i, doc.first);
             }
             // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
@@ -336,7 +353,7 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
             {
                 docsOrdenadosVector.push_back(resultado);
             }*/
-            //docsOrdenadosVector.insert(docsOrdenadosVector.end(), docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end());
+            // docsOrdenadosVector.insert(docsOrdenadosVector.end(), docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end());
             std::move(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), std::back_inserter(docsOrdenadosVector));
         }
         return true;
@@ -346,6 +363,124 @@ bool Buscador::Buscar(const string &dirPreguntas, const int &numDocumentos, cons
         cerr << "ERROR: Hubo un error al realizar la búsqueda" << endl;
         return false;
     }
+}
+
+bool Buscador::Buscar_vector(const string &dirPreguntas, const int &numDocumentos, const int &numPregInicio, const int &numPregFin)
+{
+
+    try
+    {
+        // Limpiar el vector docsOrdenados antes de empezar una nueva búsqueda
+        // docsOrdenados = priority_queue<ResultadoRI>();
+        docsOrdenadosVector.clear();
+        // Reservar memoria para el vector de resultados
+        docsOrdenadosVector.reserve(numDocumentos * (numPregFin - numPregInicio + 1));
+
+        // Obtener la lista de documentos indexados
+        // vector<string> listaDocs = ListarDocs();
+        vector<ResultadoRI> docsOrdenadosVectorAux;
+        docsOrdenadosVectorAux.reserve(numDocumentos);
+        vector<double> question_embedding;
+        // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
+        for (int i = numPregInicio; i <= numPregFin; i++)
+        {
+            docsOrdenadosVectorAux.clear();
+            string pregunta;
+            string nombrePregunta = dirPreguntas + to_string(i) + ".vec";
+            ifstream f(nombrePregunta);
+            if (!f.is_open())
+            {
+                cerr << "ERROR: No se pudo abrir el fichero " << nombrePregunta << endl;
+                return false;
+            }
+            std::string linea;
+            question_embedding.clear();
+            while (std::getline(f, linea))
+            {
+                if (linea[0] == '[')
+                {
+                    linea.erase(0, 1);
+                }
+                if (linea[linea.size() - 1] == ']')
+                {
+                    linea.erase(linea.size() - 1, 1);
+                }
+                std::stringstream ss(linea);
+                double valor;
+                while (ss >> valor)
+                {
+                    question_embedding.push_back(valor);
+                }
+            }
+            f.close();
+
+            // Obtener la lista de documentos indexados
+            // vector<string> listaDocs = ListarDocs();
+
+            // Calcular el valor de los documentos de acuerdo con la fórmula de similitud elegida
+            for (const auto &doc : embeddings)
+            {
+                double valor = cosine_similarity(question_embedding, doc.second);
+
+                // Almacenar el valor de similitud calculado para el documento actual
+                // Eliminar .vec del nombre del documento
+                string nombreDoc = doc.first.substr(0, doc.first.size() - 4);
+                int idDoc = stoi(nombreDoc);
+                docsOrdenadosVectorAux.emplace_back(valor, idDoc, i, nombreDoc);
+            }
+            // Ordenar los documentos del vector docsOrdenadosVector de menor a mayor
+            sort(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), greater<ResultadoRI>());
+            // Truncar el vector docsOrdenadosVector para que tenga el tamaño numDocumentos
+            if (numDocumentos < docsOrdenadosVectorAux.size())
+                docsOrdenadosVectorAux.erase(docsOrdenadosVectorAux.begin() + numDocumentos, docsOrdenadosVectorAux.end());
+            // Almacenar los resultados de la búsqueda en el vector docsOrdenadosVector
+            /*
+            for (auto &resultado : docsOrdenadosVectorAux)
+            {
+                docsOrdenadosVector.push_back(resultado);
+            }*/
+            // docsOrdenadosVector.insert(docsOrdenadosVector.end(), docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end());
+            std::move(docsOrdenadosVectorAux.begin(), docsOrdenadosVectorAux.end(), std::back_inserter(docsOrdenadosVector));
+        }
+        return true;
+    }
+    catch (...)
+    {
+        cerr << "ERROR: Hubo un error al realizar la búsqueda" << endl;
+        return false;
+    }
+}
+
+// Función para calcular la similitud de coseno entre dos vectores
+double Buscador::cosine_similarity(const vector<double>& vectorA, const vector<double>& vectorB) {
+    // Verificar que los vectores tengan la misma dimensión
+    if (vectorA.size() != vectorB.size()) {
+        std::cerr << "Los vectores tienen dimensiones diferentes." << std::endl;
+        return 0.0;
+    }
+
+    // Calcular el producto punto de los vectores
+    double dotProduct = 0.0;
+    for (std::size_t i = 0; i < vectorA.size(); ++i) {
+        dotProduct += vectorA[i] * vectorB[i];
+    }
+
+    // Calcular las magnitudes de los vectores
+    double magnitudeA = 0.0;
+    double magnitudeB = 0.0;
+    for (std::size_t i = 0; i < vectorA.size(); ++i) {
+        magnitudeA += vectorA[i] * vectorA[i];
+        magnitudeB += vectorB[i] * vectorB[i];
+    }
+    magnitudeA = std::sqrt(magnitudeA);
+    magnitudeB = std::sqrt(magnitudeB);
+
+    // Calcular la similitud de coseno
+    if (magnitudeA == 0.0 || magnitudeB == 0.0) {
+        std::cerr << "Uno de los vectores tiene magnitud cero." << std::endl;
+        return 0.0;
+    }
+    return dotProduct / (magnitudeA * magnitudeB);
 }
 
 void Buscador::ImprimirResultadoBusqueda(const int &numDocumentos)

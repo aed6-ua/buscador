@@ -169,6 +169,11 @@ IndexadorHash::IndexadorHash(const string &directorioIndexacion)
     RecuperarIndexacion(directorioIndexacion);
 }
 
+IndexadorHash::IndexadorHash(const string &directorioIndexacion, const bool &b)
+{
+    RecuperarEmbeddings(directorioIndexacion);
+}
+
 ostream &operator<<(ostream &s, const IndexadorHash &p)
 {
     s << "Fichero con el listado de palabras de parada: " << p.ficheroStopWords << endl;
@@ -1306,7 +1311,7 @@ bool IndexadorHash::Devuelve(const string &word, InformacionTermino &inf)
     }
 }
 
-bool IndexadorHash::Devuelve(const string &word, InformacionTermino * * inf)
+bool IndexadorHash::Devuelve(const string &word, InformacionTermino **inf)
 {
     // Aplicar tratamiento de mayï¿½sculas y acentos
     if (tok.PasarAminuscSinAcentos())
@@ -1315,18 +1320,18 @@ bool IndexadorHash::Devuelve(const string &word, InformacionTermino * * inf)
     stemmerPorter stemmer = stemmerPorter();
     string term = word;
     stemmer.stemmer(term, tipoStemmer);
-    if (!almacenarEnDisco) {
-        //return Existe(term) ? *inf = &(indice.at(term)), true : false;
+    if (!almacenarEnDisco)
+    {
+        // return Existe(term) ? *inf = &(indice.at(term)), true : false;
         try
         {
             *inf = &(indice.at(term));
             return true;
         }
-        catch(const std::out_of_range& e)
+        catch (const std::out_of_range &e)
         {
             return false;
         }
-        
     }
     else
     {
@@ -1384,40 +1389,45 @@ bool IndexadorHash::Existe(const string &word)
 string IndexadorHash::pasar_a_minusculas_sin_acentos(const string &str) const
 {
     static const unsigned char acentos[256] = {
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ','!','"','#','$','%','&',' ',
-        '(',')','*','+',',','-','.','/','0','1',
-        '2','3','4','5','6','7','8','9',':',';',
-        '<','=','>','?','@','a','b','c','d','e',
-        'f','g','h','i','j','k','l','m','n','o',
-        'p','q','r','s','t','u','v','w','x','y',
-        'z',' ',' ',' ',' ',' ',' ','a','b','c',
-        'd','e','f','g','h','i','j','k','l','m',
-        'n','o','p','q','r','s','t','u','v','w',
-        'x','y','z',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
-        ' ',' ','a','a','a','a','a','a','a',
-        'c','e','e','e','e','i','i','i','i','d','n',
-        'o','o','o','o','o','o','/','o','u','u',
-        'u','u','y','b','y','n','a','a','a','a',
-        'a','a','c','e','e','e','i','i','i','i',
-        'd','n','o','o','o','o','o','o','o','u',
-        'u','u','u','y','b','y'
-    };
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', '!', '"', '#', '$', '%', '&', ' ',
+        '(', ')', '*', '+', ',', '-', '.', '/', '0', '1',
+        '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
+        '<', '=', '>', '?', '@', 'a', 'b', 'c', 'd', 'e',
+        'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
+        'z', ' ', ' ', ' ', ' ', ' ', ' ', 'a', 'b', 'c',
+        'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
+        'x', 'y', 'z', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', 'a', 'a', 'a', 'a', 'a', 'a', 'a',
+        'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'd', 'n',
+        'o', 'o', 'o', 'o', 'o', 'o', '/', 'o', 'u', 'u',
+        'u', 'u', 'y', 'b', 'y', 'n', 'a', 'a', 'a', 'a',
+        'a', 'a', 'c', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
+        'd', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'u',
+        'u', 'u', 'u', 'y', 'b', 'y'};
     string resultado = "";
-    for (char c : str) {
-        if (c >= 0x41 && c <= 0x5a) {
+    for (char c : str)
+    {
+        if (c >= 0x41 && c <= 0x5a)
+        {
             resultado += acentos[c];
-        } else if (c >= 0xc0) {
+        }
+        else if (c >= 0xc0)
+        {
             resultado += acentos[c];
-        } else {
+        }
+        else
+        {
             // No es una letra acentuada, se agrega tal cual
             resultado += c;
         }
@@ -1613,17 +1623,20 @@ bool IndexadorHash::RecuperarIndexacion(const string &directorioIndexacion)
         bool kcasosEspeciales;
         bool minuscSinAcentos;
         delimitadoresPalabra = linea.substr(14, linea.find(" TRATA CASOS ESPECIALES: ") - 14);
-        if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos) {
+        if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos)
+        {
             delimitadoresPalabra += "\n";
             std::getline(f, linea);
-            if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos) {
+            if (linea.find(" TRATA CASOS ESPECIALES: ") == string::npos)
+            {
                 delimitadoresPalabra += "\r";
                 std::getline(f, linea);
                 delimitadoresPalabra += linea.substr(0, linea.find(" TRATA CASOS ESPECIALES: "));
-            } else {
+            }
+            else
+            {
                 delimitadoresPalabra += linea.substr(0, linea.find(" TRATA CASOS ESPECIALES: "));
             }
-            
         }
         int pos = linea.find(" TRATA CASOS ESPECIALES: ") + 25;
         kcasosEspeciales = (linea.substr(pos, linea.find(" MINUSC SIN ACENTOS: ") - pos) == "1") ? true : false;
@@ -1936,5 +1949,67 @@ bool IndexadorHash::ListarTerminos(const string &nomDoc)
     {
         // Devolvemos false
         return false;
+    }
+}
+
+void IndexadorHash::RecuperarEmbeddings(const string &dirEmbeddings)
+{
+    // Cada fichero es un vector de 300 floats
+    // El vector empieza por el carácter '[' y termina por el carácter ']'
+    // Los doubles están separados por espacios
+    // Hay 4 por línea
+
+    // Abrimos el directorio
+    DIR *dir;
+    struct dirent *ent;
+    vector<double> file_embedding;
+    if ((dir = opendir(dirEmbeddings.c_str())) != NULL)
+    {
+        // Recorremos el directorio
+        while ((ent = readdir(dir)) != NULL)
+        {
+            // Si es un fichero
+            if (ent->d_type == DT_REG)
+            {
+                // Abrimos el fichero
+                ifstream f;
+                f.exceptions(std::ifstream::badbit);
+                try
+                {
+                    f.open((dirEmbeddings + "/" + ent->d_name).c_str());
+                    std::string linea;
+                    file_embedding.clear();
+                    while (std::getline(f, linea))
+                    {
+                        if (linea[0] == '[')
+                        {
+                            linea.erase(0, 1);
+                        }
+                        if (linea[linea.size() - 1] == ']')
+                        {
+                            linea.erase(linea.size() - 1, 1);
+                        }
+                        std::stringstream ss(linea);
+                        double valor;
+                        while (ss >> valor)
+                        {
+                            file_embedding.push_back(valor);
+                        }
+                    }
+                    f.close();
+                }
+                catch (std::ios::failure &e)
+                {
+                    cerr << "Error al abrir el fichero " << dirEmbeddings + "/" + ent->d_name << ": " << e.what() << endl;
+                }
+            }
+            if (file_embedding.size() == 300)
+                embeddings[ent->d_name] = file_embedding;
+        }
+        closedir(dir);
+    }
+    else
+    {
+        cerr << "Error al abrir el directorio " << dirEmbeddings << endl;
     }
 }

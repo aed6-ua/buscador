@@ -33,12 +33,15 @@ class Buscador : public IndexadorHash
 
 public:
     Buscador(const string &directorioIndexacion, const int &f);
+    Buscador(const string &directorioVectores, const int &f, const bool &b);
     Buscador(const Buscador &);
     ~Buscador();
     Buscador &operator=(const Buscador &);
 
     bool Buscar(const int &numDocumentos = 99999);
     bool Buscar(const string &dirPreguntas, const int &numDocumentos, const int &numPregInicio, const int &numPregFin);
+
+    bool Buscar_vector(const string &dirPreguntas, const int &numDocumentos, const int &numPregInicio, const int &numPregFin);
 
     void ImprimirResultadoBusqueda(const int &numDocumentos = 99999);
     bool ImprimirResultadoBusqueda(const int &numDocumentos, const string &nombreFichero);
@@ -74,6 +77,10 @@ private:
     double c;
     double k1;
     double b;
+
+    
+    bool embeddingsActivo;
+    double cosine_similarity(const vector<double>& vectorA, const vector<double>& vectorB);
 };
 
 #endif // BUSCADOR_H

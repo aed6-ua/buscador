@@ -466,8 +466,8 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr, vector<string> &salida)
     ofstream f;
     string cadena;
     list<string> tokens;
-    list<string>::iterator itS;
-    //string ssalida = "";
+    vector<string>::iterator itS;
+    string ssalida = "";
     i.open(NomFichEntr.c_str());
     if (!i)
     {
@@ -484,6 +484,7 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr, vector<string> &salida)
             {
                 // Limpiar la lista de tokens
                 tokens.clear();
+                salida.clear();
                 if (casosEspeciales) {
                     if (pasarAminuscSinAcentos)
                         TokenizarEspeciales(pasar_a_minusculas_sin_acentos(cadena), tokens);
@@ -496,20 +497,20 @@ bool Tokenizador::Tokenizar(const string &NomFichEntr, vector<string> &salida)
                         TokenizarSimple2(pasar_a_minusculas_sin_acentos(cadena), salida);
                     else
                         TokenizarSimple2(cadena, salida);
-                /*
-                for (itS = tokens.begin(); itS != tokens.end(); itS++)
+                
+                for (itS = salida.begin(); itS != salida.end(); itS++)
                 {
                     ssalida += (*itS) + "\n";
                 }
-                */
+                
             }
         }
     }
     i.close();
-    /*
+    
     f.open((NomFichEntr + ".tk").c_str());
     f << ssalida;
-    f.close();*/
+    f.close();
     return true;
 }
 
@@ -532,7 +533,7 @@ bool Tokenizador::TokenizarListaFicheros(const string &NomFichEntr)
         while (!i.eof())
         {
             getline(i, cadena);
-            if (cadena.length() != 0)
+            if (cadena.length() != 0 && cadena != "/home/edu/ei/tokenizador/CorpusTime/Preguntas/")
             {
                 Tokenizar(cadena, tokens);
             }
@@ -617,7 +618,7 @@ string Tokenizador::pasar_a_minusculas_sin_acentos(const string &str) const {
         ' ',' ',' ','!','"','#','$','%','&',' ',
         '(',')','*','+',',','-','.','/','0','1',
         '2','3','4','5','6','7','8','9',':',';',
-        '<','=','>','?','@','a','b','c','d','r',
+        '<','=','>','?','@','a','b','c','d','e',
         'f','g','h','i','j','k','l','m','n','o',
         'p','q','r','s','t','u','v','w','x','y',
         'z',' ',' ',' ',' ',' ',' ','a','b','c',

@@ -134,6 +134,11 @@ public:
     int NumTotalPalSinParada() const { return informacionColeccionDocs.getNumTotalPalSinParada(); }
     bool Devuelve(const string &word, InformacionTermino * * inf);
 
+
+    IndexadorHash(const string &directorioIndexacion, const bool &b);
+    // Vector de dimension 300 para los embeddings de los documentos
+    unordered_map<string, vector<double>> embeddings;
+
 private:
     int id_ficheros_indice = 0;
     IndexadorHash();
@@ -141,6 +146,8 @@ private:
     bool AlmacenarEnDisco();
     bool BorraDocGuardado(string &nomDoc, const int &idDoc, const InfDoc &infDoc);
     bool BorraDocIndice(const string &nomDoc, const int &idDoc, const std::unordered_map<std::string, InfDoc>::iterator &itDoc);
+
+    void RecuperarEmbeddings(const string &dirEmbeddings);
     
     unordered_map<string, int> indice_guardados;
     unordered_set<string> indiceDocs_guardados;
@@ -160,6 +167,9 @@ private:
     int tipoStemmer;
     bool almacenarEnDisco;
     bool almacenarPosTerm;
+
+
+    
 };
 
 #endif
